@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Player Registration | D-CLIX Arena</title>
+<meta name="description" content="D-CLIX Arena - martial arts tournament portal." />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<script src="js/theme.js"></script>
+</head>
+<body data-page="player">
+<nav class="nav" aria-label="Competition">
+  <div class="nav-inner" style="max-width:none">
+    <a class="brand" href="competition.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span><span class="brand-name big">D-CLIX Arena</span></a>
+    <div class="nav-links"><a class="plain" href="competition.html#news">News</a><a class="plain" href="competition.html#rankings">Rankings</a><a class="plain" href="competition.html#fixtures">Fixtures</a><a class="plain" href="competition.html#about">About</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="strong" href="dashboard.html" data-sport-link="dashboard">Login</a><a class="btn-primary sm" style="color:#fff" href="competition.html">Register Now</a></div>
+    <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu"><a href="competition.html#news">News</a><a href="competition.html#rankings">Rankings</a><a href="competition.html#fixtures">Fixtures</a><a href="competition.html#about">About</a><a href="dashboard.html" data-sport-link="dashboard">Login</a><a class="btn-primary" style="color:#fff" href="competition.html">Register Now</a></div>
+</nav>
+
+<main class="reg-main" style="max-width:1152px">
+<div id="viewList"><div class="text-center stack-4" style="margin-bottom:56px"><h1 style="font-size:clamp(32px,5vw,48px);font-weight:600;text-transform:uppercase">Upcoming <span class="accent sport-name"></span> Events</h1><p class="lead">Select an active tournament to proceed with athlete entry</p></div><div class="t-list" id="tList"></div></div>
+<div id="viewForm" class="hidden">
+  <div class="card banner"><div class="l"><div class="icon-box"><i data-icon="trophy" class="w-6"></i></div><div><p>Tournament Entry</p><h2 id="selName"></h2></div></div><button class="btn-ghost" type="button" data-back><i data-icon="left" class="w-4"></i> Back to List</button></div>
+  <div class="stepper" id="stepper"></div>
+  <div class="reg-cols"><div class="card fs" style="margin:0"><div class="stack-4" style="margin-bottom:24px"><h2 style="font-size:24px;font-weight:600">Tournament Details</h2><p class="muted">Select your tournament category and preferences</p></div>
+  <form class="form fields-stack" id="playerForm">
+    <div class="fgrid"><div><label class="lbl">Tournament Category *</label><select class="select" required><option value="">Select category</option><option>Kyorugi (Sparring)</option><option>Poomsae (Forms)</option></select></div>
+    <div><label class="lbl">Skill Level *</label><select class="select" required><option value="">Select skill level</option><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div></div>
+    <div><label class="lbl">T-Shirt Size *</label><select class="select" required><option value="">Select size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></div>
+    <div><label class="lbl">Medical Conditions</label><textarea class="textarea input" rows="3" placeholder="Any medical conditions we should be aware of..."></textarea></div>
+    <div><label class="lbl">Dietary Restrictions</label><textarea class="textarea input" rows="3" placeholder="Vegetarian, vegan, allergies, etc..."></textarea></div>
+    <div class="form-actions" style="justify-content:space-between"><button class="btn-ghost" type="button" data-back><i data-icon="left" class="w-4"></i> Back</button><button class="btn-primary" type="submit">Complete Registration <i data-icon="arrowright" class="w-5"></i></button></div>
+  </form></div>
+  <div class="card summary"><h3>Order Summary</h3><div class="ln"><span>Registration Fee</span><span>$150</span></div><div class="ln"><span>Processing Fee</span><span>$0</span></div><div class="tot"><span>Total</span><span>$150</span></div>
+  <p class="muted" style="margin-top:24px;font-size:14px">After registration, you can:</p><ul><li>Book hotel accommodation</li><li>Order meal plans</li><li>Access your player dashboard</li></ul></div></div>
+</div></main>
+
+<script src="js/icons.js"></script>
+<script src="js/sports.js"></script>
+<script src="js/main.js"></script>
+<script src="js/competition.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard | D-CLIX Arena</title>
+<meta name="description" content="D-CLIX Arena - martial arts tournament portal." />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<script src="js/theme.js"></script>
+</head>
+<body data-page="dashboard">
+<nav class="nav" aria-label="Competition">
+  <div class="nav-inner" style="max-width:none">
+    <a class="brand" href="competition.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span><span class="brand-name big">D-CLIX Arena</span></a>
+    <div class="nav-links"><a class="plain" href="competition.html#news">News</a><a class="plain" href="competition.html#rankings">Rankings</a><a class="plain" href="competition.html#fixtures">Fixtures</a><a class="plain" href="competition.html#about">About</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="strong" href="competition.html">Competition</a><a class="strong" style="display:inline-flex;gap:8px;align-items:center" href="dashboard.html" data-sport-link="dashboard"><i data-icon="user" class="w-4"></i> Dashboard</a><a href="competition.html" style="display:inline-flex;gap:8px;align-items:center"><i data-icon="logout" class="w-4"></i> Logout</a></div>
+    <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu"><a href="competition.html#news">News</a><a href="competition.html#rankings">Rankings</a><a href="competition.html#fixtures">Fixtures</a><a href="competition.html#about">About</a><a href="dashboard.html" data-sport-link="dashboard">Login</a><a class="btn-primary" style="color:#fff" href="competition.html">Register Now</a></div>
+</nav>
+
+<main class="sp-main"><div class="dash-head"><div><h1>Welcome, <em id="uName"></em></h1><p>Manage registrations, schedules, and live activity for <span class="sport-label"></span>.</p>
+<div class="dash-btns"><a class="btn-primary" href="player-register.html" data-sport-link="player-register">Register Player <i data-icon="arrowupright" class="w-4"></i></a><a class="btn-primary" href="club-register.html" data-sport-link="club-register">Register Club <i data-icon="arrowupright" class="w-4"></i></a><a class="btn-primary" href="live.html" data-sport-link="live">Watch Live <i data-icon="arrowupright" class="w-4"></i></a></div></div>
+<a class="logout" href="competition.html"><i data-icon="logout" class="w-5"></i><span>Logout</span></a></div>
+<div class="dash-grid"><div>
+  <div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="sparkles" class="w-6"></i></div><div><h3>What’s New</h3><p>Quick updates and useful guidance</p></div></div><div class="hl" id="hl"></div></div>
+  <div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="calendardays" class="w-6"></i></div><div><h3>Upcoming Fixtures</h3><p>Your schedule will appear here once created</p></div></div><div id="fixList"></div></div></div>
+<div>
+  <div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="bell" class="w-6"></i></div><div><h3>Announcements</h3><p>Platform updates and reminders</p></div></div><div id="annList"></div></div>
+  <div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="activity" class="w-6"></i></div><div><h3>Next Best Actions</h3><p>Recommended steps to get started</p></div></div><div id="nextList"></div></div></div></div>
+<div class="dash-grid wide"><div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="trophy" class="w-6"></i></div><div><h3>Tournament Registrations</h3><p>Your active tournament registrations</p></div></div>
+  <div class="empty-box"><div class="icon-box"><i data-icon="trophy" class="w-6"></i></div><b>No tournament registrations yet</b><p>Add players and clubs first, then start creating and tracking tournament entries.</p>
+  <div class="btns"><a class="btn-primary sm" href="player-register.html" data-sport-link="player-register">Add Players</a><a class="btn-ghost" href="club-register.html" data-sport-link="club-register">Add Clubs</a></div></div></div>
+  <div class="card panel"><div class="ph"><div class="icon-box sm"><i data-icon="user" class="w-6"></i></div><h3>Player Info</h3></div><div id="infoList"></div></div></div>
+</main>
+
+<script src="js/icons.js"></script>
+<script src="js/sports.js"></script>
+<script src="js/main.js"></script>
+<script src="js/competition.js"></script>
+</body>
+</html>
