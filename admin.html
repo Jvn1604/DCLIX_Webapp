@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Admin | D-CLIX</title>
+<meta name="description" content="D-Clix Club Management System — admin portal." />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/admin.css" />
+<script src="js/theme.js"></script>
+</head>
+<body class="admin">
+<a class="skip" href="#view">Skip to content</a>
+<aside class="a-side" aria-label="Admin menu">
+  <a class="a-side-brand" href="#/dashboard"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="" /></span><span><b id="sysName">D-CLIX Admin</b><small>Club Management</small></span></a>
+  <nav id="sideNav"></nav>
+</aside>
+<div class="a-scrim" id="sideScrim"></div>
+<div class="a-main">
+  <header class="a-topbar">
+    <button class="icon-btn boxed a-burger" id="sideToggle" type="button" aria-label="Open menu"><i data-icon="menu" class="w-5"></i></button>
+    <span class="a-crumb" id="crumb"></span>
+    <span class="sp"></span>
+    <a class="icon-btn a-bell" href="#/approvals" aria-label="Pending approvals"><i data-icon="bell" class="w-5"></i><em id="bellCount" hidden></em></a>
+    <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button>
+    <div class="a-user">
+      <button type="button" id="userBtn" class="a-user-btn" aria-haspopup="true"><span id="userChip" class="a-user-chip"></span><i data-icon="down" class="w-4"></i></button>
+      <div class="a-user-menu" id="userMenu" hidden>
+        <a href="#/profile"><i data-icon="user" class="w-4"></i>My profile</a>
+        <a href="#/profile"><i data-icon="key" class="w-4"></i>Change password</a>
+        <a href="index.html"><i data-icon="globe" class="w-4"></i>View website</a>
+        <a href="#" data-logout><i data-icon="logout" class="w-4"></i>Logout</a>
+      </div>
+    </div>
+  </header>
+  <div class="a-demo-bar" role="note"><i data-icon="info" class="w-4"></i> Demo mode — sample data stored in this browser only. Not connected to a server.</div>
+  <main id="view" class="a-view" tabindex="-1"></main>
+</div>
+<div id="toasts" class="a-toasts" aria-live="polite"></div>
+
+<script src="js/icons.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+<script src="js/admin-data.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/admin-modules.js"></script>
+<script src="js/admin-operations.js"></script>
+<script src="js/admin-finance.js"></script>
+<script src="js/admin-system.js"></script>
+</body>
+</html>
