@@ -182,11 +182,7 @@
       if (o.centreId) { var c = A.byId('centres', o.centreId); if (c) o.clubId = c.clubId; }
       if (o.role === 'superadmin') { o.clubId = ''; o.centreId = ''; }
       if ((D().roles[o.role] || {}).scope === 'club') o.centreId = '';
-      if (isNew) {
-        // Server mode: the password travels once over HTTPS and is bcrypt-hashed by the API.
-        if (DB.mode === 'api') o._newPassword = o.password; else { o.salt = DB.newSalt(); o.pwHash = DB.hashPassword(o.password, o.salt); }
-        o.lastLogin = ''; o.createdAt = A.today(); o.mustChange = true;
-      }
+      if (isNew) { o.salt = DB.newSalt(); o.pwHash = DB.hashPassword(o.password, o.salt); o.lastLogin = ''; o.createdAt = A.today(); o.mustChange = true; }
       delete o.password;
       if (old && old.id === A.user().id && (o.status !== 'Active' || o.role !== old.role)) { A.toast('You cannot change your own role or deactivate yourself.', 'error'); return false; }
       if (old && old.role === 'superadmin' && o.role !== 'superadmin' && D().users.filter(function (u) { return u.role === 'superadmin' && u.status === 'Active'; }).length < 2) { A.toast('There must always be at least one active Super Admin.', 'error'); return false; }
@@ -196,11 +192,7 @@
       { icon: 'key', label: 'Reset password', show: A.can('users', 'edit'), fn: function () {
         A.openForm({ title: 'Reset password · ' + r.name, size: 'sm', rec: {}, fields: [{ k: 'password', l: 'New temporary password', type: 'password', req: true, check: pwCheck }, { k: 'confirm', l: 'Confirm password', type: 'password', req: true }],
           extraValidate: function (v) { return v.password !== v.confirm ? { confirm: 'Passwords do not match.' } : {}; },
-          onSave: function (v) {
-            var patch = { id: r.id, mustChange: true, status: r.status === 'Locked' ? 'Active' : r.status };
-            if (DB.mode === 'api') patch._newPassword = v.password; else { patch.salt = DB.newSalt(); patch.pwHash = DB.hashPassword(v.password, patch.salt); }
-            A.put('users', patch, 'users', 'Reset password for ' + r.name); return true;
-          } });
+          onSave: function (v) { var salt = DB.newSalt(); A.put('users', { id: r.id, salt: salt, pwHash: DB.hashPassword(v.password, salt), mustChange: true, status: r.status === 'Locked' ? 'Active' : r.status }, 'users', 'Reset password for ' + r.name); return true; } });
       } },
       { icon: r.status === 'Active' ? 'lock' : 'check', label: r.status === 'Active' ? 'Deactivate' : 'Activate / unlock', show: A.can('users', 'edit') && r.id !== A.user().id, fn: function () { A.put('users', { id: r.id, status: r.status === 'Active' ? 'Inactive' : 'Active' }, 'users'); M.reload(); } }
     ]; }
@@ -364,15 +356,6 @@
         { k: 'lockMinutes', l: 'Lock duration (minutes)', type: 'number', min: 1, max: 1440, req: true }, { k: 'require2fa', l: 'Two-factor authentication', type: 'checkbox', text: 'Require 2FA for every user' }
       ], function () { return S(); }, function (v, s) { Object.assign(s, v); }, 'Security'); } },
       { label: 'Data & backup', icon: 'database', render: function (b) {
-        if (DB.mode === 'api') {
-          var srv = DB.data.server || {};
-          b.innerHTML = '<div class="a-card pad"><p>Data is stored in the MySQL database on the server and shared by every admin. Payments: <b>' + esc(srv.payments || '') + '</b> · Email: <b>' + esc(srv.mail || '') + '</b>.</p><div class="a-btn-row">' +
-            A.btn('Download what I can see (JSON)', 'download', 'data-backup', 'ghost') + A.btn('Reload from server', 'refresh', 'data-reload', 'ghost') + '</div>' +
-            '<p class="a-help">Full backups are taken on the server: in XAMPP use phpMyAdmin → database <code>dclix</code> → Export; on cPanel enable daily MySQL backups. Payment gateway keys and the email password live in <code>api/config.php</code> on the server, never in this page.</p></div>';
-          $('[data-backup]', b).addEventListener('click', function () { A.download(new Blob([DB.exportJSON()], { type: 'application/json' }), 'dclix-data-' + A.today() + '.json'); A.audit('Export', 'settings', 'backup', [], 'Downloaded data export'); DB.save(); });
-          $('[data-reload]', b).addEventListener('click', function () { DB.bootstrap().then(function () { A.toast('Reloaded the latest data.'); A.updateBadges(); A.refresh(); }, function (e) { A.toast(e.message, 'error'); }); });
-          return;
-        }
         var canE = A.can('settings', 'edit') && M.isSuper();
         var size = 0; try { size = (localStorage.getItem('dclix_admin_db_v1') || '').length; } catch (e) {}
         b.innerHTML = '<div class="a-card pad"><p>Demo data is stored in this browser (' + Math.round(size / 1024) + ' KB). It is not shared with other people or devices.</p><div class="a-btn-row">' +
@@ -419,16 +402,9 @@
         var form = $('form', b);
         form.addEventListener('submit', function (e) {
           e.preventDefault(); var v = A.readForm(form, fields); var errs = A.validate(fields, v);
+          if (!errs.current && DB.hashPassword(v.current, u.salt) !== u.pwHash) errs.current = 'Current password is incorrect.';
           if (!errs.confirm && v.password !== v.confirm) errs.confirm = 'Passwords do not match.';
           if (!errs.password && v.password === v.current) errs.password = 'Choose a password you have not used here.';
-          if (DB.mode === 'api') {
-            if (!A.showErrors(form, errs)) return;
-            window.dclixApi('auth.php', { body: { action: 'change_password', current: v.current, password: v.password }, token: DB.token() }).then(function () {
-              u.mustChange = false; form.reset(); A.toast('Password changed. Other devices have been signed out.');
-            }, function (err) { var e2 = {}; e2[(err.data && err.data.field) || 'current'] = err.message; A.showErrors(form, e2); });
-            return;
-          }
-          if (!errs.current && DB.hashPassword(v.current, u.salt) !== u.pwHash) errs.current = 'Current password is incorrect.';
           if (!A.showErrors(form, errs)) return;
           var salt = DB.newSalt(); A.put('users', { id: u.id, salt: salt, pwHash: DB.hashPassword(v.password, salt), mustChange: false }, 'users', 'Changed own password');
           form.reset(); A.toast('Password changed.');
@@ -446,11 +422,11 @@
   } };
 
   /* ---------- Menu order ---------- */
-  A.nav = ['dashboard', 'automation', 'leads', 'subscriptions', 'clubs', 'centres', 'students', 'instructors', 'classes', 'registrations',
+  A.nav = ['dashboard', 'clubs', 'centres', 'students', 'instructors', 'classes', 'registrations',
     'attendance', 'gradings', 'activities', 'tournaments', 'rankings',
     'payments', 'collections', 'invoices', 'refunds', 'payroll', 'outstanding',
     'products', 'stock', 'purchases', 'deliveries', 'notifications', 'reports',
-    'users', 'roles', 'approvals', 'audit', 'emails', 'settings'];
+    'users', 'roles', 'approvals', 'audit', 'settings'];
   A.views.products.group = A.views.stock.group = A.views.purchases.group = A.views.deliveries.group = 'Inventory';
 
   A.boot();

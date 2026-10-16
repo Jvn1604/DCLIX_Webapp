@@ -56,23 +56,20 @@
       return '<div class="card sport-card" role="button" tabindex="0" data-id="' + s.id + '" style="animation-delay:' + (i * .02) + 's">' +
         '<div class="ic">' + window.icon(s.icon) + '</div><span>' + s.name + '</span></div>';
     }).join('');
-    // plan chosen on the pricing page: keep it while the user picks a sport, so it reaches club registration
-    var landQs = new URLSearchParams(location.search), landPlan = landQs.get('plan'), landBilling = landQs.get('billing');
-    function planQs() { return landPlan ? '&plan=' + encodeURIComponent(landPlan) + (landBilling ? '&billing=' + encodeURIComponent(landBilling) : '') : ''; }
     function select(id) {
       var s = window.getSport(id); if (!s) return;
       sportId = id; sport = s;
-      history.replaceState(null, '', '?sport=' + id + planQs());
+      history.replaceState(null, '', '?sport=' + id);
       $('#selIcon').innerHTML = window.icon(s.icon);
       $('#selName').textContent = s.name;
       var opts = [
         { l: 'Watch Live Event', d: 'Real-time match tracking and live brackets', i: 'tv', p: 'live' },
         { l: 'New Club Registration', d: 'Register your academy for the upcoming season', i: 'userplus', p: 'club-register' },
         { l: 'Player Registration', d: 'Register athletes and manage team rosters', i: 'users', p: 'player-register' },
-        { l: 'Competition Setting', d: 'Admin panel for tournament configuration (login required)', i: 'settings', href: '../admin/index.html#/tournaments' }
+        { l: 'Competition Setting', d: 'Admin panel for tournament configuration', i: 'settings', p: 'dashboard' }
       ];
       $('#optGrid').innerHTML = opts.map(function (o) {
-        return '<a class="card opt" href="' + (o.href || o.p + '.html?sport=' + id + (o.p === 'club-register' ? planQs() : '')) + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
+        return '<a class="card opt" href="' + o.p + '.html?sport=' + id + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
           '</div><div><h3>' + o.l + '</h3><p>' + o.d + '</p></div></div><span class="chev">' + window.icon('right') + '</span></a>';
       }).join('');
       selector.classList.add('hidden'); actions.classList.remove('hidden');
@@ -81,7 +78,7 @@
     grid.addEventListener('click', function (e) { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); });
     grid.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); } });
     $('#changeSport').addEventListener('click', function () {
-      history.replaceState(null, '', location.pathname + planQs().replace('&', '?'));
+      history.replaceState(null, '', location.pathname);
       actions.classList.add('hidden'); selector.classList.remove('hidden');
     });
     if (new URLSearchParams(location.search).get('sport')) select(sportId);
@@ -138,75 +135,19 @@
   /* ---------- Club registration ---------- */
   function initClub() {
     if (!sport) return notFound();
-    var typeSel = $('#clubType');
-    typeSel.innerHTML = window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
-    typeSel.value = sport.id; // pre-selected from the sport chosen earlier, but the user can change it
-    typeSel.addEventListener('change', function () { sportId = typeSel.value; sport = window.getSport(sportId); });
-    var form = $('#clubForm'), modal = $('#successModal'), errBox = $('#clubErr'), btn = $('#clubSubmit');
-    var qs = new URLSearchParams(location.search);
-    // Plan chosen on the pricing page (?plan=…&billing=…); visitors from the competition portal pick one here.
-    var PLANS = [['basic', 'Basic Plan', 100, 1000], ['standard', 'Standard Plan', 150, 1500], ['premium', 'Premium Plan', 200, 2000]];
-    var plan = qs.get('plan'), billing = qs.get('billing') === 'yearly' ? 'yearly' : 'monthly';
-    if (!PLANS.some(function (p) { return p[0] === plan; })) plan = 'basic';
-    var pick = $('#planPick');
-    pick.innerHTML = '<div class="pp-l"><label class="lbl" for="planSel">Your plan</label><select class="select" id="planSel">' +
-      PLANS.map(function (p) { return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p[0] + '-' + m + '">' + p[1] + ' — RM' + (m === 'monthly' ? p[2] + ' / month' : p[3] + ' / year') + '</option>'; }).join(''); }).join('') +
-      '</select></div><a class="accent" href="../pricing.html">Compare plans</a>';
-    pick.hidden = false;
-    var planSel = $('#planSel');
-    planSel.value = plan + '-' + billing;
-    planSel.addEventListener('change', function () {
-      var v = planSel.value.split('-'); plan = v[0]; billing = v[1];
-      try { history.replaceState(null, '', '?sport=' + sportId + '&plan=' + plan + '&billing=' + billing); } catch (e) {}
-    });
-    // Field name in the API → input id on this page
-    var FIELD_IDS = { clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
-    function clearErrors() {
-      errBox.classList.remove('show'); errBox.textContent = '';
-      $$('.field-err', form).forEach(function (el) { el.remove(); });
-      $$('[aria-invalid]', form).forEach(function (el) { el.removeAttribute('aria-invalid'); });
-    }
-    function showErrors(fields, summary) {
-      var first = null;
-      Object.keys(fields || {}).forEach(function (k) {
-        var input = $('#' + (FIELD_IDS[k] || k)); if (!input) return;
-        input.setAttribute('aria-invalid', 'true');
-        var p = document.createElement('small'); p.className = 'field-err'; p.textContent = fields[k];
-        input.insertAdjacentElement('afterend', p);
-        first = first || input;
-      });
-      errBox.textContent = summary || 'Please fix the highlighted fields.'; errBox.classList.add('show');
-      if (first) first.focus();
-    }
+    $('#clubType').innerHTML = '<option>' + sport.id.toUpperCase() + '-' + sport.name + '</option>';
+    var form = $('#clubForm'), modal = $('#successModal');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      clearErrors();
-      var v = function (id) { return $('#' + id).value.trim(); };
-      var errs = {};
-      if (!v('clubCode')) errs.clubCode = 'Club code is required.';
-      if (!v('clubName')) errs.clubName = 'Club name is required.';
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('clubEmail'))) errs.email = 'Please enter a valid email address.';
-      var pw = $('#pw').value;
-      if (pw.length < 8 || !/[A-Z]/.test(pw) || !/[a-z]/.test(pw) || !/[0-9]/.test(pw)) errs.password = 'Use at least 8 characters with upper-case, lower-case and a number.';
-      if (pw !== $('#pw2').value) errs.password2 = 'Passwords do not match.';
-      if (Object.keys(errs).length) return showErrors(errs);
-      btn.disabled = true; btn.textContent = 'Saving…';
-      window.dclixApi('signup.php', { body: {
-        plan: plan, billing: billing, clubCode: v('clubCode'), clubName: v('clubName'), headInstructor: v('headInstructor'),
-        sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
-        country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw
-      } }).then(function (res) {
-        // Only the one-time signup token is kept in the browser — never the password.
-        try { sessionStorage.setItem('dclixSignup', JSON.stringify({ token: res.token, clubName: v('clubName'), clubCode: v('clubCode'), email: v('clubEmail'), plan: plan, billing: billing })); } catch (err) {}
-        modal.classList.add('show');
-        setTimeout(function () { location.href = q('payment'); }, 1500);
-      }, function (err) {
-        btn.disabled = false; btn.textContent = 'Save Club';
-        if (err.offline) return showErrors({}, 'Online registration is not available yet. Please contact D-Clix at +603-7804 1412 to register your club.');
-        showErrors(err.data && err.data.fields, err.message);
-      });
+      var pw = $('#pw').value, pw2 = $('#pw2').value;
+      if (pw.length < 8) { $('#pw').setCustomValidity('Password must be at least 8 characters'); form.reportValidity(); $('#pw').setCustomValidity(''); return; }
+      if (pw !== pw2) { $('#pw2').setCustomValidity('Passwords do not match'); form.reportValidity(); $('#pw2').setCustomValidity(''); return; }
+      // TODO: send the club data to your backend here (never store the password in the browser).
+      try { localStorage.setItem('dclixClubAccount', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, clubType: sport.id })); } catch (err) {}
+      modal.classList.add('show');
+      setTimeout(function () { location.href = q('dashboard'); }, 2000);
     });
-    $('#cancelBtn').addEventListener('click', function () { location.href = '../pricing.html'; });
+    $('#cancelBtn').addEventListener('click', function () { location.href = 'competition.html?sport=' + sportId; });
   }
 
   /* ---------- Player registration ---------- */
@@ -248,7 +189,11 @@
   function initDashboard() {
     var label = sportId.split('-').map(function (p) { return p ? p[0].toUpperCase() + p.slice(1) : p; }).join(' ');
     $$('.sport-label').forEach(function (e) { e.textContent = label; });
-    var user = { name: 'User', email: 'user@example.com', phone: 'Not provided', id: '—' };
+    var user = { name: 'User', email: 'user@example.com', phone: 'Not provided', id: '—', idLabel: 'Player ID' };
+    try { // set when a club is registered
+      var acct = JSON.parse(localStorage.getItem('dclixClubAccount') || 'null');
+      if (acct && acct.clubName) { user.name = acct.clubName; user.email = acct.email || user.email; user.id = acct.clubCode || '—'; user.idLabel = 'Club code'; }
+    } catch (err) {}
     $('#uName').textContent = user.name;
     $('#hl').innerHTML = [['sparkles', 'Instant registrations', 'Create players and clubs in minutes.'], ['calendardays', 'Fixtures & schedules', 'Keep matches organized and on time.'], ['shieldcheck', 'Secure access', 'Clean, role-ready dashboard structure.']]
       .map(function (h) { return '<div>' + window.icon(h[0]) + '<b>' + h[1] + '</b><span>' + h[2] + '</span></div>'; }).join('');
@@ -258,7 +203,8 @@
       .map(function (a) { return '<div class="li"><div class="ib">' + window.icon(a[0]) + '</div><div><b>' + a[1] + '</b><span>' + a[2] + '</span></div></div>'; }).join('');
     $('#nextList').innerHTML = [['Register Players', 'Add athletes to your tournament roster.', 'player-register'], ['Register Clubs', 'Create clubs and assign participants.', 'club-register'], ['Watch Live', 'Follow matches and live updates.', 'live']]
       .map(function (s) { return '<a class="li" style="margin-bottom:12px" href="' + q(s[2]) + '"><div><b>' + s[0] + '</b><span>' + s[1] + '</span></div><span class="arr">' + window.icon('arrowupright') + '</span></a>'; }).join('');
-    $('#infoList').innerHTML = [['Name', user.name, 'user'], ['Email', user.email, 'mail'], ['Phone', user.phone, 'phone'], ['Player ID', user.id, 'hash']]
+    var rows = [['Name', user.name, 'user'], ['Email', user.email, 'mail'], ['Phone', user.phone, 'phone'], [user.idLabel, user.id, 'hash']];
+    $('#infoList').innerHTML = rows
       .map(function (r) { return '<div class="info-row"><div class="k">' + window.icon(r[2]) + r[0] + '</div><p>' + r[1] + '</p></div>'; }).join('');
   }
 })();
