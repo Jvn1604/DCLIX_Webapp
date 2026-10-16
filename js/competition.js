@@ -135,7 +135,10 @@
   /* ---------- Club registration ---------- */
   function initClub() {
     if (!sport) return notFound();
-    $('#clubType').innerHTML = '<option>' + sport.id.toUpperCase() + '-' + sport.name + '</option>';
+    var typeSel = $('#clubType');
+    typeSel.innerHTML = window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
+    typeSel.value = sport.id; // pre-selected from the sport chosen earlier, but the user can change it
+    typeSel.addEventListener('change', function () { sportId = typeSel.value; sport = window.getSport(sportId); });
     var form = $('#clubForm'), modal = $('#successModal');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -143,7 +146,7 @@
       if (pw !== pw2) { $('#pw2').setCustomValidity('Passwords do not match'); form.reportValidity(); $('#pw2').setCustomValidity(''); return; }
       // TODO: send the club data to your backend here (never store the password in the browser).
       var qs = new URLSearchParams(location.search);
-      try { sessionStorage.setItem('dclixClub', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, plan: qs.get('plan') || '', billing: qs.get('billing') || '' })); } catch (err) {}
+      try { sessionStorage.setItem('dclixClub', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, clubType: typeSel.value, plan: qs.get('plan') || '', billing: qs.get('billing') || '' })); } catch (err) {}
       modal.classList.add('show');
       setTimeout(function () { location.href = q('payment'); }, 2000);
     });
