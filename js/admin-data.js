@@ -76,6 +76,7 @@
     var VCE = ['view', 'create', 'edit', 'export'];
     var club = {}; MODS.forEach(function (m) { club[m] = ALL; });
     club.clubs = ['view', 'edit']; club.roles = ['view']; club.settings = ['view']; club.audit = ['view', 'export'];
+    club.leads = []; club.emails = []; club.subscriptions = ['view'];
     return {
       superadmin: { name: 'Super Admin', scope: 'all', desc: 'Everything, across every club.', perms: grant(full) },
       clubadmin: { name: 'Club Admin', scope: 'club', desc: 'Only their own club.', perms: grant(club) },
@@ -403,35 +404,143 @@
     addUser('Demo Finance', 'finance@demo.dclix', 'finance', db.clubs[0].id);
     addUser(db.clubs[1].owner, 'owner@harimau.example.com', 'clubadmin', db.clubs[1].id);
 
-    db.audit = []; db.logins = [];
+    db.audit = []; db.logins = []; db.emails = [];
+    db.leads = []; db.subscriptions = [];
     return db;
+  }
+
+  /* ---------- Server (API) mode ----------
+     The admin portal keeps working on DB.data in memory. In API mode every DB.save()
+     compares DB.data with what the server last confirmed and sends only the changes. */
+  var SYNC_COLLS = ['clubs', 'centres', 'students', 'instructors', 'classes', 'registrations', 'attendance', 'gradings', 'candidates', 'activities', 'tournaments',
+    'participants', 'payments', 'refunds', 'transfers', 'payroll', 'products', 'stockMoves', 'purchases', 'deliveries', 'notifications', 'leads', 'subscriptions'];
+  var snap = null;          // { coll: { id: json } } as last confirmed by the server
+  var syncing = false, again = false, retryTimer = null;
+
+  function takeSnapshot() {
+    var d = DB.data;
+    snap = { users: {}, settings: JSON.stringify(d.settings), roles: JSON.stringify(d.roles), audit: {} };
+    SYNC_COLLS.concat(['users']).forEach(function (c) { snap[c] = {}; (d[c] || []).forEach(function (r) { snap[c][r.id] = JSON.stringify(r); }); });
+    (d.audit || []).forEach(function (a) { snap.audit[a.id] = 1; });
+  }
+  function assignInPlace(target, src) { Object.keys(target).forEach(function (k) { if (!(k in src)) delete target[k]; }); Object.assign(target, src); }
+
+  function buildOps() {
+    var d = DB.data, ops = [], hints = {};
+    (d.audit || []).forEach(function (a) {
+      if (snap.audit[a.id]) return;
+      snap.audit[a.id] = 1;
+      if (['Create', 'Update', 'Delete'].indexOf(a.action) >= 0) { if (a.summary) hints[a.recordId] = a.summary; }
+      else if (['Export', 'View', 'Email', 'Print'].indexOf(a.action) >= 0) ops.push({ op: 'audit', action: a.action, module: a.module, recordId: a.recordId, summary: a.summary });
+    });
+    SYNC_COLLS.forEach(function (c) {
+      var s = snap[c], seen = {};
+      (d[c] || []).forEach(function (r) {
+        seen[r.id] = 1;
+        var j = JSON.stringify(r);
+        if (s[r.id] !== j) ops.push({ op: 'put', coll: c, rec: r, json: j, isNew: !(r.id in s), summary: hints[r.id] || '' });
+      });
+      Object.keys(s).forEach(function (id) { if (!seen[id]) ops.push({ op: 'del', coll: c, id: id, summary: hints[id] || '' }); });
+    });
+    var us = snap.users, useen = {};
+    (d.users || []).forEach(function (u) {
+      useen[u.id] = 1;
+      var j = JSON.stringify(u);
+      if (us[u.id] === j) return;
+      var rec = Object.assign({}, u); var pw = rec._newPassword; delete rec._newPassword; delete rec.pwHash; delete rec.salt;
+      ops.push({ op: 'user', rec: rec, ref: u, isNew: !(u.id in us), password: pw || undefined, summary: hints[u.id] || '' });
+    });
+    Object.keys(us).forEach(function (id) { if (!useen[id]) ops.push({ op: 'userDel', id: id }); });
+    var sj = JSON.stringify(d.settings); if (sj !== snap.settings) ops.push({ op: 'settings', value: d.settings, json: sj });
+    var rj = JSON.stringify(d.roles); if (rj !== snap.roles) ops.push({ op: 'roles', value: d.roles, json: rj });
+    return ops;
+  }
+
+  function runSync() {
+    if (syncing) { again = true; return; }
+    var ops = buildOps();
+    if (!ops.length) { DB.onStatus('saved'); return; }
+    syncing = true; DB.onStatus('saving');
+    var wire = ops.map(function (o) { var w = Object.assign({}, o); delete w.json; delete w.ref; return w; });
+    window.dclixApi('data.php', { body: { action: 'sync', ops: wire }, token: DB.token() }).then(function (res) {
+      var errors = [];
+      res.results.forEach(function (r) {
+        var o = ops[r.i];
+        if (!r.ok) { errors.push(r.error); return; }
+        if (o.op === 'put') {
+          var j = JSON.stringify(r.rec);
+          if (j !== o.json) { var local = (DB.data[o.coll] || []).filter(function (x) { return x.id === o.rec.id; })[0]; if (local) assignInPlace(local, r.rec); }
+          snap[o.coll][o.rec.id] = j;
+        } else if (o.op === 'del') delete snap[o.coll][o.id];
+        else if (o.op === 'user') { assignInPlace(o.ref, r.rec); snap.users[r.rec.id] = JSON.stringify(o.ref); }
+        else if (o.op === 'userDel') delete snap.users[o.id];
+        else if (o.op === 'settings') { assignInPlace(DB.data.settings, r.value); snap.settings = JSON.stringify(DB.data.settings); }
+        else if (o.op === 'roles') { assignInPlace(DB.data.roles, r.value); snap.roles = JSON.stringify(DB.data.roles); }
+      });
+      syncing = false;
+      if (errors.length) {
+        DB.onStatus('error');
+        DB.onError('Not saved: ' + errors[0] + (errors.length > 1 ? ' (and ' + (errors.length - 1) + ' more)' : '') + ' The page has been reloaded with the latest data.');
+        DB.bootstrap().then(function () { DB.onReloaded(); });
+        return;
+      }
+      if (again) { again = false; runSync(); } else DB.onStatus('saved');
+    }, function (err) {
+      syncing = false;
+      if (err.status === 401) { DB.onAuthLost(err.data && err.data.reason); return; }
+      DB.onStatus('offline');
+      clearTimeout(retryTimer);
+      retryTimer = setTimeout(function () { retryTimer = null; runSync(); }, 5000);
+    });
   }
 
   /* ---------- Public API ---------- */
   var DB = {
     DEMO_PASSWORD: DEMO_PASSWORD,
     data: null,
+    mode: 'demo',
     hashPassword: hashPassword,
     newSalt: newSalt,
+    // Hooks the UI fills in (admin.js)
+    token: function () { return ''; },
+    onStatus: function () {}, onError: function () {}, onAuthLost: function () {}, onReloaded: function () {},
+    apiConfigured: function () { return !!(window.DCLIX_CONFIG && window.DCLIX_CONFIG.apiBase); },
+    pending: function () { return DB.mode === 'api' && (syncing || !!retryTimer); },
     load: function () {
       var raw = null;
       try { raw = localStorage.getItem(KEY); } catch (e) {}
       if (raw) { try { DB.data = JSON.parse(raw); } catch (e) { DB.data = null; } }
       if (!DB.data || !DB.data.meta) { DB.data = generate(); DB.save(); }
+      ['leads', 'subscriptions', 'emails'].forEach(function (k) { if (!DB.data[k]) DB.data[k] = []; });
       // fill gaps if the module list grew since data was saved
       var fresh = defaultPerms();
       Object.keys(DB.data.roles).forEach(function (r) {
         window.ADMIN_MODULE_KEYS.forEach(function (m) { if (!DB.data.roles[r].perms[m]) DB.data.roles[r].perms[m] = fresh[r] ? fresh[r].perms[m] : []; });
       });
+      DB.mode = 'demo';
       return DB.data;
     },
+    /* Load everything this user may see from the server. */
+    bootstrap: function () {
+      return window.dclixApi('data.php?action=bootstrap', { token: DB.token() }).then(function (res) {
+        var d = { meta: { version: 1, api: true, loadedAt: new Date().toISOString() }, seq: res.seq || {}, settings: res.settings || defaultSettings(), roles: res.roles,
+          plans: res.plans, server: res.server || {} };
+        Object.keys(res.collections).forEach(function (c) { d[c] = res.collections[c]; });
+        SYNC_COLLS.concat(['users', 'audit', 'logins', 'emails', 'bills']).forEach(function (c) { if (!Array.isArray(d[c])) d[c] = []; });
+        DB.data = d; DB.mode = 'api';
+        takeSnapshot();
+        return d;
+      });
+    },
     save: function () {
+      if (DB.mode === 'api') { if (snap) setTimeout(runSync, 0); return true; }
       try { localStorage.setItem(KEY, JSON.stringify(DB.data)); return true; }
       catch (e) { if (window.ADMIN && ADMIN.toast) ADMIN.toast('Could not save: browser storage is full or blocked.', 'error'); return false; }
     },
-    reset: function () { DB.data = generate(); DB.save(); },
+    reset: function () { if (DB.mode === 'api') return; DB.data = generate(); DB.save(); },
     exportJSON: function () { return JSON.stringify(DB.data, null, 1); },
     importJSON: function (text) {
+      if (DB.mode === 'api') throw new Error('Restoring a backup is only available in demo mode. Restore the MySQL database on the server instead.');
       var d = JSON.parse(text);
       if (!d || !d.meta || !Array.isArray(d.students) || !Array.isArray(d.users)) throw new Error('This file is not a D-Clix admin backup.');
       DB.data = d; DB.save();
@@ -448,7 +557,7 @@
   /* Module keys used by roles/permissions (kept here so seeding and the UI agree). */
   window.ADMIN_MODULE_KEYS = ['dashboard', 'clubs', 'centres', 'students', 'instructors', 'classes', 'registrations', 'attendance', 'gradings', 'activities',
     'tournaments', 'rankings', 'payments', 'collections', 'invoices', 'refunds', 'payroll', 'outstanding', 'products', 'stock', 'purchases', 'deliveries',
-    'notifications', 'reports', 'users', 'roles', 'approvals', 'audit', 'settings'];
+    'notifications', 'reports', 'users', 'roles', 'approvals', 'audit', 'settings', 'leads', 'subscriptions', 'emails'];
 
   window.ADMIN_DB = DB;
 })();

@@ -1,0 +1,10 @@
+# Block direct web access to configuration, code libraries, seed data and logs (Apache / cPanel)
+<FilesMatch "^(config\.php|config\.example\.php|install\.php|schema\.sql)$">
+  Require all denied
+</FilesMatch>
+RedirectMatch 404 ^/(.*/)?api/(lib|storage|seed)(/|$)
+Options -Indexes
+# Pass the Authorization header through to PHP
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

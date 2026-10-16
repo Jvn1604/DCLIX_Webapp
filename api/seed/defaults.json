@@ -1,0 +1,847 @@
+{
+ "settings": {
+  "systemName": "D-CLIX Admin",
+  "currency": "RM",
+  "dateFormat": "DD/MM/YYYY",
+  "timeZone": "Asia/Kuala_Lumpur",
+  "language": "English",
+  "grades": [
+   "White",
+   "Yellow",
+   "Orange",
+   "Green",
+   "Blue",
+   "Purple",
+   "Brown",
+   "Red",
+   "Black 1st Dan",
+   "Black 2nd Dan",
+   "Black 3rd Dan"
+  ],
+  "membershipTypes": [
+   "Monthly",
+   "Quarterly",
+   "Annual",
+   "Family"
+  ],
+  "paymentTypes": [
+   "Membership Fee",
+   "Monthly Fee",
+   "Registration Fee",
+   "Grading Fee",
+   "Tournament Fee",
+   "Product Payment",
+   "Other Fee"
+  ],
+  "paymentMethods": [
+   "Cash",
+   "FPX",
+   "Online Banking",
+   "Card",
+   "Bank Transfer",
+   "Other"
+  ],
+  "attendanceTypes": [
+   "Present",
+   "Absent",
+   "Late",
+   "Excused"
+  ],
+  "studentStatuses": [
+   "Active",
+   "Inactive",
+   "Suspended"
+  ],
+  "classTypes": [
+   "Kids",
+   "Junior",
+   "Adult",
+   "Competition",
+   "Private"
+  ],
+  "taxRate": 0,
+  "invoiceFormat": "INV-{YYYY}-{#####}",
+  "receiptFormat": "RCP-{YYYY}-{#####}",
+  "gateway": "FPX (not connected)",
+  "gatewayMode": "Sandbox",
+  "notifyEmail": true,
+  "notifyWhatsApp": true,
+  "notifyPush": true,
+  "sessionMinutes": 30,
+  "maxFailedLogins": 5,
+  "lockMinutes": 15,
+  "require2fa": false,
+  "integrations": [
+   {
+    "name": "Payment gateway (FPX / cards)",
+    "on": false
+   },
+   {
+    "name": "WhatsApp Business API",
+    "on": false
+   },
+   {
+    "name": "Email (SMTP)",
+    "on": false
+   },
+   {
+    "name": "Push notifications (FCM)",
+    "on": false
+   },
+   {
+    "name": "Tournament scoring system",
+    "on": false
+   },
+   {
+    "name": "Fingerprint scanners",
+    "on": false
+   }
+  ],
+  "regLinkSlug": "join",
+  "regFields": {
+   "ic": true,
+   "dob": true,
+   "guardian": true,
+   "documents": false,
+   "address": false
+  }
+ },
+ "roles": {
+  "superadmin": {
+   "name": "Super Admin",
+   "scope": "all",
+   "desc": "Everything, across every club.",
+   "perms": {
+    "dashboard": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "clubs": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "centres": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "students": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "instructors": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "classes": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "registrations": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "attendance": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "gradings": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "activities": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "tournaments": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "rankings": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "payments": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "collections": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "invoices": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "refunds": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "payroll": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "outstanding": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "products": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "stock": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "purchases": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "deliveries": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "notifications": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "reports": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "users": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "roles": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "approvals": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "audit": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "settings": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "leads": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "subscriptions": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "emails": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ]
+   }
+  },
+  "clubadmin": {
+   "name": "Club Admin",
+   "scope": "club",
+   "desc": "Only their own club.",
+   "perms": {
+    "dashboard": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "clubs": [
+     "view",
+     "edit"
+    ],
+    "centres": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "students": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "instructors": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "classes": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "registrations": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "attendance": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "gradings": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "activities": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "tournaments": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "rankings": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "payments": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "collections": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "invoices": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "refunds": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "payroll": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "outstanding": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "products": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "stock": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "purchases": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "deliveries": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "notifications": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "reports": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "users": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "roles": [
+     "view"
+    ],
+    "approvals": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "audit": [
+     "view",
+     "export"
+    ],
+    "settings": [
+     "view"
+    ],
+    "leads": [],
+    "subscriptions": [
+     "view"
+    ],
+    "emails": []
+   }
+  },
+  "centreadmin": {
+   "name": "Centre Admin",
+   "scope": "centre",
+   "desc": "Only their assigned training centre.",
+   "perms": {
+    "dashboard": [
+     "view"
+    ],
+    "clubs": [],
+    "centres": [
+     "view"
+    ],
+    "students": [
+     "view",
+     "create",
+     "edit",
+     "export"
+    ],
+    "instructors": [
+     "view"
+    ],
+    "classes": [
+     "view",
+     "create",
+     "edit",
+     "export"
+    ],
+    "registrations": [
+     "view",
+     "approve"
+    ],
+    "attendance": [
+     "view",
+     "create",
+     "edit",
+     "export"
+    ],
+    "gradings": [
+     "view",
+     "create",
+     "edit",
+     "export"
+    ],
+    "activities": [
+     "view",
+     "create",
+     "edit",
+     "export"
+    ],
+    "tournaments": [
+     "view"
+    ],
+    "rankings": [
+     "view"
+    ],
+    "payments": [
+     "view",
+     "create",
+     "export"
+    ],
+    "collections": [
+     "view"
+    ],
+    "invoices": [
+     "view"
+    ],
+    "refunds": [],
+    "payroll": [],
+    "outstanding": [
+     "view",
+     "export"
+    ],
+    "products": [
+     "view"
+    ],
+    "stock": [
+     "view"
+    ],
+    "purchases": [],
+    "deliveries": [],
+    "notifications": [
+     "view",
+     "create"
+    ],
+    "reports": [
+     "view",
+     "export"
+    ],
+    "users": [],
+    "roles": [],
+    "approvals": [
+     "view",
+     "approve"
+    ],
+    "audit": [],
+    "settings": [],
+    "leads": [],
+    "subscriptions": [],
+    "emails": []
+   }
+  },
+  "instructor": {
+   "name": "Instructor",
+   "scope": "centre",
+   "desc": "Assigned classes and students.",
+   "perms": {
+    "dashboard": [
+     "view"
+    ],
+    "clubs": [],
+    "centres": [],
+    "students": [
+     "view"
+    ],
+    "instructors": [],
+    "classes": [
+     "view"
+    ],
+    "registrations": [],
+    "attendance": [
+     "view",
+     "create",
+     "edit"
+    ],
+    "gradings": [
+     "view",
+     "edit"
+    ],
+    "activities": [
+     "view"
+    ],
+    "tournaments": [
+     "view"
+    ],
+    "rankings": [
+     "view"
+    ],
+    "payments": [],
+    "collections": [],
+    "invoices": [],
+    "refunds": [],
+    "payroll": [],
+    "outstanding": [],
+    "products": [],
+    "stock": [],
+    "purchases": [],
+    "deliveries": [],
+    "notifications": [],
+    "reports": [
+     "view"
+    ],
+    "users": [],
+    "roles": [],
+    "approvals": [],
+    "audit": [],
+    "settings": [],
+    "leads": [],
+    "subscriptions": [],
+    "emails": []
+   }
+  },
+  "finance": {
+   "name": "Finance",
+   "scope": "club",
+   "desc": "Payments, collections and financial reports.",
+   "perms": {
+    "dashboard": [
+     "view"
+    ],
+    "clubs": [],
+    "centres": [],
+    "students": [
+     "view"
+    ],
+    "instructors": [],
+    "classes": [],
+    "registrations": [],
+    "attendance": [],
+    "gradings": [],
+    "activities": [],
+    "tournaments": [],
+    "rankings": [],
+    "payments": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "collections": [
+     "view",
+     "export"
+    ],
+    "invoices": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "refunds": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "payroll": [
+     "view",
+     "create",
+     "edit",
+     "delete",
+     "approve",
+     "export"
+    ],
+    "outstanding": [
+     "view",
+     "export"
+    ],
+    "products": [],
+    "stock": [],
+    "purchases": [
+     "view",
+     "approve"
+    ],
+    "deliveries": [],
+    "notifications": [],
+    "reports": [
+     "view",
+     "export"
+    ],
+    "users": [],
+    "roles": [],
+    "approvals": [
+     "view",
+     "approve"
+    ],
+    "audit": [],
+    "settings": [],
+    "leads": [],
+    "subscriptions": [],
+    "emails": []
+   }
+  }
+ }
+}

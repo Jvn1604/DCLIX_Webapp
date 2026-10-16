@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
-<title>Admin Login | D-CLIX</title>
+<title>Club Login | D-Clix</title>
 <meta name="description" content="D-Clix Club Management System — admin portal login." />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,12 +34,13 @@
       <p class="a-err" data-err="password"></p>
       <div class="login-row"><label class="a-check"><input type="checkbox" id="remember" /> Remember me</label><a href="#" id="forgotLink" class="a-link">Forgot password?</a></div>
       <button class="a-btn primary block" id="loginBtn" type="submit"><i data-icon="lock" class="w-4"></i>Sign in</button>
+      <p class="login-alt">New to D-Clix? <a class="a-link" href="pricing.html">Choose a plan and register your club</a></p>
     </form>
 
     <form id="codeForm" novalidate hidden>
       <h1>Two-factor check</h1>
-      <p class="muted">Enter the 6-digit verification code.</p>
-      <p class="demo-note">Demo: no SMS is sent. Your code is <b id="demoCode"></b></p>
+      <p class="muted" id="codeNote">Enter the 6-digit verification code.</p>
+      <p class="demo-note" id="codeDev" hidden></p>
       <label class="a-lbl" for="code">Verification code</label>
       <input class="a-input" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" />
       <p class="a-err" data-err="code"></p>
@@ -73,7 +74,7 @@
       <button class="a-btn ghost block" type="button" id="resetBack">Back to sign in</button>
     </form>
 
-    <details class="demo-box">
+    <details class="demo-box" id="demoBox" hidden>
       <summary>Demo accounts (sample data only)</summary>
       <p class="muted">Password for every demo account: <code id="demoPw"></code>. Click one to fill the form.</p>
       <div id="demoList" class="demo-list"></div>
@@ -82,6 +83,7 @@
   </section>
   <p class="login-foot muted">© <span id="year"></span> Raig Technologies (M) Sdn Bhd · <a class="a-link" href="index.html">Back to website</a></p>
 </main>
+<script src="js/config.js"></script>
 <script src="js/icons.js"></script>
 <script src="js/admin-data.js"></script>
 <script src="js/admin.js"></script>
