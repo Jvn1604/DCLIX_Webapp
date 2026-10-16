@@ -30,7 +30,7 @@ audit(null, 'Create', 'leads', $id, 'Contact form enquiry from ' . $f['name'] . 
 
 send_mail((string) cfg('mail.sales_to'), 'New enquiry: ' . $f['club'] . ' — ' . $f['name'],
     email_layout('New website enquiry', 'Someone filled in the contact form on the home page.', [['Name', $f['name']], ['Club', $f['club']], ['Phone', $f['phone']], ['Email', $f['email']], ['Enquiry', $f['inquiries']]],
-        ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin.html#/leads/' . $id]), 'sales_enquiry', $id);
+        ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin/index.html#/leads/' . $id]), 'sales_enquiry', $id);
 send_mail($f['email'], 'We received your enquiry — D-Clix',
     email_layout('Thanks, ' . $f['name'] . '!', 'We have received your enquiry about <b>' . esc($f['club']) . '</b>. A D-Clix expert will contact you soon, usually within one working day.', [],
         ['See our plans', rtrim((string) cfg('site_url'), '/') . '/pricing.html'], 'Need help sooner? Call us at +603-7804 1412.'), 'client_enquiry', $id);

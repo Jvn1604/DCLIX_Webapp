@@ -11,7 +11,10 @@
   var PRODUCTION_API = '';
   var h = location.hostname;
   var local = h === 'localhost' || h === '127.0.0.1' || /\.test$|\.localhost$/.test(h);
-  var base = local ? 'api' : PRODUCTION_API;
+  // The site root is two folders above this file (js/shared/config.js), so pages in admin/ and arena/ find the same api/ folder.
+  var me = document.currentScript && document.currentScript.src;
+  var siteRoot = me ? me.replace(/js\/shared\/config\.js(\?.*)?$/, '') : location.href.replace(/[^\/]*$/, '');
+  var base = local ? siteRoot + 'api' : PRODUCTION_API;
   window.DCLIX_CONFIG = { apiBase: base.replace(/\/$/, '') };
 
   /* Call the API. Resolves with the JSON reply; rejects with an Error that has

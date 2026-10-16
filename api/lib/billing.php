@@ -186,7 +186,7 @@ function resume_link(string $leadId): string
 {
     $token = random_token();
     q('INSERT INTO signup_tokens (token_hash, lead_id, created_at, expires_at) VALUES (?, ?, ?, ?)', [hash('sha256', $token), $leadId, now(), date('Y-m-d H:i:s', time() + 7 * 86400)]);
-    return rtrim((string) cfg('site_url'), '/') . '/payment.html?t=' . $token;
+    return rtrim((string) cfg('site_url'), '/') . '/arena/payment.html?t=' . $token;
 }
 
 /* ---------- Emails ---------- */
@@ -194,7 +194,7 @@ function signup_emails(array $lead, string $resumeUrl): void
 {
     $rows = [['Club', $lead['clubName']], ['Contact email', $lead['email']], ['Phone', $lead['phone']], ['Sport', $lead['sport']], ['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')'], ['Lead ID', $lead['id']]];
     send_mail((string) cfg('mail.sales_to'), 'New signup: ' . $lead['clubName'] . ' (payment pending)',
-        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows, ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin.html#/leads']), 'sales_signup', $lead['id']);
+        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows, ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin/index.html#/leads']), 'sales_signup', $lead['id']);
     send_mail($lead['email'], 'Complete your D-Clix registration',
         email_layout('Thanks for registering, ' . $lead['clubName'], 'We have saved your club details. Your account will be activated as soon as payment is completed.',
             [['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')'], ['Login email', $lead['email']]], ['Complete payment', $resumeUrl], 'If you have already paid, you can ignore this email.'), 'client_signup', $lead['id']);
@@ -202,7 +202,7 @@ function signup_emails(array $lead, string $resumeUrl): void
 
 function payment_emails(array $lead, array $club, array $sub): void
 {
-    $login = rtrim((string) cfg('site_url'), '/') . '/admin-login.html';
+    $login = rtrim((string) cfg('site_url'), '/') . '/admin/login.html';
     send_mail($lead['email'], 'Welcome to D-Clix — your club is active',
         email_layout('Welcome to D-Clix!', 'Your payment was successful and <b>' . esc($club['name']) . '</b> is now active. Log in with the email and password you chose during registration.',
             [['Login email', $lead['email']], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Active until', date('d/m/Y', strtotime($sub['periodEnd']))]], ['Log in to D-Clix', $login],
@@ -215,5 +215,5 @@ function payment_emails(array $lead, array $club, array $sub): void
         ], null, 'This is a computer-generated receipt. No signature is required.'), 'client_receipt', $sub['id']);
     send_mail((string) cfg('mail.sales_to'), 'Payment received: ' . $club['name'] . ' — ' . money_fmt($sub['total']),
         email_layout('Payment received', 'A new club has paid and been activated automatically.', [['Club', $club['name'] . ' (' . $club['id'] . ')'], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Amount', money_fmt($sub['total'])], ['Bill', $sub['txnId']], ['Contact', $lead['email'] . ' · ' . $lead['phone']]],
-            ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin.html#/leads']), 'sales_paid', $sub['id']);
+            ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin/index.html#/leads']), 'sales_paid', $sub['id']);
 }

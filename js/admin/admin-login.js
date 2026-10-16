@@ -32,9 +32,9 @@
     decideMode().then(function () {
       var s = A.session();
       if (MODE === 'api' && s && s.token) {
-        window.dclixApi('auth.php', { body: { action: 'me' }, token: s.token }).then(function () { location.replace('admin.html' + nextHash()); }, function () {});
+        window.dclixApi('auth.php', { body: { action: 'me' }, token: s.token }).then(function () { location.replace('index.html' + nextHash()); }, function () {});
       } else if (MODE === 'demo' && s && !s.token) {
-        var u = A.user(); if (u && u.status === 'Active' && !A.sessionExpired()) location.replace('admin.html' + nextHash());
+        var u = A.user(); if (u && u.status === 'Active' && !A.sessionExpired()) location.replace('index.html' + nextHash());
       }
     });
   });
@@ -115,7 +115,7 @@
   function finishApi(res) {
     rememberEmail(res.user.email);
     A.startSession(res.user, $('#remember').checked, res.token);
-    location.replace('admin.html' + (res.user.mustChange ? '#/profile' : nextHash()));
+    location.replace('index.html' + (res.user.mustChange ? '#/profile' : nextHash()));
   }
   function verifyCode(e) {
     e.preventDefault();
@@ -208,6 +208,6 @@
     rememberEmail(u.email);
     A.startSession(u, $('#remember').checked);
     A.audit('Login', 'auth', u.id, [], u.name + ' logged in'); DB.save();
-    location.replace('admin.html' + (u.mustChange ? '#/profile' : nextHash()));
+    location.replace('index.html' + (u.mustChange ? '#/profile' : nextHash()));
   }
 })();

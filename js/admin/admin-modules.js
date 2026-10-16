@@ -604,7 +604,7 @@
   /* ======================================================
      ONLINE REGISTRATION
      ====================================================== */
-  function regLink() { var base = location.href.replace(/[^/]*$/, ''); return base + 'player-register.html?ref=' + encodeURIComponent(A.settings().regLinkSlug || 'join') + (A.role().scope !== 'all' ? '&club=' + A.user().clubId : ''); }
+  function regLink() { var base = location.href.replace(/admin\/[^\/]*([?#].*)?$/, ''); return base + 'arena/player-register.html?ref=' + encodeURIComponent(A.settings().regLinkSlug || 'join') + (A.role().scope !== 'all' ? '&club=' + A.user().clubId : ''); }
   M.approveRegistration = function (r) {
     if (r.type === 'Instructor') {
       var club = A.byId('clubs', r.clubId);

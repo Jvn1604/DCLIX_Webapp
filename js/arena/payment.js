@@ -25,7 +25,7 @@
 
     if (!token) {
       lock('We could not find your registration. Please choose a plan and register your club first.');
-      btn.insertAdjacentHTML('afterend', ' <a class="btn-primary" href="pricing.html">Choose a plan</a>');
+      btn.insertAdjacentHTML('afterend', ' <a class="btn-primary" href="../pricing.html">Choose a plan</a>');
       btn.hidden = true; return;
     }
 
@@ -46,7 +46,7 @@
       try { sessionStorage.setItem('dclixSignup', JSON.stringify({ token: token, clubName: lead.clubName })); } catch (e) {}
       updateSummary();
     }, function (e) {
-      if (e.data && e.data.reason === 'paid') { lock(e.message); btn.insertAdjacentHTML('afterend', ' <a class="btn-ghost" href="admin-login.html">Log in</a>'); return; }
+      if (e.data && e.data.reason === 'paid') { lock(e.message); btn.insertAdjacentHTML('afterend', ' <a class="btn-ghost" href="../admin/login.html">Log in</a>'); return; }
       lock(e.offline ? 'Online payment is not available yet. Please contact D-Clix at +603-7804 1412.' : e.message);
     });
 
