@@ -236,7 +236,7 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] Chrome, Edge, Firefox on Windows; Safari on iPhone; Chrome on Android.
 
 ### 🚀 Go-live checklist
-- [ ] PHP hosting with HTTPS (e.g. company cPanel) and a MySQL database.
+- [x] PHP hosting with HTTPS (e.g. company cPanel) and a MySQL database.
 - [ ] Upload `api/`, create `api/config.php` on the server, run `php api/install.php --admin-email=… --admin-password=…` (no `--demo`).
 - [ ] Set `site_url` (GitHub Pages address), `api_url`, `allowed_origins`, Billplz **live** keys, SMTP, `sales_to`.
 - [ ] Set `PRODUCTION_API` in `js/shared/config.js` and push.
