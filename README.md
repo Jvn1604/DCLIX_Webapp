@@ -1,10 +1,8 @@
 # D-Clix Club Management + Competition Portal (static site)
 
-Plain HTML / CSS / JavaScript rebuild of the React prototype. No build step, no framework, no Vercel needed.
-
 ## Run it
 - Quickest: double-click `index.html`.
-- Local server: `python3 -m http.server 8000` then open http://localhost:8000
+
 
 ## Deploy anywhere
 Upload the whole folder to any static host: your company web server / cPanel (`public_html`), Netlify, GitHub Pages,
