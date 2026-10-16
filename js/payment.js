@@ -15,14 +15,28 @@
   };
   var FEE = 1.2; // gateway fee per online payment (RM)
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var saved = {};
-    try { saved = JSON.parse(sessionStorage.getItem('dclixClub') || '{}'); } catch (e) {}
+  // Standard card-number checksum, catches most typing mistakes before submitting.
+  function luhnOk(num) {
+    var sum = 0, dbl = false;
+    for (var i = num.length - 1; i >= 0; i--) {
+      var d = +num.charAt(i);
+      if (dbl) { d *= 2; if (d > 9) d -= 9; }
+      sum += d; dbl = !dbl;
+    }
+    return sum % 10 === 0;
+  }
 
-    // ----- prefill from the club registration step -----
-    $('#pClubName').value = saved.clubName || '';
-    $('#pClubCode').value = saved.clubCode || '';
-    $('#bEmail').value = saved.email || '';
+  document.addEventListener('DOMContentLoaded', function () {
+    var saved = {}, account = null;
+    try { saved = JSON.parse(sessionStorage.getItem('dclixClub') || '{}'); } catch (e) {}
+    try { account = JSON.parse(localStorage.getItem('dclixClubAccount') || 'null'); } catch (e) {}
+    var params = new URLSearchParams(location.search);
+    var club = saved.clubName ? saved : (account && account.clubName ? account : {});
+
+    // ----- prefill: club from registration (or an existing club), plan from the pricing page -----
+    $('#pClubName').value = club.clubName || '';
+    $('#pClubCode').value = club.clubCode || '';
+    $('#bEmail').value = club.email || '';
 
     // ----- plan dropdown -----
     var sel = $('#pPlan');
@@ -34,9 +48,20 @@
         sel.appendChild(o);
       });
     });
-    var startPlan = PLANS[saved.plan] ? saved.plan : 'basic';
-    var startMode = saved.billing === 'yearly' ? 'yearly' : 'monthly';
+    var wantPlan = params.get('plan') || saved.plan, wantMode = params.get('billing') || saved.billing;
+    var startPlan = PLANS[wantPlan] ? wantPlan : 'basic';
+    var startMode = wantMode === 'yearly' ? 'yearly' : 'monthly';
     sel.value = startPlan + '-' + startMode;
+
+    // ----- hint: club not registered yet -----
+    var regLink = null;
+    if (!club.clubName) {
+      var hint = document.createElement('div');
+      hint.style.cssText = 'border:1px solid var(--line2);border-radius:16px;padding:16px 20px;margin-bottom:24px;color:var(--muted);line-height:1.6';
+      hint.innerHTML = 'Is your club not registered yet? <a id="regLink" href="competition.html" style="color:var(--accent-light);text-decoration:underline;font-weight:600">Register it here</a>.';
+      $('#payForm').parentNode.insertBefore(hint, $('#payForm'));
+      regLink = hint.querySelector('#regLink');
+    }
 
     function money(n) { return 'RM' + n.toFixed(2); }
     function updateSummary() {
@@ -47,6 +72,7 @@
       $('#sumPrice').textContent = money(price);
       $('#sumFee').textContent = money(FEE);
       $('#sumTotal').textContent = money(price + FEE);
+      if (regLink) regLink.href = 'competition.html?plan=' + parts[0] + '&billing=' + mode;
       $('#payNote').textContent = 'This card will be automatically charged each ' + (mode === 'monthly' ? 'month' : 'year') + '.';
     }
     sel.addEventListener('change', updateSummary);
@@ -79,7 +105,7 @@
       if (!/^\S+@\S+\.\S+$/.test($('#bEmail').value.trim())) return fail('Please enter a valid email address.', '#bEmail');
 
       var card = $('#pCard').value.replace(/\D/g, '');
-      if (card.length < 13 || card.length > 19) return fail('Please enter a valid card number.', '#pCard');
+      if (card.length < 13 || card.length > 19 || !luhnOk(card)) return fail('Please enter a valid card number.', '#pCard');
       var m = $('#pExp').value.match(/^(\d{2})\/(\d{2})$/);
       if (!m || +m[1] < 1 || +m[1] > 12) return fail('Please enter the expiry date as MM/YY.', '#pExp');
       var now = new Date(), yy = now.getFullYear() % 100, mm = now.getMonth() + 1;
@@ -90,7 +116,14 @@
       // straight to the gateway (hosted fields / checkout), never to your own server or storage.
       btn.disabled = true; btn.textContent = 'Processing...';
       setTimeout(function () {
-        try { sessionStorage.removeItem('dclixClub'); } catch (e2) {}
+        try {
+          var chosen = sel.value.split('-');
+          localStorage.setItem('dclixClubAccount', JSON.stringify({
+            clubName: $('#pClubName').value.trim(), clubCode: $('#pClubCode').value.trim(), email: $('#bEmail').value.trim(),
+            plan: PLANS[chosen[0]].name + ' (' + chosen[1] + ')'
+          }));
+          sessionStorage.removeItem('dclixClub');
+        } catch (e2) {}
         $('#successModal').classList.add('show');
         setTimeout(function () { location.href = 'dashboard.html?sport=' + window.currentSportId(); }, 2000);
       }, 1200);
