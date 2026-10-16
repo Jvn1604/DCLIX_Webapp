@@ -56,10 +56,13 @@
       return '<div class="card sport-card" role="button" tabindex="0" data-id="' + s.id + '" style="animation-delay:' + (i * .02) + 's">' +
         '<div class="ic">' + window.icon(s.icon) + '</div><span>' + s.name + '</span></div>';
     }).join('');
+    // plan chosen on the pricing page: keep it while the user picks a sport, so it reaches club registration and payment
+    var landQs = new URLSearchParams(location.search), landPlan = landQs.get('plan'), landBilling = landQs.get('billing');
+    function planQs() { return landPlan ? '&plan=' + encodeURIComponent(landPlan) + (landBilling ? '&billing=' + encodeURIComponent(landBilling) : '') : ''; }
     function select(id) {
       var s = window.getSport(id); if (!s) return;
       sportId = id; sport = s;
-      history.replaceState(null, '', '?sport=' + id);
+      history.replaceState(null, '', '?sport=' + id + planQs());
       $('#selIcon').innerHTML = window.icon(s.icon);
       $('#selName').textContent = s.name;
       var opts = [
@@ -69,7 +72,7 @@
         { l: 'Competition Setting', d: 'Admin panel for tournament configuration', i: 'settings', p: 'dashboard' }
       ];
       $('#optGrid').innerHTML = opts.map(function (o) {
-        return '<a class="card opt" href="' + o.p + '.html?sport=' + id + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
+        return '<a class="card opt" href="' + o.p + '.html?sport=' + id + (o.p === 'club-register' ? planQs() : '') + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
           '</div><div><h3>' + o.l + '</h3><p>' + o.d + '</p></div></div><span class="chev">' + window.icon('right') + '</span></a>';
       }).join('');
       selector.classList.add('hidden'); actions.classList.remove('hidden');
@@ -78,7 +81,7 @@
     grid.addEventListener('click', function (e) { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); });
     grid.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); } });
     $('#changeSport').addEventListener('click', function () {
-      history.replaceState(null, '', location.pathname);
+      history.replaceState(null, '', location.pathname + planQs().replace('&', '?'));
       actions.classList.add('hidden'); selector.classList.remove('hidden');
     });
     if (new URLSearchParams(location.search).get('sport')) select(sportId);
@@ -135,18 +138,16 @@
   /* ---------- Club registration ---------- */
   function initClub() {
     if (!sport) return notFound();
-    var typeSel = $('#clubType');
-    typeSel.innerHTML = window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
-    typeSel.value = sport.id; // pre-selected from the sport chosen earlier, but the user can change it
-    typeSel.addEventListener('change', function () { sportId = typeSel.value; sport = window.getSport(sportId); });
+    $('#clubType').innerHTML = '<option>' + sport.id.toUpperCase() + '-' + sport.name + '</option>';
     var form = $('#clubForm'), modal = $('#successModal');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var pw = $('#pw').value, pw2 = $('#pw2').value;
+      if (pw.length < 8) { $('#pw').setCustomValidity('Password must be at least 8 characters'); form.reportValidity(); $('#pw').setCustomValidity(''); return; }
       if (pw !== pw2) { $('#pw2').setCustomValidity('Passwords do not match'); form.reportValidity(); $('#pw2').setCustomValidity(''); return; }
       // TODO: send the club data to your backend here (never store the password in the browser).
       var qs = new URLSearchParams(location.search);
-      try { sessionStorage.setItem('dclixClub', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, clubType: typeSel.value, plan: qs.get('plan') || '', billing: qs.get('billing') || '' })); } catch (err) {}
+      try { sessionStorage.setItem('dclixClub', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, clubType: sport.id, plan: qs.get('plan') || '', billing: qs.get('billing') || '' })); } catch (err) {}
       modal.classList.add('show');
       setTimeout(function () { location.href = q('payment'); }, 2000);
     });
@@ -192,7 +193,11 @@
   function initDashboard() {
     var label = sportId.split('-').map(function (p) { return p ? p[0].toUpperCase() + p.slice(1) : p; }).join(' ');
     $$('.sport-label').forEach(function (e) { e.textContent = label; });
-    var user = { name: 'User', email: 'user@example.com', phone: 'Not provided', id: '—' };
+    var user = { name: 'User', email: 'user@example.com', phone: 'Not provided', id: '—', idLabel: 'Player ID', plan: '' };
+    try { // set by payment.js once a club has registered and paid
+      var acct = JSON.parse(localStorage.getItem('dclixClubAccount') || 'null');
+      if (acct && acct.clubName) { user.name = acct.clubName; user.email = acct.email || user.email; user.id = acct.clubCode || '—'; user.idLabel = 'Club code'; user.plan = acct.plan || ''; }
+    } catch (err) {}
     $('#uName').textContent = user.name;
     $('#hl').innerHTML = [['sparkles', 'Instant registrations', 'Create players and clubs in minutes.'], ['calendardays', 'Fixtures & schedules', 'Keep matches organized and on time.'], ['shieldcheck', 'Secure access', 'Clean, role-ready dashboard structure.']]
       .map(function (h) { return '<div>' + window.icon(h[0]) + '<b>' + h[1] + '</b><span>' + h[2] + '</span></div>'; }).join('');
@@ -202,7 +207,9 @@
       .map(function (a) { return '<div class="li"><div class="ib">' + window.icon(a[0]) + '</div><div><b>' + a[1] + '</b><span>' + a[2] + '</span></div></div>'; }).join('');
     $('#nextList').innerHTML = [['Register Players', 'Add athletes to your tournament roster.', 'player-register'], ['Register Clubs', 'Create clubs and assign participants.', 'club-register'], ['Watch Live', 'Follow matches and live updates.', 'live']]
       .map(function (s) { return '<a class="li" style="margin-bottom:12px" href="' + q(s[2]) + '"><div><b>' + s[0] + '</b><span>' + s[1] + '</span></div><span class="arr">' + window.icon('arrowupright') + '</span></a>'; }).join('');
-    $('#infoList').innerHTML = [['Name', user.name, 'user'], ['Email', user.email, 'mail'], ['Phone', user.phone, 'phone'], ['Player ID', user.id, 'hash']]
+    var rows = [['Name', user.name, 'user'], ['Email', user.email, 'mail'], ['Phone', user.phone, 'phone'], [user.idLabel, user.id, 'hash']];
+    if (user.plan) rows.push(['Plan', user.plan, 'sparkles']);
+    $('#infoList').innerHTML = rows
       .map(function (r) { return '<div class="info-row"><div class="k">' + window.icon(r[2]) + r[0] + '</div><p>' + r[1] + '</p></div>'; }).join('');
   }
 })();
