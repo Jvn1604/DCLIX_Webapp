@@ -11,7 +11,7 @@
   DB.load();
   var S = DB.data.settings;
   var existing = A.user();
-  if (existing && existing.status === 'Active' && !A.sessionExpired()) { location.replace('admin.html'); return; }
+  if (existing && existing.status === 'Active' && !A.sessionExpired()) { location.replace('index.html'); return; }
 
   var MESSAGES = {
     timeout: ['info', 'You were logged out after ' + S.sessionMinutes + ' minutes of inactivity.'],
@@ -109,7 +109,7 @@
     try { if (remember) localStorage.setItem('dclix_admin_remember_email', u.email); else localStorage.removeItem('dclix_admin_remember_email'); } catch (e) {}
     A.startSession(u, remember);
     A.audit('Login', 'auth', u.id, [], u.name + ' logged in'); DB.save();
-    location.replace('admin.html' + (u.mustChange ? '#/profile' : ''));
+    location.replace('index.html' + (u.mustChange ? '#/profile' : ''));
   }
   function forgot(e) {
     e.preventDefault();
