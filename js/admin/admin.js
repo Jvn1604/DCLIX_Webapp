@@ -104,7 +104,7 @@
   };
   A.endSession = function (reason) {
     try { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); } catch (e) {}
-    location.href = 'admin-login.html' + (reason ? '?reason=' + encodeURIComponent(reason) : '');
+    location.href = 'login.html' + (reason ? '?reason=' + encodeURIComponent(reason) : '');
   };
   A.user = function () { var s = readSession(); return s ? A.byId('users', s.userId) : null; };
   A.touchSession = function () { var s = readSession(); if (s) { s.last = Date.now(); writeSession(s); } };
