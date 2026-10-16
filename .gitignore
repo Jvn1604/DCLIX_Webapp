@@ -1,0 +1,14 @@
+# Editor / OS files
+.vs/
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Dependencies and logs
+node_modules/
+*.log
+
+# Never commit secrets
+.env
+.env.*
