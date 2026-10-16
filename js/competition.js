@@ -141,9 +141,11 @@
       e.preventDefault();
       var pw = $('#pw').value, pw2 = $('#pw2').value;
       if (pw !== pw2) { $('#pw2').setCustomValidity('Passwords do not match'); form.reportValidity(); $('#pw2').setCustomValidity(''); return; }
-      // TODO: send the form data to your backend here.
+      // TODO: send the club data to your backend here (never store the password in the browser).
+      var qs = new URLSearchParams(location.search);
+      try { sessionStorage.setItem('dclixClub', JSON.stringify({ clubName: $('#clubName').value, clubCode: $('#clubCode').value, email: $('#clubEmail').value, plan: qs.get('plan') || '', billing: qs.get('billing') || '' })); } catch (err) {}
       modal.classList.add('show');
-      setTimeout(function () { location.href = q('dashboard'); }, 2000);
+      setTimeout(function () { location.href = q('payment'); }, 2000);
     });
     $('#cancelBtn').addEventListener('click', function () { location.href = 'competition.html?sport=' + sportId; });
   }
@@ -193,7 +195,7 @@
       .map(function (h) { return '<div>' + window.icon(h[0]) + '<b>' + h[1] + '</b><span>' + h[2] + '</span></div>'; }).join('');
     $('#fixList').innerHTML = [['No fixtures yet', 'Create fixtures to show match times'], ['No venues yet', 'Add locations to improve planning']]
       .map(function (f) { return '<div class="li"><div><b>' + f[0] + '</b><span>' + f[1] + '</span></div><span class="arr">' + window.icon('right') + '</span></div>'; }).join('');
-    $('#annList').innerHTML = [['sparkles', 'Orange theme enabled', 'UI update'], ['trophy', 'Add your first players to unlock registrations', 'Getting started'], ['activity', 'Go live when your fixtures are ready', 'Live activity']]
+    $('#annList').innerHTML = [['sparkles', 'Blue theme enabled', 'UI update'], ['trophy', 'Add your first players to unlock registrations', 'Getting started'], ['activity', 'Go live when your fixtures are ready', 'Live activity']]
       .map(function (a) { return '<div class="li"><div class="ib">' + window.icon(a[0]) + '</div><div><b>' + a[1] + '</b><span>' + a[2] + '</span></div></div>'; }).join('');
     $('#nextList').innerHTML = [['Register Players', 'Add athletes to your tournament roster.', 'player-register'], ['Register Clubs', 'Create clubs and assign participants.', 'club-register'], ['Watch Live', 'Follow matches and live updates.', 'live']]
       .map(function (s) { return '<a class="li" style="margin-bottom:12px" href="' + q(s[2]) + '"><div><b>' + s[0] + '</b><span>' + s[1] + '</span></div><span class="arr">' + window.icon('arrowupright') + '</span></a>'; }).join('');
