@@ -48,7 +48,8 @@ if (!isset($errors['clubCode'])) {
 if ($errors) fail('Please fix the highlighted fields.', 422, ['fields' => $errors]);
 
 $sportName = $f['sportName'] !== '' ? $f['sportName'] : ucwords(str_replace('-', ' ', $f['sport']));
-$phone = trim(preg_replace('/\s*\(.*\)$/', '', $f['phoneCode']) . ' ' . $f['whatsapp']);
+// Country code + WhatsApp number; empty when no number was given (a bare "+60" is not a phone number)
+$phone = $f['whatsapp'] === '' ? '' : trim(preg_replace('/\s*\(.*\)$/', '', $f['phoneCode']) . ' ' . $f['whatsapp']);
 $address = trim($f['address1'] . ($f['address2'] !== '' ? ', ' . $f['address2'] : ''));
 
 $pdo = db();

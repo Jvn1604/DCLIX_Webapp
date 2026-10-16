@@ -5,7 +5,7 @@
  */
 require __DIR__ . '/lib/init.php';
 
-$site = rtrim((string) cfg('site_url'), '/') . '/payment-status.html';
+$site = rtrim((string) cfg('site_url'), '/') . '/arena/payment-status.html';
 $p = is_array($_GET['billplz'] ?? null) ? $_GET['billplz'] : [];
 $billId = is_string($p['id'] ?? null) ? $p['id'] : '';
 $bill = $billId !== '' ? q('SELECT * FROM bills WHERE bill_id = ?', [$billId])->fetch() : false;

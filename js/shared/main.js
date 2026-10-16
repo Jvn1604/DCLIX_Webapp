@@ -199,7 +199,7 @@
           '<div class="save">' + (mode === 'yearly' ? p.save : '') + '</div>' +
           '<div class="desc">' + p.desc + '</div>' +
           '<ul>' + p.items.map(function (t) { return '<li><span class="tick">' + window.icon('check') + '</span><span>' + t + '</span></li>'; }).join('') + '</ul>' +
-          '<a class="btn-primary block" href="club-register.html?plan=' + p.name.split(' ')[0].toLowerCase() + '&billing=' + mode + '">Select Plan</a></div></div>';
+          '<a class="btn-primary block" href="arena/club-register.html?plan=' + p.name.split(' ')[0].toLowerCase() + '&billing=' + mode + '">Select Plan</a></div></div>';
       }).join('');
     }
     $$('.billing button').forEach(function (b) {

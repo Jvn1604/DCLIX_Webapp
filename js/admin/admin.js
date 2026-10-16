@@ -109,9 +109,9 @@
     var s = readSession();
     try { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); } catch (e) {}
     // Remember the admin page they were on, so logging in again returns there (not after a deliberate logout).
-    var next = /admin\.html$/.test(location.pathname) && /^#\/[\w\/%.-]+$/.test(location.hash) && reason !== 'loggedout' && reason !== 'reset' ? location.hash : '';
+    var next = /\/admin\/(index\.html)?$/.test(location.pathname) &&/^#\/[\w\/%.-]+$/.test(location.hash) && reason !== 'loggedout' && reason !== 'reset' ? location.hash : '';
     var qs = [reason ? 'reason=' + encodeURIComponent(reason) : '', next ? 'next=' + encodeURIComponent(next) : ''].filter(Boolean).join('&');
-    var go = function () { location.href = 'admin-login.html' + (qs ? '?' + qs : ''); };
+    var go = function () { location.href = 'login.html' + (qs ? '?' + qs : ''); };
     if (s && s.token && ['timeout', 'expired', 'disabled', 'club'].indexOf(reason) < 0) {
       window.dclixApi('auth.php', { body: { action: 'logout', reason: reason || '' }, token: s.token }).then(go, go);
     } else go();

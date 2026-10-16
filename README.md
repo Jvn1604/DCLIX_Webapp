@@ -10,8 +10,28 @@ Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite ru
 
 ## Site flow
 - **Visitor → client:** Home / Pricing → Select Plan → Club details → Payment → Done (a 4-step progress bar on each step; the plan can also be chosen on the registration page).
-- **Login:** every "Club Login" / "Login" opens `admin-login.html`. If a logged-out person opens an admin link (e.g. from an alert email), they return to that page after logging in.
+- **Login:** every "Club Login" / "Login" opens `admin/login.html`. If a logged-out person opens an admin link (e.g. from an alert email), they return to that page after logging in.
 - **Competition portal:** Register Now → Pricing; Competition Setting → Admin → Tournaments (login required).
+
+## Folder layout
+```
+index.html, about.html, pricing.html, edu-hub.html, referral.html   Marketing site (root)
+privacy.html, terms.html, 404.html                                   Legal pages + "page not found"
+arena/      competition, live, club-register, payment, payment-status, player-register, dashboard
+admin/      login.html, index.html (admin portal)
+api/        PHP + MySQL backend (see "Backend" below; api/config.php is never committed)
+css/        style.css (shared + theme colour), admin.css
+js/shared/      theme.js, icons.js, main.js, config.js (where the API is) — used by every page
+js/arena/       sports.js (18 sports), competition.js (portal + club registration), payment.js
+js/marketing/   referral-data.js (slides)
+js/admin/       admin-*.js (see table below)
+assets/     logo, favicon, images
+```
+Pages inside `arena/` and `admin/` load shared files with `../` (for example `../css/style.css`).
+
+## Change the theme colour
+Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light` and `--accent-rgb` (the same colour as R,G,B numbers).
+The admin portal, its charts and printed documents follow the same colour automatically.
 
 ## Pages
 | File | Page |
@@ -21,31 +41,31 @@ Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite ru
 | pricing.html | Plans (monthly / yearly) |
 | edu-hub.html | Edu-Hub + PDF guide download |
 | referral.html | Referral program slideshow |
-| competition.html | D-CLIX Arena: sport selector, news, rankings, fixtures |
-| live.html?sport=karate | Watch Live (live / brackets / schedule / winners) |
-| club-register.html?sport=karate | Club registration |
-| player-register.html?sport=karate | Player registration |
-| dashboard.html?sport=karate | Club login destination / dashboard |
-| admin-login.html | Admin portal login |
-| admin.html | Admin portal (all modules, see below) |
-| payment.html | Signup step 2: plan + billing details, then Billplz |
-| payment-status.html | Where clients land after paying (paid / failed / pending) |
+| arena/competition.html | D-CLIX Arena: sport selector, news, rankings, fixtures |
+| arena/live.html?sport=karate | Watch Live (live / brackets / schedule / winners) |
+| arena/club-register.html?sport=karate | Club registration |
+| arena/player-register.html?sport=karate | Player registration |
+| arena/dashboard.html?sport=karate | Arena tournament dashboard (demo; player registration lands here) |
+| admin/login.html | Admin portal login |
+| admin/index.html | Admin portal (all modules, see below) |
+| arena/payment.html | Signup step 2: plan + billing details, then Billplz |
+| arena/payment-status.html | Where clients land after paying (paid / failed / pending) |
 | privacy.html · terms.html | Privacy Policy and Terms & Conditions (have them reviewed before launch) |
 | 404.html | "Page not found" page (GitHub Pages shows it for any missing address) |
 
 ## Files
-css/style.css · js/theme.js (saved theme) · js/icons.js · js/sports.js (18 sports) · js/main.js (shared behaviour)
-· js/competition.js (portal pages) · js/referral-data.js (slides) · assets/ (logo + images)
+css/style.css · js/shared/theme.js (saved theme) · js/shared/icons.js · js/arena/sports.js (18 sports) · js/shared/main.js (shared behaviour)
+· js/arena/competition.js (portal pages) · js/marketing/referral-data.js (slides) · assets/ (logo + images)
 
 ## Admin portal
-Open `admin-login.html` (also linked from the home page footer). When the API is reachable the portal reads and saves
+Open `admin/login.html` (also linked from the home page footer). When the API is reachable the portal reads and saves
 the MySQL database. Otherwise (e.g. on GitHub Pages before the API is hosted) it runs as an offline demo: expand
 **Demo accounts** on the login page and click one to fill the form. All demo accounts share the password shown there. Five roles are included: Super Admin, Club
 Admin, Centre Admin, Instructor and Finance. Each one sees different menus and data.
 
 Double-clicking the file usually works. Some browsers restrict storage on `file://` pages, so if the login does not
 stay, serve the folder over HTTP instead (for example `python -m http.server 8000`, then open
-`http://localhost:8000/admin-login.html`).
+`http://localhost:8000/admin/login.html`).
 
 **Modules:** Dashboard (summary cards, 8 charts, quick actions) · Clubs · Training Centres · Students (profile tabs,
 QR code, membership card, transfer, documents, history) · Instructors · Classes · Online Registration (link, QR,
@@ -62,23 +82,23 @@ Excel (CSV) / PDF / print, plus loading, empty and error states.
 | File | Purpose |
 |---|---|
 | css/admin.css | Admin styles (uses the colour tokens from style.css; light + dark) |
-| js/admin-data.js | Sample data generator and storage (`localStorage` key `dclix_admin_db_v1`) |
-| js/admin.js | Core: session, permissions, data scope, router, table, forms, validation, charts, export, audit |
-| js/admin-modules.js | Dashboard + Management modules |
-| js/admin-operations.js | Attendance, Grading, Activities, Tournaments, Rankings |
-| js/admin-finance.js | Finance + Inventory modules |
-| js/admin-sales.js | Leads (website signups), Subscriptions (plan invoices / Billplz), Email Log |
-| js/admin-automation.js | Signup Automation dashboard, full lead record (timeline, raw data), Simulate signup |
-| js/admin-system.js | Notifications, Reports, Users, Roles, Approvals, Audit, Settings, Profile, menu order |
-| js/config.js | Where the API lives (`PRODUCTION_API`) + the `dclixApi()` helper |
-| js/admin-login.js | Login, lockout, 2FA code, forgot / reset password |
+| js/admin/admin-data.js | Sample data generator and storage (`localStorage` key `dclix_admin_db_v1`) |
+| js/admin/admin.js | Core: session, permissions, data scope, router, table, forms, validation, charts, export, audit |
+| js/admin/admin-modules.js | Dashboard + Management modules |
+| js/admin/admin-operations.js | Attendance, Grading, Activities, Tournaments, Rankings |
+| js/admin/admin-finance.js | Finance + Inventory modules |
+| js/admin/admin-sales.js | Leads (website signups), Subscriptions (plan invoices / Billplz), Email Log |
+| js/admin/admin-automation.js | Signup Automation dashboard, full lead record (timeline, raw data), Simulate signup |
+| js/admin/admin-system.js | Notifications, Reports, Users, Roles, Approvals, Audit, Settings, Profile, menu order |
+| js/shared/config.js | Where the API lives (`PRODUCTION_API`) + the `dclixApi()` helper |
+| js/admin/admin-login.js | Login, lockout, 2FA code, forgot / reset password |
 
 Demo mode keeps everything in the browser and is **not secure** (roles can be bypassed). Use server mode for real data.
 
 ## Backend (PHP + MySQL) — the automated signup
 ```
-pricing.html → Select Plan → club-register.html ──POST api/signup.php──▶ club + Club Admin login + lead (Pending Payment)
-            → payment.html ──POST api/checkout.php──▶ invoice + Billplz bill ──▶ Billplz payment page
+pricing.html → Select Plan → arena/club-register.html ──POST api/signup.php──▶ club + Club Admin login + lead (Pending Payment)
+            → arena/payment.html ──POST api/checkout.php──▶ invoice + Billplz bill ──▶ Billplz payment page
             ◀── api/billplz-return.php (+ api/billplz-callback.php) re-checks the bill with Billplz, then automatically:
                 club Active + plan dates · Main Centre created · login activated · receipt number
                 emails: welcome + receipt to the client, alerts to sales · shown in Admin → Leads, Subscriptions, Email Log
@@ -116,7 +136,7 @@ pricing.html → Select Plan → club-register.html ──POST api/signup.php─
 1. Upload the `api` folder to PHP hosting with HTTPS (e.g. company cPanel), create a MySQL database and a `config.php`
    there, then run `php api/install.php --admin-email=… --admin-password=…` (or import `schema.sql`).
 2. In `api/config.php`: `debug => false`, real `site_url` (the GitHub Pages address), `api_url`, Billplz keys, SMTP.
-3. In `js/config.js` set `PRODUCTION_API` to the HTTPS address of the api folder and push to GitHub.
+3. In `js/shared/config.js` set `PRODUCTION_API` to the HTTPS address of the api folder and push to GitHub.
 4. Billplz callbacks cannot reach a home PC, so locally payments are confirmed only by the redirect back to the site.
    Once hosted, the callback (`api_url` + `/billplz-callback.php`, sent with each bill) confirms them even if the client closes the browser.
 
@@ -131,7 +151,7 @@ pricing.html → Select Plan → club-register.html ──POST api/signup.php─
 - Clubs whose subscription has ended are not suspended automatically.
 
 ## Things to connect (marked `TODO` in the JS)
-1. Player registration (competition.js) only validates in the browser. Club registration and the home page contact form
+1. Player registration (arena/competition.js) only validates in the browser. Club registration and the home page contact form
    (saved as a lead, source "Contact form", with emails to sales and the visitor) are connected to the API.
 2. Social media icons were removed from the footers until real Facebook / Instagram / LinkedIn addresses are available.
 3. Boxing/MMA hero tiles, testimonial avatars, dashboard photos, news and referral slides load from the same remote

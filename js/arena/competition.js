@@ -56,20 +56,23 @@
       return '<div class="card sport-card" role="button" tabindex="0" data-id="' + s.id + '" style="animation-delay:' + (i * .02) + 's">' +
         '<div class="ic">' + window.icon(s.icon) + '</div><span>' + s.name + '</span></div>';
     }).join('');
+    // plan chosen on the pricing page: keep it while the user picks a sport, so it reaches club registration
+    var landQs = new URLSearchParams(location.search), landPlan = landQs.get('plan'), landBilling = landQs.get('billing');
+    function planQs() { return landPlan ? '&plan=' + encodeURIComponent(landPlan) + (landBilling ? '&billing=' + encodeURIComponent(landBilling) : '') : ''; }
     function select(id) {
       var s = window.getSport(id); if (!s) return;
       sportId = id; sport = s;
-      history.replaceState(null, '', '?sport=' + id);
+      history.replaceState(null, '', '?sport=' + id + planQs());
       $('#selIcon').innerHTML = window.icon(s.icon);
       $('#selName').textContent = s.name;
       var opts = [
         { l: 'Watch Live Event', d: 'Real-time match tracking and live brackets', i: 'tv', p: 'live' },
         { l: 'New Club Registration', d: 'Register your academy for the upcoming season', i: 'userplus', p: 'club-register' },
         { l: 'Player Registration', d: 'Register athletes and manage team rosters', i: 'users', p: 'player-register' },
-        { l: 'Competition Setting', d: 'Admin panel for tournament configuration (login required)', i: 'settings', href: 'admin.html#/tournaments' }
+        { l: 'Competition Setting', d: 'Admin panel for tournament configuration (login required)', i: 'settings', href: '../admin/index.html#/tournaments' }
       ];
       $('#optGrid').innerHTML = opts.map(function (o) {
-        return '<a class="card opt" href="' + (o.href || o.p + '.html?sport=' + id) + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
+        return '<a class="card opt" href="' + (o.href || o.p + '.html?sport=' + id + (o.p === 'club-register' ? planQs() : '')) + '"><div class="l"><div class="icon-box" style="width:64px;height:64px">' + window.icon(o.i, 'w-8') +
           '</div><div><h3>' + o.l + '</h3><p>' + o.d + '</p></div></div><span class="chev">' + window.icon('right') + '</span></a>';
       }).join('');
       selector.classList.add('hidden'); actions.classList.remove('hidden');
@@ -78,7 +81,7 @@
     grid.addEventListener('click', function (e) { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); });
     grid.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var c = e.target.closest('.sport-card'); if (c) select(c.getAttribute('data-id')); } });
     $('#changeSport').addEventListener('click', function () {
-      history.replaceState(null, '', location.pathname);
+      history.replaceState(null, '', location.pathname + planQs().replace('&', '?'));
       actions.classList.add('hidden'); selector.classList.remove('hidden');
     });
     if (new URLSearchParams(location.search).get('sport')) select(sportId);
@@ -148,7 +151,7 @@
     var pick = $('#planPick');
     pick.innerHTML = '<div class="pp-l"><label class="lbl" for="planSel">Your plan</label><select class="select" id="planSel">' +
       PLANS.map(function (p) { return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p[0] + '-' + m + '">' + p[1] + ' — RM' + (m === 'monthly' ? p[2] + ' / month' : p[3] + ' / year') + '</option>'; }).join(''); }).join('') +
-      '</select></div><a class="accent" href="pricing.html">Compare plans</a>';
+      '</select></div><a class="accent" href="../pricing.html">Compare plans</a>';
     pick.hidden = false;
     var planSel = $('#planSel');
     planSel.value = plan + '-' + billing;
@@ -203,7 +206,7 @@
         showErrors(err.data && err.data.fields, err.message);
       });
     });
-    $('#cancelBtn').addEventListener('click', function () { location.href = 'pricing.html'; });
+    $('#cancelBtn').addEventListener('click', function () { location.href = '../pricing.html'; });
   }
 
   /* ---------- Player registration ---------- */
