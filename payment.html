@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Payment | D-CLIX Arena</title>
-<meta name="description" content="D-CLIX Arena - martial arts tournament portal." />
+<title>Payment | D-Clix</title>
+<meta name="description" content="Register your club on D-Clix Club Management System." />
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,29 +13,29 @@
 <script src="js/theme.js"></script>
 </head>
 <body data-page="payment">
-<nav class="nav" aria-label="Competition">
-  <div class="nav-inner" style="max-width:none">
-    <a class="brand" href="competition.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span><span class="brand-name big">D-CLIX Arena</span></a>
-    <div class="nav-links"><a class="plain" href="competition.html#news">News</a><a class="plain" href="competition.html#rankings">Rankings</a><a class="plain" href="competition.html#fixtures">Fixtures</a><a class="plain" href="competition.html#about">About</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="strong" href="dashboard.html" data-sport-link="dashboard">Login</a><a class="btn-primary sm" style="color:#fff" href="competition.html">Register Now</a></div>
+<nav class="nav" aria-label="Main">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span>
+      <span><span class="brand-name" style="display:block">D-Clix</span><span class="brand-sub">Club Management</span></span></a>
+    <div class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html" class="active" aria-current="page">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><a href="referral.html">D-Clix Referral Program</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" style="color:#fff" href="admin-login.html">Club Login</a></div>
     <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
   </div>
-  <div class="mobile-menu" id="mobileMenu"><a href="competition.html#news">News</a><a href="competition.html#rankings">Rankings</a><a href="competition.html#fixtures">Fixtures</a><a href="competition.html#about">About</a><a href="dashboard.html" data-sport-link="dashboard">Login</a><a class="btn-primary" style="color:#fff" href="competition.html">Register Now</a></div>
+  <div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><a href="referral.html">D-Clix Referral Program</a><a class="btn-primary" style="color:#fff" href="admin-login.html">Club Login</a></div>
 </nav>
 
 <main class="reg-main" style="max-width:720px">
+<ol class="flow-steps" aria-label="Signup progress"><li class="done"><a href="pricing.html"><span class="n"><i data-icon="check" class="w-4"></i></span><span class="t">Choose plan</span></a></li><li class="done"><span class="n"><i data-icon="check" class="w-4"></i></span><span class="t">Club details</span></li><li class="now" aria-current="step"><span class="n">3</span><span class="t">Payment</span></li><li class=""><span class="n">4</span><span class="t">Done</span></li></ol>
 <div class="reg-head"><div class="icon-box" style="width:64px;height:64px"><i data-icon="building" class="w-8"></i></div><div><h1>Complete <em>Payment</em></h1><p>Choose your plan and finish setting up your club</p></div></div>
 
 <form id="payForm" novalidate>
   <div class="card fs"><div class="fs-title"><i></i><h2>Club</h2></div><div class="fgrid">
-    <div><label class="lbl" for="pClubName">Club name <span class="req">*</span></label><input class="input" id="pClubName" autocomplete="organization" required /></div>
-    <div><label class="lbl" for="pClubCode">Club code</label><input class="input" id="pClubCode" /></div>
+    <div><label class="lbl" for="pClubName">Club name</label><input class="input" id="pClubName" readonly /></div>
+    <div><label class="lbl" for="pClubCode">Club code</label><input class="input" id="pClubCode" readonly /></div>
   </div></div>
 
   <div class="card fs"><div class="fs-title"><i></i><h2>Payment</h2></div><div class="fgrid">
     <div style="grid-column:1/-1"><label class="lbl" for="pPlan">Select plan</label><select class="select" id="pPlan"></select></div>
-    <div style="grid-column:1/-1"><label class="lbl" for="pCard">Card number <span class="req">*</span></label><input class="input" id="pCard" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" /></div>
-    <div><label class="lbl" for="pExp">Expiry (MM/YY) <span class="req">*</span></label><input class="input" id="pExp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" /></div>
-    <div><label class="lbl" for="pCvc">CVC <span class="req">*</span></label><input class="input" id="pCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" /></div>
+    <div style="grid-column:1/-1" class="pay-secure"><i data-icon="shieldcheck" class="w-5"></i><span>After you continue, you will be taken to <b>Billplz</b> to pay securely by FPX online banking or card. D-Clix never sees or stores your card or bank details.</span></div>
   </div>
   <div class="pay-sum"><div><span>Plan</span><span id="sumPlan"></span></div><div><span id="sumPriceLbl">Subscription</span><span id="sumPrice"></span></div><div><span>Gateway payment fee</span><span id="sumFee"></span></div><div class="total"><span>Total today</span><span id="sumTotal"></span></div></div>
   <p class="pay-note" id="payNote"></p></div>
@@ -52,12 +52,33 @@
     <div><label class="lbl" for="bPhone">Phone</label><input class="input" id="bPhone" type="tel" autocomplete="tel" /></div>
   </div>
   <p class="form-err" id="payErr" role="alert"></p>
-  <div class="form-actions"><button class="btn-primary" type="submit" id="payBtn">Continue to payment</button><a class="btn-ghost" href="club-register.html">Back</a></div></div>
+  <div class="form-actions"><button class="btn-primary" type="submit" id="payBtn">Continue to payment</button><a class="btn-ghost" href="club-register.html" id="payBack">Edit club details</a></div></div>
 </form>
 
-<div class="modal" id="successModal" role="dialog" aria-modal="true"><div class="box"><div class="ok"><i data-icon="checkcircle" class=""></i></div><h2>Payment received</h2><p>Your club is all set. Redirecting to your dashboard...</p><div class="bar"><i></i></div></div></div>
+<div class="modal" id="successModal" role="dialog" aria-modal="true"><div class="box"><div class="ok"><i data-icon="checkcircle" class=""></i></div><h2>Taking you to payment</h2><p>Opening the secure Billplz payment page...</p><div class="bar"><i></i></div></div></div>
 </main>
 
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <div class="name">D-Clix</div>
+      <div class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</div>
+      
+    </div>
+    <div>
+      <h4 class="t">Contact</h4>
+      <div class="f-line"><i data-icon="phone" class=""></i><b><a href="tel:+60378041412">+603-7804 1412</a></b></div>
+      <div class="f-line"><i data-icon="pin" class=""></i><span class="muted" style="font-weight:500">Suite 442 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, SS7, 47301 Petaling Jaya, Selangor</span></div>
+    </div>
+    <div>
+      <h4 class="t">Links</h4>
+      <div class="f-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">Edu-Hub</a><a href="referral.html">Referral</a><a href="competition.html">Competition Portal</a><a href="admin-login.html">Club Login</a></div>
+      <div class="f-legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a></div>
+    </div>
+  </div>
+  <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><span class="caps">D-Clix Club Management System</span></div></div>
+</footer>
+<script src="js/config.js"></script>
 <script src="js/icons.js"></script>
 <script src="js/sports.js"></script>
 <script src="js/main.js"></script>

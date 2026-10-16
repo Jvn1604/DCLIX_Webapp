@@ -622,3 +622,40 @@ html.dark .ticker::before { background: linear-gradient(to right, #0b0f16, trans
 .pay-note { color: var(--muted); font-size: 13px; margin-top: 12px; }
 .form-err { display: none; color: #ef4444; font-size: 14px; margin-top: 20px; }
 .form-err.show { display: block; }
+/* ---------- Signup: selected plan + field errors ---------- */
+.plan-pick { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; align-items: center; padding: 14px 20px; margin-bottom: 24px; border-color: rgba(var(--accent-rgb),.35); }
+.plan-pick[hidden] { display: none; }
+.plan-pick a { font-weight: 600; }
+.field-err { display: block; color: #ef4444; font-size: 13px; margin-top: 6px; }
+.field-hint { display: block; color: var(--muted); font-size: 12px; margin-top: 6px; }
+.input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: #ef4444; }
+.pay-secure { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; background: rgba(var(--accent-rgb),.08); border: 1px solid rgba(var(--accent-rgb),.25); font-size: 14px; color: var(--fg); }
+.pay-secure svg { color: var(--accent); flex: none; margin-top: 2px; }
+.pay-status { text-align: center; padding: 40px 28px; }
+.pay-status h1 { font-size: 28px; margin: 16px 0 10px; }
+.pay-status p { color: var(--muted); line-height: 1.6; }
+.pay-status .form-actions { justify-content: center; }
+.ps-icon { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; background: rgba(239,68,68,.12); color: #ef4444; }
+.ps-icon.paid { background: rgba(16,185,129,.12); color: #10b981; }
+.ps-icon.pending { background: rgba(var(--accent-rgb),.12); color: var(--accent); }
+
+/* ---------- Signup progress (pricing → club details → payment → done) ---------- */
+.flow-steps { list-style: none; display: flex; align-items: center; gap: 8px; padding: 0; margin: 0 0 32px; flex-wrap: wrap; }
+.flow-steps li { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 600; }
+.flow-steps li a { display: flex; align-items: center; gap: 8px; color: inherit; }
+.flow-steps li:not(:last-child)::after { content: ""; width: 32px; height: 2px; background: var(--line2); border-radius: 2px; margin-left: 4px; }
+.flow-steps .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line2); font-size: 13px; }
+.flow-steps li.done { color: var(--fg); } .flow-steps li.done .n { background: var(--accent); border-color: var(--accent); color: #fff; }
+.flow-steps li.done:not(:last-child)::after { background: var(--accent); }
+.flow-steps li.now { color: var(--accent); } .flow-steps li.now .n { border-color: var(--accent); }
+@media (max-width: 560px) { .flow-steps li:not(.now) .t { display: none; } .flow-steps li:not(:last-child)::after { width: 18px; } }
+.plan-pick .pp-l { flex: 1 1 280px; max-width: 420px; }
+.plan-pick .pp-l .lbl { margin-bottom: 6px; }
+.toast.err { color: #ef4444; border-color: rgba(239,68,68,.35); }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.legal h1 { font-size: clamp(32px, 5vw, 44px); font-weight: 600; }
+.legal h2 { font-size: 22px; font-weight: 600; }
+.legal p, .legal li { color: var(--muted); line-height: 1.7; }
+.legal ul { padding-left: 20px; margin: 0; } .legal li + li { margin-top: 8px; } .legal b { color: var(--fg); }
+.notfound h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 600; }
+.notfound .btn-outline { padding: 12px 24px; }

@@ -80,16 +80,27 @@
   function initLeadForm() {
     var form = $('#leadForm'); if (!form) return;
     var toast = $('#leadToast');
+    var btn = form.querySelector('button[type=submit]');
+    function say(msg, ok) {
+      toast.textContent = msg; toast.classList.toggle('err', !ok); toast.classList.add('show');
+      clearTimeout(say.t); say.t = setTimeout(function () { toast.classList.remove('show'); }, ok ? 4500 : 7000);
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      $$('[aria-invalid]', form).forEach(function (el) { el.removeAttribute('aria-invalid'); });
       if (!form.checkValidity()) { form.reportValidity(); return; }
       var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
-      // TODO: send `data` to your own backend / email service, e.g.
-      // fetch('/api/enquiry', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-      console.log('Lead ready to send:', data);
-      form.reset();
-      toast.classList.add('show');
-      setTimeout(function () { toast.classList.remove('show'); }, 3500);
+      if (!window.dclixApi) { say('Sorry, the form is not available right now. Please call us at +603-7804 1412.', false); return; }
+      btn.disabled = true; btn.textContent = 'Sending…';
+      // Saved as a lead in Admin → Leads; sales is alerted and the visitor gets a confirmation email.
+      window.dclixApi('contact.php', { body: data }).then(function () {
+        form.reset();
+        say('Thanks! We have received your details. A D-Clix expert will contact you soon.', true);
+      }, function (err) {
+        var fields = err.data && err.data.fields;
+        if (fields) Object.keys(fields).forEach(function (k) { var el = form.elements[k]; if (el) el.setAttribute('aria-invalid', 'true'); });
+        say(err.offline ? 'Online enquiries are not connected yet. Please call us at +603-7804 1412 or email us.' : (fields ? fields[Object.keys(fields)[0]] : err.message), false);
+      }).then(function () { btn.disabled = false; btn.textContent = 'Submit'; });
     });
   }
 
