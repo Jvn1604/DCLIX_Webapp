@@ -78,10 +78,10 @@
   A.nameOf = function (coll, id) { var r = A.byId(coll, id); return r ? r.name : (id ? id : ''); };
   A.cssStatus = function (s) {
     s = String(s || '').toLowerCase();
-    if (/^(active|paid|present|approved|pass|completed|delivered|sent|open|registered|in stock|success|gold|converted)$/.test(s)) return 'ok';
-    if (/(fail|inactive|suspended|absent|overdue|rejected|cancelled|archived|refunded|locked|out of stock|^lost$)/.test(s)) return 'bad';
-    if (/(pending|partial|late|scheduled|requested|in transit|draft|silver|unpaid|registration open|low stock|queued|follow-up)/.test(s)) return 'warn';
-    if (/(excused|bronze|shipped|logged|^new$|contacted)/.test(s)) return 'info';
+    if (/^(active|paid|present|approved|pass|completed|delivered|sent|open|registered|in stock|success|gold)$/.test(s)) return 'ok';
+    if (/(pending|partial|late|scheduled|requested|in transit|draft|silver|unpaid|registration open|low stock)/.test(s)) return 'warn';
+    if (/(inactive|suspended|absent|overdue|rejected|fail|cancelled|archived|refunded|failed|locked|out of stock)/.test(s)) return 'bad';
+    if (/(excused|bronze|shipped)/.test(s)) return 'info';
     return 'neutral';
   };
   A.badge = function (s) { return s ? '<span class="a-badge ' + A.cssStatus(s) + '">' + esc(s) + '</span>' : ''; };
@@ -99,22 +99,12 @@
       store.setItem(SESSION_KEY, JSON.stringify(s));
     } catch (e) {}
   }
-  /* token is set for server (API) sessions; demo sessions have none. */
-  A.startSession = function (user, remember, token) {
-    writeSession({ userId: user.id, remember: !!remember, at: Date.now(), last: Date.now(), mode: token ? 'api' : 'demo', token: token || '' });
+  A.startSession = function (user, remember) {
+    writeSession({ userId: user.id, remember: !!remember, at: Date.now(), last: Date.now() });
   };
-  A.session = readSession;
-  DB.token = function () { var s = readSession(); return (s && s.token) || ''; };
   A.endSession = function (reason) {
-    var s = readSession();
     try { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem(SESSION_KEY); } catch (e) {}
-    // Remember the admin page they were on, so logging in again returns there (not after a deliberate logout).
-    var next = /\/admin\/(index\.html)?$/.test(location.pathname) &&/^#\/[\w\/%.-]+$/.test(location.hash) && reason !== 'loggedout' && reason !== 'reset' ? location.hash : '';
-    var qs = [reason ? 'reason=' + encodeURIComponent(reason) : '', next ? 'next=' + encodeURIComponent(next) : ''].filter(Boolean).join('&');
-    var go = function () { location.href = 'login.html' + (qs ? '?' + qs : ''); };
-    if (s && s.token && ['timeout', 'expired', 'disabled', 'club'].indexOf(reason) < 0) {
-      window.dclixApi('auth.php', { body: { action: 'logout', reason: reason || '' }, token: s.token }).then(go, go);
-    } else go();
+    location.href = 'login.html' + (reason ? '?reason=' + encodeURIComponent(reason) : '');
   };
   A.user = function () { var s = readSession(); return s ? A.byId('users', s.userId) : null; };
   A.touchSession = function () { var s = readSession(); if (s) { s.last = Date.now(); writeSession(s); } };
@@ -126,7 +116,6 @@
 
   /* Record a login attempt (used by the login page) */
   A.logLogin = function (email, ok, reason) {
-    if (DB.mode === 'api') return; // the server records logins itself
     DB.data.logins.unshift({ email: email, ok: ok, reason: reason || '', at: new Date().toISOString(), agent: navigator.userAgent.slice(0, 90) });
     DB.data.logins = DB.data.logins.slice(0, 500);
     DB.save();
@@ -406,8 +395,8 @@
     d.write('<!doctype html><html><head><meta charset="utf-8"><title>' + esc(title) + '</title><style>' +
       'body{font-family:"DM Sans",system-ui,sans-serif;color:#111;margin:24px;font-size:12px}h1{font-size:18px;margin:0 0 4px}h2{font-size:14px;margin:18px 0 6px}.muted{color:#666}' +
       'table{width:100%;border-collapse:collapse;margin-top:12px}th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top}th{background:#f3f4f6}' +
-      '.head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid ' + A.accent() + ';padding-bottom:10px;margin-bottom:12px}.brand{font-weight:700;color:' + A.accent() + ';font-size:16px}' +
-      '.right{text-align:right}.tot td{font-weight:700}.box{border:1px solid #ddd;border-radius:8px;padding:12px;margin-top:12px}.cert{text-align:center;border:8px double ' + A.accent() + ';padding:60px 40px;margin-top:40px}.cert h1{font-size:34px}.cert .big{font-size:26px;font-weight:700;margin:16px 0}' +
+      '.head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #f97316;padding-bottom:10px;margin-bottom:12px}.brand{font-weight:700;color:#f97316;font-size:16px}' +
+      '.right{text-align:right}.tot td{font-weight:700}.box{border:1px solid #ddd;border-radius:8px;padding:12px;margin-top:12px}.cert{text-align:center;border:8px double #f97316;padding:60px 40px;margin-top:40px}.cert h1{font-size:34px}.cert .big{font-size:26px;font-weight:700;margin:16px 0}' +
       '@page{margin:14mm}</style></head><body>' +
       '<div class="head"><div><div class="brand">' + esc(A.settings().systemName) + '</div><div class="muted">Raig Technologies (M) Sdn Bhd</div></div><div class="right muted">Printed ' + A.datetime(new Date()) + '<br>' + esc((A.user() || {}).name || '') + '</div></div>' +
       html + '</body></html>');
@@ -431,9 +420,7 @@
   };
 
   /* ---------- Charts (inline SVG) ---------- */
-  /* First chart colour follows the site theme (--accent in style.css). */
-  A.accent = function () { var v = ''; try { v = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(); } catch (e) {} return v || '#1d4ed8'; };
-  var PALETTE = [A.accent(), '#f97316', '#10b981', '#a855f7', '#eab308', '#ef4444', '#14b8a6', '#ec4899'];
+  var PALETTE = ['#f97316', '#3b82f6', '#10b981', '#a855f7', '#eab308', '#ef4444', '#14b8a6', '#ec4899'];
   A.palette = PALETTE;
   function niceMax(v) { if (v <= 0) return 1; var p = Math.pow(10, Math.floor(Math.log10(v))); var n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }
   function shortNum(v) { return v >= 1e6 ? (v / 1e6).toFixed(1).replace(/\.0$/, '') + 'M' : v >= 1e3 ? (v / 1e3).toFixed(1).replace(/\.0$/, '') + 'k' : String(Math.round(v)); }
@@ -704,62 +691,13 @@
     $$('[data-badge]').forEach(function (el) { var v = A.views[el.getAttribute('data-badge')]; var n = v.badge(); el.textContent = n || ''; el.hidden = !n; });
     var bell = $('#bellCount'); if (bell) { var n = A.views.approvals && A.can('approvals', 'view') ? A.views.approvals.badge() : 0; bell.textContent = n; bell.hidden = !n; }
   };
-  function whenDom(fn) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn); else fn(); }
-  /* Show the server connection state in the bar under the top bar. */
-  function setBar(kind, html) { var b = $('.a-demo-bar'); if (!b) return; b.className = 'a-demo-bar ' + (kind || ''); b.innerHTML = html; b.hidden = !html; }
-  function serverBar() {
-    var s = DB.data.server || {}, notes = [];
-    if (s.payments === 'mock') notes.push('payments use the built-in test gateway');
-    else if (s.payments === 'sandbox') notes.push('payments use the Billplz sandbox');
-    if (s.mail !== 'smtp') notes.push('emails are logged, not sent');
-    setBar('', notes.length ? A.icon('info') + ' Connected to the server · Test setup: ' + notes.join(' and ') + '.' : '');
-  }
   A.boot = function () {
-    var s = readSession();
-    if (!s) { A.endSession(''); return; }
-    var ready;
-    if (s.mode === 'api') {
-      whenDom(function () { var v = $('#view'); if (v) v.innerHTML = '<div class="a-notice">' + A.icon('refresh', 'w-12') + '<h2>Loading your data…</h2></div>'; window.hydrateIcons(); });
-      ready = DB.bootstrap();
-    } else ready = Promise.resolve(DB.load());
-    ready.then(function () {
-      var u = A.user();
-      if (!u || u.status !== 'Active') { A.endSession(u ? 'disabled' : ''); return; }
-      if (A.sessionExpired()) { A.endSession('timeout'); return; }
-      A.touchSession();
-      whenDom(start);
-    }, function (err) {
-      if (err.status === 401) { A.endSession((err.data && err.data.reason) || 'expired'); return; }
-      whenDom(function () {
-        $('#view').innerHTML = '<div class="a-notice">' + A.icon('alert', 'w-12') + '<h2>Cannot reach the server</h2><p>' + esc(err.message) + '</p><button class="a-btn primary" onclick="location.reload()">Try again</button></div>';
-        window.hydrateIcons();
-      });
-    });
-  };
-  function start() {
-      if (DB.mode === 'api') {
-        serverBar();
-        DB.onStatus = function (st) {
-          if (st === 'offline') setBar('bad', A.icon('alert') + ' Changes not saved yet — cannot reach the server. Retrying…');
-          else if (st === 'saving') { var b = $('.a-demo-bar'); if (b && b.classList.contains('bad')) setBar('', A.icon('refresh') + ' Saving…'); }
-          else serverBar();
-        };
-        DB.onError = function (m) { A.toast(m, 'error'); };
-        DB.onAuthLost = function (reason) { A.endSession(reason || 'expired'); };
-        DB.onReloaded = function () { A.updateBadges(); route(); };
-        window.addEventListener('beforeunload', function (e) { if (DB.pending()) { e.preventDefault(); e.returnValue = ''; } });
-      } else {
-        setBar('', A.icon('info') + ' Demo mode — sample data stored in this browser only. Not connected to a server.');
-      }
-      if (DB.mode === 'api') {
-        // pick up changes made elsewhere (new website signups, other admins) when coming back to the tab
-        var lastLoad = Date.now();
-        document.addEventListener('visibilitychange', function () {
-          if (document.visibilityState === 'visible' && Date.now() - lastLoad > 60000 && !DB.pending() && !document.querySelector('.a-modal-wrap')) {
-            lastLoad = Date.now(); DB.bootstrap().then(function () { A.updateBadges(); route(); }, function (err) { if (err.status === 401) A.endSession((err.data && err.data.reason) || 'expired'); });
-          }
-        });
-      }
+    DB.load();
+    var u = A.user();
+    if (!u || u.status !== 'Active') { A.endSession(u ? 'disabled' : ''); return; }
+    if (A.sessionExpired()) { A.endSession('timeout'); return; }
+    A.touchSession();
+    document.addEventListener('DOMContentLoaded', function () {
       window.hydrateIcons();
       buildShell();
       $$('[data-theme-toggle]').forEach(function (btn) { btn.addEventListener('click', function () { var r = document.documentElement; var n = r.classList.contains('light') ? 'dark' : 'light'; r.classList.remove('light', 'dark'); r.classList.add(n); try { localStorage.setItem('theme', n); } catch (e) {} }); });
@@ -776,8 +714,9 @@
       ['click', 'keydown', 'mousemove', 'touchstart', 'scroll'].forEach(function (ev) { document.addEventListener(ev, bump, { passive: true }); });
       setInterval(function () { if (A.sessionExpired()) { A.audit('Logout', 'auth', (A.user() || {}).id, [], 'Session timed out'); DB.save(); A.endSession('timeout'); } }, 20000);
       window.addEventListener('hashchange', route);
-      // other tabs changing data (demo mode)
-      if (DB.mode !== 'api') window.addEventListener('storage', function (e) { if (e.key === 'dclix_admin_db_v1') { DB.load(); A.updateBadges(); } });
+      // other tabs changing data
+      window.addEventListener('storage', function (e) { if (e.key === 'dclix_admin_db_v1') { DB.load(); A.updateBadges(); } });
       route();
-  }
+    });
+  };
 })();

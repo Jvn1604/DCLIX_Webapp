@@ -143,10 +143,7 @@
   /* Mark unpaid bills past their due date as overdue. */
   M.normalize = function () {
     var t = A.today(), changed = false;
-    if (!A.can('payments', 'edit')) return;
-    D().payments.forEach(function (p) {
-      if (p.status === 'Unpaid' && p.dueDate && p.dueDate < t && A.inScope(p, 'payments')) { p.status = 'Overdue'; changed = true; A.audit('Update', 'payments', p.id, [], 'Marked overdue automatically (due date passed)'); }
-    });
+    D().payments.forEach(function (p) { if (p.status === 'Unpaid' && p.dueDate && p.dueDate < t) { p.status = 'Overdue'; changed = true; } });
     if (changed) DB.save();
   };
   M.pendingCount = function () {
@@ -200,15 +197,6 @@
       A.statCard('New registrations', A.num(newReg), 'userplus', 'joined this month + pending', A.can('registrations') ? '#/registrations' : ''),
       A.statCard('Pending approvals', A.num(pending), 'checksquare', pending ? 'needs your action' : 'all clear', A.can('approvals') ? '#/approvals' : '')
     ].join('');
-    if (A.can('leads')) {
-      var leads = A.rows('leads'), subs = A.rows('subscriptions');
-      var newLeads = leads.filter(function (l) { return String(l.createdAt).slice(0, 7) === month; });
-      var subPaid = subs.filter(function (s) { return s.status === 'Paid' && String(s.paidAt).slice(0, 7) === month; });
-      var waiting = leads.filter(function (l) { return ['New', 'Payment Pending', 'Payment Failed'].indexOf(l.status) >= 0; });
-      cards = A.statCard('Website signups', A.num(newLeads.length), 'userplus', 'this month · ' + newLeads.filter(function (l) { return l.status === 'Paid'; }).length + ' paid', '#/leads') +
-        A.statCard('Subscription revenue', A.money(A.sum(subPaid, 'total')), 'card', 'this month · ' + subPaid.length + ' payments', '#/subscriptions') +
-        A.statCard('Leads to follow up', A.num(waiting.length), 'phone', waiting.length ? 'unpaid or new signups' : 'all followed up', '#/leads') + cards;
-    }
 
     var months = A.lastMonths(6);
     var paidAll = pays.filter(function (p) { return p.status === 'Paid' || p.status === 'Partial'; });
@@ -264,7 +252,7 @@
       C.num('students', 'Students', function (r) { return D().students.filter(function (s) { return s.clubId === r.id; }).length; }),
       C.num('centres', 'Centres', function (r) { return D().centres.filter(function (s) { return s.clubId === r.id; }).length; }),
       C.text('plan', 'Subscription'), C.status()]; },
-    filters: function () { return [FL.status(['Active', 'Pending Payment', 'Suspended', 'Archived']), FL.plain('plan', 'Plan', ['Basic', 'Standard', 'Premium']), FL.plain('sport', 'Sport')]; },
+    filters: function () { return [FL.status(['Active', 'Suspended', 'Archived']), FL.plain('plan', 'Plan', ['Basic', 'Standard', 'Premium']), FL.plain('sport', 'Sport')]; },
     fields: function () { return [
       { k: 'name', l: 'Club name', req: true, unique: true }, { k: 'regNo', l: 'Business registration no.', ph: 'e.g. 202301012345 (1234567-X)' },
       { k: 'owner', l: 'Owner / PIC', req: true }, { k: 'type', l: 'Club type', type: 'select', opts: ['Academy', 'Association', 'Private Club', 'School Club'], req: true },
@@ -275,7 +263,7 @@
       { k: 'subStart', l: 'Subscription start', type: 'date', req: true, def: A.today, hide: M.notSuper },
       { k: 'subEnd', l: 'Subscription end', type: 'date', req: true, hide: M.notSuper, check: function (v, all) { return all.subStart && v < all.subStart ? 'End date must be after the start date.' : ''; } },
       { k: 'logo', l: 'Club logo', type: 'file', image: true, accept: 'image/*', help: 'PNG/JPG/SVG under 300 KB.' },
-      F.status(['Active', 'Pending Payment', 'Suspended', 'Archived'])
+      F.status(['Active', 'Suspended', 'Archived'])
     ]; },
     beforeSave: function (o, old, isNew) { if (isNew) o.createdAt = A.today(); },
     canDelete: function (r) { return D().centres.some(function (c) { return c.clubId === r.id; }) || D().students.some(function (s) { return s.clubId === r.id; }) ? 'This club still has centres or students. Archive it instead of deleting.' : null; },
@@ -298,11 +286,8 @@
         A.statCard('Instructors', A.num(ins.length), 'award') + A.statCard('Revenue this month', A.money(rev), 'wallet') +
         A.statCard('Subscription', esc(r.plan), 'card', daysLeft >= 0 ? daysLeft + ' days left' : '<span class="bad">Expired ' + (-daysLeft) + ' days ago</span>') + '</div>' +
         '<div class="a-grid2">' + A.panel('Club information', A.dl([['Status', A.badge(r.status)], ['Owner', esc(r.owner)], ['Phone', esc(r.phone)], ['Email', esc(r.email)], ['Business reg. no.', esc(r.regNo)], ['Address', esc(r.address)], ['Default monthly fee', A.money(r.monthlyFee)], ['Subscription', esc(r.plan) + ' · ' + A.date(r.subStart) + ' – ' + A.date(r.subEnd)]])) +
-        A.panel('Training centres', '<div data-c></div>') + '</div>' +
-        (A.can('subscriptions') ? A.panel('D-Clix subscription invoices', '<div data-subs></div>') : '');
+        A.panel('Training centres', '<div data-c></div>') + '</div>';
       var e = $('[data-edit]', main); if (e) e.addEventListener('click', function () { view.openEdit(r, function () { A.refresh(); }); });
-      var sh = $('[data-subs]', main);
-      if (sh) M.subTable(sh, { rows: function () { return A.rows('subscriptions').filter(function (s) { return s.clubId === r.id; }); }, cols: [C.text('invoiceNo', 'Invoice'), C.text('planName', 'Plan'), C.text('billing', 'Billing'), C.money('total', 'Total'), C.status(), C.calc('p', 'Period', function (s) { return s.periodStart ? A.date(s.periodStart) + ' – ' + A.date(s.periodEnd) : ''; })], onRow: function (s) { M.showSubscription(s); }, exportName: r.name + ' subscriptions', empty: 'No online subscription payments for this club.' });
       M.subTable($('[data-c]', main), { rows: function () { return centres; }, cols: [C.id, C.text('name', 'Centre'), C.num('n', 'Students', function (c) { return st.filter(function (s) { return s.centreId === c.id; }).length; }), C.status()], onRow: function (c) { A.go('#/centres/' + c.id); }, exportName: r.name + ' centres' });
     }
   });
@@ -387,7 +372,7 @@
     DB.save();
   };
   M.memberCard = function (s) {
-    var html = '<div style="width:340px;border-radius:14px;border:1px solid #ddd;overflow:hidden;font-family:inherit"><div style="background:' + A.accent() + ';color:#fff;padding:10px 14px;font-weight:700">' + esc(A.nameOf('clubs', s.clubId)) + '<div style="font-size:10px;font-weight:400">MEMBERSHIP CARD</div></div>' +
+    var html = '<div style="width:340px;border-radius:14px;border:1px solid #ddd;overflow:hidden;font-family:inherit"><div style="background:#f97316;color:#fff;padding:10px 14px;font-weight:700">' + esc(A.nameOf('clubs', s.clubId)) + '<div style="font-size:10px;font-weight:400">MEMBERSHIP CARD</div></div>' +
       '<div style="display:flex;gap:12px;padding:14px;align-items:center"><div>' + A.qrSVG('DCLIX:' + s.id, 100) + '</div><div><div style="font-size:15px;font-weight:700">' + esc(s.name) + '</div><div>ID: ' + esc(s.id) + '</div><div>Grade: ' + esc(s.grade) + '</div><div>Centre: ' + esc(A.nameOf('centres', s.centreId)) + '</div><div>Since ' + A.date(s.joinDate) + '</div></div></div></div>';
     return html;
   };
@@ -604,7 +589,7 @@
   /* ======================================================
      ONLINE REGISTRATION
      ====================================================== */
-  function regLink() { var base = location.href.replace(/admin\/[^\/]*([?#].*)?$/, ''); return base + 'arena/player-register.html?ref=' + encodeURIComponent(A.settings().regLinkSlug || 'join') + (A.role().scope !== 'all' ? '&club=' + A.user().clubId : ''); }
+  function regLink() { var base = new URL('../arena/', location.href).href; return base + 'player-register.html?ref=' + encodeURIComponent(A.settings().regLinkSlug || 'join') + (A.role().scope !== 'all' ? '&club=' + A.user().clubId : ''); }
   M.approveRegistration = function (r) {
     if (r.type === 'Instructor') {
       var club = A.byId('clubs', r.clubId);
