@@ -720,3 +720,5 @@ html.dark .ticker::before { background: linear-gradient(to right, #0b0f16, trans
 .lang-menu button:hover { background: rgba(127,127,127,.12); } .lang-menu button[aria-checked="true"] { color: var(--accent); font-weight: 700; }
 /* solid background so the moving karate silhouette never runs behind the text */
 .benefit, .elevate-card, .demo-card { background: var(--hero); }
+.test-mode-note { margin: -16px 0 28px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.35); color: #f59e0b; }
+html.light .test-mode-note { color: #92400e; }

@@ -115,6 +115,13 @@ pricing.html → Select Plan → arena/club-register.html ──POST api/signup.
   outcome (pays / cancels / leaves / registers only / random mix). Results are tagged "Simulated test" and
   **Remove simulated tests** deletes them with their clubs, logins, invoices, payment attempts and emails.
 
+### Test mode on GitHub Pages (UAT, no server needed)
+While `PRODUCTION_API` in `js/shared/config.js` is empty, the GitHub Pages site uses a **built-in test API that runs in the browser**
+(`js/shared/mock-api.js`). Signup → test payment page (`arena/mock-gateway.html`, Pay / Cancel) → success → Club Login all work,
+and the contact form works too. Everything is saved in **that browser only** (the admin portal's demo data), so each tester must
+register and check the admin in the same browser. Signup pages show a yellow "UAT test mode" notice.
+To switch to the company's real API later, set `PRODUCTION_API` to its HTTPS address — nothing else changes.
+
 ### Run it on your PC (XAMPP)
 1. Start **MySQL** in the XAMPP Control Panel.
 2. First time only, in this folder: `C:\xampp\php\php.exe api/install.php --demo`

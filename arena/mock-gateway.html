@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Test payment | D-Clix</title>
+<!-- Test payment page used by the built-in browser TEST API (js/shared/mock-api.js) when there is no real server.
+     It behaves like the payment gateway: the customer pays or cancels, then returns to payment-status.html. -->
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #f3f4f6; margin: 0; padding: 24px; color: #111; }
+  .box { max-width: 440px; margin: 40px auto; background: #fff; border-radius: 16px; padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,.08); }
+  .tag { display: inline-block; background: #fef3c7; color: #92400e; border-radius: 99px; padding: 4px 10px; font-size: 12px; font-weight: 700; }
+  h1 { font-size: 20px; } table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  td { padding: 8px 0; border-bottom: 1px solid #eee; } td:last-child { text-align: right; font-weight: 600; }
+  button { width: 100%; padding: 12px; border-radius: 10px; border: 0; font-size: 15px; font-weight: 700; margin-top: 10px; cursor: pointer; }
+  .pay { background: #16a34a; color: #fff; } .cancel { background: #e5e7eb; } button:disabled { opacity: .6; cursor: progress; }
+  .note { color: #6b7280; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <span class="tag">TEST MODE — no real money</span>
+  <h1>D-Clix test payment</h1>
+  <div id="content"><p class="note">Loading…</p></div>
+  <p class="note">This page stands in for the payment gateway while the site runs without a server (UAT). Data is saved in this browser only.</p>
+</div>
+<script src="../js/shared/config.js"></script>
+<script src="../js/admin/admin-data.js"></script>
+<script src="../js/shared/mock-api.js"></script>
+<script>
+(function () {
+  'use strict';
+  var box = document.getElementById('content');
+  var id = new URLSearchParams(location.search).get('bill') || '';
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var x = window.DCLIX_MOCK && window.DCLIX_MOCK.billInfo(id);
+  if (!x) { box.innerHTML = '<p>This payment link is not valid in this browser. Start again from the <a href="../pricing.html">pricing page</a>.</p>'; return; }
+  if (x.bill.paid) { box.innerHTML = '<p>This bill is already paid.</p><p><a href="payment-status.html?status=paid&ref=' + encodeURIComponent(x.sub.id) + '">Continue</a></p>'; return; }
+  box.innerHTML = '<table><tr><td>Club</td><td>' + esc(x.lead.clubName) + '</td></tr><tr><td>Plan</td><td>' + esc(x.sub.planName + ' (' + x.sub.billing + ')') + '</td></tr>' +
+    '<tr><td>Invoice</td><td>' + esc(x.sub.invoiceNo) + '</td></tr><tr><td>Amount</td><td>RM ' + Number(x.bill.amount).toFixed(2) + '</td></tr></table>' +
+    '<button class="pay" type="button" data-r="1">Pay (simulate success)</button><button class="cancel" type="button" data-r="0">Cancel (simulate failure)</button>';
+  box.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-r]'); if (!b) return;
+    box.querySelectorAll('button').forEach(function (x) { x.disabled = true; });
+    var res = window.DCLIX_MOCK.pay(id, b.getAttribute('data-r') === '1');
+    location.href = 'payment-status.html?status=' + res.status + '&ref=' + encodeURIComponent(res.ref);
+  });
+})();
+</script>
+</body>
+</html>

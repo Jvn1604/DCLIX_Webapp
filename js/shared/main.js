@@ -21,7 +21,6 @@
     initHexTilt();
     initPricing();
     initReferral();
-    initEduDownload();
     initImageFallbacks();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
