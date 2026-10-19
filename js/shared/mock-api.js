@@ -50,10 +50,11 @@
   function signup(b) {
     var d = DB().data, A = window.ADMIN_DB;
     var f = { clubCode: str(b.clubCode, 30).toUpperCase(), clubName: str(b.clubName, 120), headInstructor: str(b.headInstructor, 120), sport: str(b.sport, 40), sportName: str(b.sportName, 60),
-      address1: str(b.address1), address2: str(b.address2), state: str(b.state, 60), country: str(b.country, 60), phoneCode: str(b.phoneCode, 30), whatsapp: str(b.whatsapp, 30), email: str(b.email, 190).toLowerCase(), username: str(b.username, 60), branch: str(b.branch, 80) };
+      address1: str(b.address1), address2: str(b.address2), state: str(b.state, 60), country: str(b.country, 60), phoneCode: str(b.phoneCode, 30), whatsapp: str(b.whatsapp, 30), email: str(b.email, 190).toLowerCase(), username: str(b.username, 60), branch: str(b.branch, 80), regNo: str(b.regNo, 60) };
     var pw = typeof b.password === 'string' ? b.password : '';
     var e = {};
     if (!f.clubName) e.clubName = 'Club name is required.';
+    if (!f.regNo) e.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
     if (!/^[A-Za-z0-9._-]{3,30}$/.test(f.username)) e.username = 'Use 3–30 letters, numbers, . _ or -.';
     if (!f.clubCode) e.clubCode = 'Club code is required.'; else if (!/^[A-Z0-9][A-Z0-9_-]{1,29}$/.test(f.clubCode)) e.clubCode = 'Use 2–30 letters, numbers, - or _ (no spaces).';
     if (!validEmail(f.email)) e.email = 'Please enter a valid email address.';
@@ -75,7 +76,7 @@
     var clubId = resume ? resume.clubId : A.nextId('clubs', 'CLB');
     var club = d.clubs.filter(function (c) { return c.id === clubId; })[0];
     if (!club) { club = { id: clubId, createdAt: today(), regNo: '', type: 'Private Club', monthlyFee: 100, subStart: '', subEnd: '', source: 'Website signup' }; d.clubs.unshift(club); }
-    Object.assign(club, { name: f.clubName, clubCode: f.clubCode, owner: f.headInstructor, phone: phone, email: f.email, username: f.username, branch: f.branch, address: address, state: f.state, country: f.country, sport: sportName, plan: p.name.split(' ')[0], billing: billing, status: 'Pending Payment' });
+    Object.assign(club, { name: f.clubName, clubCode: f.clubCode, owner: f.headInstructor, phone: phone, email: f.email, username: f.username, branch: f.branch, regNo: f.regNo, address: address, state: f.state, country: f.country, sport: sportName, plan: p.name.split(' ')[0], billing: billing, status: 'Pending Payment' });
     var user = existing;
     if (!user) {
       var salt = A.newSalt();
@@ -118,7 +119,7 @@
     [['firstName', 'First name'], ['lastName', 'Last name'], ['address', 'Address'], ['zip', 'Zip'], ['city', 'City']].forEach(function (x) { if (!info[x[0]]) e[x[0]] = x[1] + ' is required.'; });
     if (!validEmail(info.email)) e.email = 'Please enter a valid email address.';
     if (info.phone && !/^\+?[0-9 \-]{7,20}$/.test(info.phone)) e.phone = 'Please enter a valid phone number.';
-    if (!b.agreeTerms) e.agreeTerms = 'Please read and agree to the Terms & Conditions, No Refund Policy and Privacy Policy to continue.';
+    if (!b.agreeTerms) e.agreeTerms = 'Please read and agree to the Terms & Conditions and Privacy Policy to continue.';
     if (Object.keys(e).length) throw err(422, 'Please fix the highlighted fields.', { fields: e });
     Object.assign(lead, { plan: q.plan.id, planName: q.plan.name, billing: q.billing, amount: q.total, billingInfo: info, status: 'Payment Pending', termsAcceptedAt: now(), termsAcceptedIp: 'browser test' });
     var club = d.clubs.filter(function (c) { return c.id === lead.clubId; })[0];
