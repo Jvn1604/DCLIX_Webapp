@@ -95,7 +95,12 @@
      ====================================================== */
   M.showEmail = function (e) {
     var m = A.modal({ title: e.subject, size: 'lg', body: A.dl([['To', esc(e.to)], ['Type', esc(e.kind)], ['Status', A.badge(e.status) + (e.error ? ' <span class="bad">' + esc(e.error) + '</span>' : '')], ['Created', A.datetime(e.createdAt)]]) + '<div class="a-email-frame"><p class="muted">Loading…</p></div>', actions: [{ label: 'Close', cls: 'ghost' }] });
-    if (DB.mode !== 'api') { $('.a-email-frame', m.el).innerHTML = '<p class="muted">Email content is only available when connected to the server.</p>'; return; }
+    if (DB.mode !== 'api') {
+      // emails written by the browser TEST API keep their content with them
+      if (e.html) { var fr = document.createElement('iframe'); fr.setAttribute('sandbox', ''); fr.setAttribute('title', 'Email preview'); fr.srcdoc = e.html; var bx = $('.a-email-frame', m.el); bx.innerHTML = ''; bx.appendChild(fr); }
+      else $('.a-email-frame', m.el).innerHTML = '<p class="muted">Email content is only available when connected to the server.</p>';
+      return;
+    }
     window.dclixApi('data.php?action=email&id=' + encodeURIComponent(e.id), { token: DB.token() }).then(function (res) {
       var f = document.createElement('iframe'); f.setAttribute('sandbox', ''); f.setAttribute('title', 'Email preview'); f.srcdoc = res.html;
       var box = $('.a-email-frame', m.el); box.innerHTML = ''; box.appendChild(f);
@@ -104,7 +109,7 @@
   A.views.emails = { title: 'Email Log', group: 'Administration', icon: 'mail', render: function (main) {
     var mode = (D().server || {}).mail;
     main.innerHTML = A.pageHead('Email Log', 'Every email the system sends: signup confirmations, welcome emails, receipts, sales alerts, codes.') +
-      (DB.mode !== 'api' ? '<p class="a-warn">' + A.icon('info') + ' Emails are only recorded when the portal is connected to the server.</p>'
+      (DB.mode !== 'api' ? '<p class="a-warn">' + A.icon('info') + ' Test mode (no server): emails from website signups and the contact form made in <b>this browser</b> are saved here, not sent.</p>'
         : mode !== 'smtp' ? '<p class="a-warn">' + A.icon('info') + ' Test setup: emails are saved here but not sent. Set <code>mail.driver</code> to <code>smtp</code> in api/config.php to send them for real.</p>' : '') +
       '<div class="a-card" data-t></div>';
     M.table($('[data-t]', main), { rows: function () { return D().emails || []; }, dateKey: 'createdAt', defaultSort: { k: 'createdAt', dir: -1 },
