@@ -13,10 +13,10 @@ function email_layout(string $title, string $intro, array $rows = [], ?array $bu
         foreach ($rows as $r) $table .= '<tr><td style="padding:8px 10px;border:1px solid #e5e7eb;background:#f9fafb;width:40%;font-weight:600">' . esc((string) $r[0]) . '</td><td style="padding:8px 10px;border:1px solid #e5e7eb">' . esc((string) $r[1]) . '</td></tr>';
         $table .= '</table>';
     }
-    $btn = $button ? '<p style="margin:22px 0"><a href="' . esc($button[1]) . '" style="background:#1d4ed8;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700;display:inline-block">' . esc($button[0]) . '</a></p>' : '';
+    $btn = $button ? '<p style="margin:22px 0"><a href="' . esc($button[1]) . '" style="background:#de9836;color:#1a1208;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700;display:inline-block">' . esc($button[0]) . '</a></p>' : '';
     return '<!doctype html><html><body style="margin:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#111">'
         . '<div style="max-width:600px;margin:0 auto;padding:24px"><div style="background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e5e7eb">'
-        . '<div style="background:#0b0f16;color:#fff;padding:18px 24px;font-size:20px;font-weight:700">D-<span style="color:#1d4ed8">CLIX</span></div>'
+        . '<div style="background:#0e0e10;color:#fff;padding:18px 24px;font-size:20px;font-weight:700">D-<span style="color:#de9836">CLIX</span></div>'
         . '<div style="padding:24px"><h1 style="font-size:20px;margin:0 0 12px">' . esc($title) . '</h1><p style="line-height:1.6;margin:0">' . $intro . '</p>' . $table . $btn
         . ($outro ? '<p style="line-height:1.6;color:#4b5563">' . $outro . '</p>' : '') . '</div></div>'
         . '<p style="text-align:center;color:#6b7280;font-size:12px;margin-top:14px">Raig Technologies (M) Sdn Bhd · D-Clix Club Management System</p></div></body></html>';

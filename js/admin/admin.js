@@ -432,7 +432,7 @@
 
   /* ---------- Charts (inline SVG) ---------- */
   /* First chart colour follows the site theme (--accent in style.css). */
-  A.accent = function () { var v = ''; try { v = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(); } catch (e) {} return v || '#1d4ed8'; };
+  A.accent = function () { var v = ''; try { v = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(); } catch (e) {} return v || '#de9836'; };
   var PALETTE = [A.accent(), '#f97316', '#10b981', '#a855f7', '#eab308', '#ef4444', '#14b8a6', '#ec4899'];
   A.palette = PALETTE;
   function niceMax(v) { if (v <= 0) return 1; var p = Math.pow(10, Math.floor(Math.log10(v))); var n = v / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10) * p; }

@@ -1,12 +1,12 @@
 /* ==========================================================
    D-Clix Admin portal — builds on the tokens in style.css
    ========================================================== */
-html.dark { --panel: #0d1117; --panel2: #111827; --side: #07090d; --hover: rgba(255,255,255,.05); --ok: #34d399; --warn: #fbbf24; --bad: #f87171; --info: #60a5fa; --ink-muted: #9ca3af; }
+html.dark { --panel: #141416; --panel2: #19191b; --side: #0b0b0c; --hover: rgba(255,255,255,.05); --ok: #34d399; --warn: #fbbf24; --bad: #f87171; --info: #60a5fa; --ink-muted: #9ca3af; }
 html.light { --panel: #fff; --panel2: #f9fafb; --side: #fff; --hover: #f3f4f6; --ok: #047857; --warn: #b45309; --bad: #b91c1c; --info: #1d4ed8; --ink-muted: #6b7280; }
 
 body.admin { overflow-x: hidden; background: var(--bg-alt); }
-html.dark body.admin { background: #05070a; }
-.skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: var(--accent); color: #fff; padding: 8px 12px; border-radius: 8px; }
+html.dark body.admin { background: #08080a; }
+.skip { position: absolute; left: -999px; top: 8px; z-index: 100; background: var(--accent); color: var(--on-accent); padding: 8px 12px; border-radius: 8px; }
 .skip:focus { left: 8px; }
 .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; }
 .ok { color: var(--ok); } .warn { color: var(--warn); } .bad { color: var(--bad); }
@@ -25,7 +25,7 @@ code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9em; b
 #sideNav a:hover { background: var(--hover); opacity: 1; }
 #sideNav a.on { background: rgba(var(--accent-rgb),.12); color: var(--accent); opacity: 1; font-weight: 700; }
 #sideNav a span { flex: 1; }
-#sideNav a em { font-style: normal; font-size: 11px; font-weight: 700; background: var(--accent); color: #fff; border-radius: 99px; padding: 1px 7px; }
+#sideNav a em { font-style: normal; font-size: 11px; font-weight: 700; background: var(--accent); color: var(--on-accent); border-radius: 99px; padding: 1px 7px; }
 .a-scrim { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 39; display: none; }
 body.side-open .a-side { transform: none; } body.side-open .a-scrim { display: block; }
 @media (min-width: 1024px) { .a-side { transform: none; } .a-main { margin-left: 260px; } .a-burger { display: none !important; } body.side-open .a-scrim { display: none; } }
@@ -59,7 +59,7 @@ body.side-open .a-side { transform: none; } body.side-open .a-scrim { display: b
 
 /* ---------- Buttons ---------- */
 .a-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 9px 16px; border-radius: 10px; font-size: 14px; font-weight: 600; border: 1px solid transparent; white-space: nowrap; transition: background .15s, border-color .15s, color .15s; text-decoration: none; }
-.a-btn.primary { background: var(--accent); color: #fff; } .a-btn.primary:hover { background: var(--accent-light); }
+.a-btn.primary { background: var(--accent); color: var(--on-accent); } .a-btn.primary:hover { background: var(--accent-light); }
 .a-btn.ghost { background: var(--panel); border-color: var(--line2); color: var(--fg); } .a-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
 .a-btn.danger { background: #dc2626; color: #fff; } .a-btn.danger:hover { background: #b91c1c; }
 .a-btn.sm { padding: 6px 11px; font-size: 13px; border-radius: 8px; }
@@ -199,7 +199,7 @@ a.a-stat:hover { border-color: rgba(var(--accent-rgb),.5); transform: translateY
 .a-pager label { display: flex; align-items: center; gap: 6px; }
 .a-pages { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; }
 .a-page { min-width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line2); background: var(--panel); display: inline-grid; place-items: center; font-size: 13px; padding: 0 8px; }
-.a-page.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+.a-page.on { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
 .a-page:disabled { opacity: .4; cursor: default; }
 .a-page .i { font-size: 14px; }
 .a-pages .dots { padding: 6px 2px; }
