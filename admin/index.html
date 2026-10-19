@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex" />
-<title>Dashboard | D-CLIX Admin</title>
+<title>Admin | D-CLIX</title>
 <meta name="description" content="D-Clix Club Management System — admin portal." />
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,11 +38,12 @@
       </div>
     </div>
   </header>
-  <div class="a-demo-bar" role="note"><i data-icon="info" class="w-4"></i> Demo mode — sample data stored in this browser only. Not connected to a server.</div>
+  <div class="a-demo-bar" role="note" hidden></div>
   <main id="view" class="a-view" tabindex="-1"></main>
 </div>
 <div id="toasts" class="a-toasts" aria-live="polite"></div>
 
+<script src="../js/shared/config.js"></script>
 <script src="../js/shared/icons.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 <script src="../js/admin/admin-data.js"></script>
@@ -50,6 +51,8 @@
 <script src="../js/admin/admin-modules.js"></script>
 <script src="../js/admin/admin-operations.js"></script>
 <script src="../js/admin/admin-finance.js"></script>
+<script src="../js/admin/admin-sales.js"></script>
+<script src="../js/admin/admin-automation.js"></script>
 <script src="../js/admin/admin-system.js"></script>
 </body>
 </html>

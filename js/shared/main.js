@@ -19,6 +19,7 @@
     initSparkles();
     initParallax();
     initHexTilt();
+    initPricing();
     initReferral();
     initEduDownload();
     initImageFallbacks();
@@ -79,16 +80,27 @@
   function initLeadForm() {
     var form = $('#leadForm'); if (!form) return;
     var toast = $('#leadToast');
+    var btn = form.querySelector('button[type=submit]');
+    function say(msg, ok) {
+      toast.textContent = msg; toast.classList.toggle('err', !ok); toast.classList.add('show');
+      clearTimeout(say.t); say.t = setTimeout(function () { toast.classList.remove('show'); }, ok ? 4500 : 7000);
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      $$('[aria-invalid]', form).forEach(function (el) { el.removeAttribute('aria-invalid'); });
       if (!form.checkValidity()) { form.reportValidity(); return; }
       var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
-      // TODO: send `data` to your own backend / email service, e.g.
-      // fetch('/api/enquiry', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-      console.log('Lead ready to send:', data);
-      form.reset();
-      toast.classList.add('show');
-      setTimeout(function () { toast.classList.remove('show'); }, 3500);
+      if (!window.dclixApi) { say('Sorry, the form is not available right now. Please call us at +603-7804 1412.', false); return; }
+      btn.disabled = true; btn.textContent = 'Sending…';
+      // Saved as a lead in Admin → Leads; sales is alerted and the visitor gets a confirmation email.
+      window.dclixApi('contact.php', { body: data }).then(function () {
+        form.reset();
+        say('Thanks! We have received your details. A D-Clix expert will contact you soon.', true);
+      }, function (err) {
+        var fields = err.data && err.data.fields;
+        if (fields) Object.keys(fields).forEach(function (k) { var el = form.elements[k]; if (el) el.setAttribute('aria-invalid', 'true'); });
+        say(err.offline ? 'Online enquiries are not connected yet. Please call us at +603-7804 1412 or email us.' : (fields ? fields[Object.keys(fields)[0]] : err.message), false);
+      }).then(function () { btn.disabled = false; btn.textContent = 'Submit'; });
     });
   }
 
@@ -166,6 +178,37 @@
       });
       el.addEventListener('mouseleave', function () { el.style.transform = ''; });
     });
+  }
+
+  /* ---------- Pricing (monthly / yearly) ---------- */
+  function initPricing() {
+    var grid = $('#planGrid'); if (!grid) return;
+    var plans = [
+      { name: 'Basic Plan', m: 'RM100', y: 'RM1000', save: '(Save RM200)', desc: 'Essential Features',
+        items: ['User management tools', 'Online student registrations', 'Fee management', 'Manual attendance (Portal)', 'QR Code+ Scan attendance', 'Discount module', 'Shared workspace', 'Push notification', 'Reimbursement', 'Web and mobile app', '3 Basic classes, 1 advanced class a week', 'Dedicated WhatsApp group support'] },
+      { name: 'Standard Plan', m: 'RM150', y: 'RM1500', save: '(Save RM300)', desc: 'Essential Features +', featured: true,
+        items: ['Grading management', 'Activities management', 'Inventory stock management', '5 Basic classes, 2 advanced classes a week', 'Prepaid account management', 'Dedicated WhatsApp group support'] },
+      { name: 'Premium Plan', m: 'RM200', y: 'RM2000', save: '(Save RM400)', desc: 'BASIC + STANDARD +',
+        items: ['Contribution', 'Purchase request by branch to HQ', 'Purchase request by students to branch', 'Tournament participations, scores, results & history', 'Financial reports customizations', 'Payroll module', 'HQ approval on manual payment', 'Student class booking via app', 'Dedicated WhatsApp group support'] }
+    ];
+    function render(mode) {
+      grid.innerHTML = plans.map(function (p, i) {
+        return '<div class="reveal in" style="transition-delay:' + (i * .08) + 's"><div class="card plan' + (p.featured ? ' featured' : '') + '">' +
+          '<div class="pn">' + p.name + '</div>' +
+          '<div class="price">' + (mode === 'monthly' ? p.m : p.y) + '<small>/' + (mode === 'monthly' ? 'month' : 'Year') + '</small></div>' +
+          '<div class="save">' + (mode === 'yearly' ? p.save : '') + '</div>' +
+          '<div class="desc">' + p.desc + '</div>' +
+          '<ul>' + p.items.map(function (t) { return '<li><span class="tick">' + window.icon('check') + '</span><span>' + t + '</span></li>'; }).join('') + '</ul>' +
+          '<a class="btn-primary block" href="arena/club-register.html?plan=' + p.name.split(' ')[0].toLowerCase() + '&billing=' + mode + '">Select Plan</a></div></div>';
+      }).join('');
+    }
+    $$('.billing button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        $$('.billing button').forEach(function (o) { o.classList.toggle('active', o === b); o.setAttribute('aria-pressed', String(o === b)); });
+        render(b.getAttribute('data-mode'));
+      });
+    });
+    render('monthly');
   }
 
   /* ---------- Referral slideshow ---------- */
