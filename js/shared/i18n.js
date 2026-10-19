@@ -14,8 +14,8 @@
   var BM = {
     /* ---- menu, footer, shared ---- */
     'Club Management': 'Pengurusan Kelab', 'Home': 'Utama', 'About': 'Tentang', 'Pricing': 'Harga', 'D-Clix Edu-Hub': 'D-Clix Edu-Hub',
-    'D-Clix Referral Program': 'Program Rujukan D-Clix', 'Club Login': 'Log Masuk Kelab', 'Follow': 'Ikut', 'Contact': 'Hubungi', 'Links': 'Pautan',
-    'Edu-Hub': 'Edu-Hub', 'Referral': 'Rujukan', 'Community': 'Komuniti', 'Competition Portal': 'Portal Pertandingan', 'Privacy Policy': 'Dasar Privasi',
+    'D-Clix Referral Program': 'Program Rujukan D-Clix', 'Club Login': 'Log Masuk Kelab', 'Follow': 'Ikut', 'Follow us': 'Ikuti Kami', 'Call us': 'Hubungi Kami', 'Visit us': 'Lawati Kami', 'Contact': 'Hubungi', 'Links': 'Pautan',
+    'Edu-Hub': 'Edu-Hub', 'Referral': 'Rujukan', 'Community': 'Komuniti', 'Privacy Policy': 'Dasar Privasi',
     'Terms & Conditions': 'Terma & Syarat', 'Admin Portal': 'Portal Admin', 'D-Clix Club Management System ·': 'Sistem Pengurusan Kelab D-Clix ·',
     'D-Clix Club Management System': 'Sistem Pengurusan Kelab D-Clix', '© 2026 by Raig Technologies (M) Sdn Bhd': '© 2026 oleh Raig Technologies (M) Sdn Bhd',
     'Grow revenue and streamline your club with a modern, reliable club management system.': 'Tingkatkan pendapatan dan lancarkan kelab anda dengan sistem pengurusan kelab yang moden dan boleh dipercayai.',

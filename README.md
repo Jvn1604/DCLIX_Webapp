@@ -1,4 +1,4 @@
-# D-Clix Club Management + Competition Portal (static site)
+# D-Clix Club Management (static site)
 
 ## Run it
 - Website only: double-click `index.html`.
@@ -11,18 +11,17 @@ Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite ru
 ## Site flow
 - **Visitor → client:** Home / Pricing → Select Plan → Club details → Payment → Done (a 4-step progress bar on each step; the plan can also be chosen on the registration page).
 - **Login:** every "Club Login" / "Login" opens `admin/login.html`. If a logged-out person opens an admin link (e.g. from an alert email), they return to that page after logging in.
-- **Competition portal:** Register Now → Pricing; Competition Setting → Admin → Tournaments (login required).
 
 ## Folder layout
 ```
 index.html, about.html, pricing.html, edu-hub.html, referral.html, community.html   Marketing site (root)
 privacy.html, terms.html, 404.html                                   Legal pages + "page not found"
-arena/      competition, live, club-register, payment, payment-status, player-register, dashboard
+arena/      club-register, payment, payment-status (signup + payment flow)
 admin/      login.html, index.html (admin portal)
 api/        PHP + MySQL backend (see "Backend" below; api/config.php is never committed)
 css/        style.css (shared + theme colour), admin.css
 js/shared/      theme.js, icons.js, main.js, config.js (where the API is), i18n.js (English / Bahasa Melayu), whatsapp.js (chat button)
-js/arena/       sports.js (18 sports), competition.js (portal + club registration), payment.js
+js/arena/       sports.js (club types), signup.js (club registration), payment.js
 js/marketing/   referral-data.js (slides)
 js/admin/       admin-*.js (see table below)
 assets/     logo, favicon, images
@@ -42,11 +41,7 @@ The admin portal, its charts and printed documents follow the same colour automa
 | edu-hub.html | Edu-Hub + PDF guide download |
 | referral.html | Referral program slideshow |
 | community.html | Join Our Community (WhatsApp + Facebook) |
-| arena/competition.html | D-CLIX Arena: sport selector, news, rankings, fixtures |
-| arena/live.html?sport=karate | Watch Live (live / brackets / schedule / winners) |
 | arena/club-register.html?sport=karate | Club registration |
-| arena/player-register.html?sport=karate | Player registration |
-| arena/dashboard.html?sport=karate | Arena tournament dashboard (demo; player registration lands here) |
 | admin/login.html | Admin portal login |
 | admin/index.html | Admin portal (all modules, see below) |
 | arena/payment.html | Signup step 2: plan + billing details, then Billplz |
@@ -56,7 +51,7 @@ The admin portal, its charts and printed documents follow the same colour automa
 
 ## Files
 css/style.css · js/shared/theme.js (saved theme) · js/shared/icons.js · js/arena/sports.js (18 sports) · js/shared/main.js (shared behaviour)
-· js/arena/competition.js (portal pages) · js/marketing/referral-data.js (slides) · assets/ (logo + images)
+· js/arena/signup.js (club signup) · js/marketing/referral-data.js (slides) · assets/ (logo + images)
 
 ## Admin portal
 Open `admin/login.html` (also linked from the home page footer). When the API is reachable the portal reads and saves
@@ -115,13 +110,6 @@ pricing.html → Select Plan → arena/club-register.html ──POST api/signup.
   outcome (pays / cancels / leaves / registers only / random mix). Results are tagged "Simulated test" and
   **Remove simulated tests** deletes them with their clubs, logins, invoices, payment attempts and emails.
 
-### Test mode on GitHub Pages (UAT, no server needed)
-While `PRODUCTION_API` in `js/shared/config.js` is empty, the GitHub Pages site uses a **built-in test API that runs in the browser**
-(`js/shared/mock-api.js`). Signup → test payment page (`arena/mock-gateway.html`, Pay / Cancel) → success → Club Login all work,
-and the contact form works too. Everything is saved in **that browser only** (the admin portal's demo data), so each tester must
-register and check the admin in the same browser. Signup pages show a yellow "UAT test mode" notice.
-To switch to the company's real API later, set `PRODUCTION_API` to its HTTPS address — nothing else changes.
-
 ### Run it on your PC (XAMPP)
 1. Start **MySQL** in the XAMPP Control Panel.
 2. First time only, in this folder: `C:\xampp\php\php.exe api/install.php --demo`
@@ -159,7 +147,7 @@ To switch to the company's real API later, set `PRODUCTION_API` to its HTTPS add
 - Clubs whose subscription has ended are not suspended automatically.
 
 ## Things to connect (marked `TODO` in the JS)
-1. Player registration (arena/competition.js) only validates in the browser. Club registration and the home page contact form
+1. Club registration and the home page contact form
    (saved as a lead, source "Contact form", with emails to sales and the visitor) are connected to the API.
 2. Only the Facebook link is shown in the footers (the live site has no Instagram / LinkedIn).
 3. Boxing/MMA hero tiles, testimonial avatars, dashboard photos, news and referral slides load from the same remote
@@ -170,14 +158,12 @@ To switch to the company's real API later, set `PRODUCTION_API` to its HTTPS add
 Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = soon after · **P3** = nice to have.
 
 ### 🔧 Fix
-- [ ] **P1** Player registration (`arena/player-register.html`) is not saved — connect it to the API and show players in the admin (`TODO` in `js/arena/competition.js`).
-- [ ] **P1** Arena dashboard (`arena/dashboard.html`) is still a demo: anyone can open it, it shows "User", and "Logout" only goes back to the portal. Rebuild it on the real login or remove it.
 - [ ] **P1** Make all database tables use the same collation (`utf8mb4_unicode_ci`). Some tables use the default `utf8mb4_general_ci`, which breaks queries that join them.
 - [ ] **P2** "Mark overdue" runs in the browser when someone opens the dashboard — move it to a scheduled server job (cron).
 - [ ] **P2** Record IDs are created in the browser; two admins adding at the same moment can clash ("please reload"). Let the server assign IDs.
 - [ ] **P2** The admin reloads data only when you come back to the tab after 60 seconds — add live refresh for pages other than Automation.
 - [ ] **P2** The QR-code library loads from a CDN; if it is blocked, QR codes fall back to text. Bundle it locally.
-- [ ] **P3** Plans and prices are written in three places (`js/shared/main.js`, `js/arena/competition.js`, database `settings.plans`). Load them from the API everywhere.
+- [ ] **P3** Plans and prices are written in three places (`js/shared/main.js`, `js/arena/signup.js`, database `settings.plans`). Load them from the API everywhere.
 
 ### 🔄 Update / connect
 - [ ] **P1** Connect the **Billplz sandbox** (API secret key, collection ID, XSignature key in `api/config.php`, `billplz.mode = sandbox`) and test real FPX/card test payments.
@@ -202,8 +188,9 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] **P2** Decide which "Club Login" is real: live site opens maclubsystem.com, this site opens the new admin portal.
 - [ ] **P3** Report to the live site owner: the "No Refund Policy" link on the pricing page is broken, and the Malay home page still shows template text ("Ini adalah ruang untuk mengalu-alukan pengunjung…").
 - [ ] **P3** The user manual PDF links to the live site's copy; save it into `assets/` if it should not depend on d-clix.com.
-- [ ] **P3** Bahasa Melayu covers the main website pages; the signup forms, competition portal, admin portal and legal pages are English only.
+- [ ] **P3** Bahasa Melayu covers the main website pages; the signup forms, admin portal and legal pages are English only.
 
+- [ ] **P2** The "Online Registration" link in the admin points to the contact form because the public player/student form was removed with the competition portal — build a student registration form if clubs need one.
 ### ✨ Improve
 - [ ] **P2** Automatic **renewal invoices** before a subscription ends, and automatic **suspension** of clubs whose subscription expired.
 - [ ] **P2** A **Plans** screen in Settings so prices can be changed without editing code or the database.

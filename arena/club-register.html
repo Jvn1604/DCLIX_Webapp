@@ -24,7 +24,7 @@
 </nav>
 
 <main class="reg-main">
-<ol class="flow-steps" aria-label="Signup progress"><li class="done"><a href="../pricing.html"><span class="n"><i data-icon="check" class="w-4"></i></span><span class="t">Choose plan</span></a></li><li class="now" aria-current="step"><span class="n">2</span><span class="t">Club details</span></li><li class=""><span class="n">3</span><span class="t">Payment</span></li><li class=""><span class="n">4</span><span class="t">Done</span></li></ol><div class="reg-head"><div class="icon-box" style="width:64px;height:64px"><i data-icon="building" class="w-8"></i></div><div><h1>Club <em>Registration</em></h1><p>Create your D-Clix club account. You will use it to manage your club and to join tournaments in D-CLIX Arena.</p></div></div>
+<ol class="flow-steps" aria-label="Signup progress"><li class="done"><a href="../pricing.html"><span class="n"><i data-icon="check" class="w-4"></i></span><span class="t">Choose plan</span></a></li><li class="now" aria-current="step"><span class="n">2</span><span class="t">Club details</span></li><li class=""><span class="n">3</span><span class="t">Payment</span></li><li class=""><span class="n">4</span><span class="t">Done</span></li></ol><div class="reg-head"><div class="icon-box" style="width:64px;height:64px"><i data-icon="building" class="w-8"></i></div><div><h1>Club <em>Registration</em></h1><p>Create your D-Clix club account. You will use it to manage your club in D-Clix.</p></div></div>
 <div class="card plan-pick" id="planPick" hidden></div>
 <form id="clubForm" novalidate><div class="card fs"><div class="fs-title"><i></i><h2>Club Details</h2></div><div class="fgrid">
 <div><label class="lbl" for="clubCode">Club Code <span class="req">*</span></label><input class="input" id="clubCode" name="clubCode" maxlength="30" autocomplete="off" required /></div><div><label class="lbl" for="clubName">Club Name <span class="req">*</span></label><input class="input" id="clubName" name="clubName" maxlength="120" autocomplete="organization" required /></div>
@@ -37,7 +37,7 @@
 <div><label class="lbl" for="clubEmail">Login Email <span class="req">*</span></label><input class="input" type="email" id="clubEmail" name="email" autocomplete="email" required /></div><div><label class="lbl" for="pw">Password <span class="req">*</span></label><input class="input" type="password" id="pw" name="password" autocomplete="new-password" required /><small class="field-hint">At least 8 characters with upper-case, lower-case and a number.</small></div><div><label class="lbl" for="pw2">Confirm Password <span class="req">*</span></label><input class="input" type="password" id="pw2" name="password2" autocomplete="new-password" required /></div>
 </div><p class="form-err" id="clubErr" role="alert"></p><div class="form-actions"><button class="btn-primary" type="submit" id="clubSubmit">Save Club</button><button class="btn-ghost" type="button" id="cancelBtn">Cancel</button></div></div></form>
 <div class="card notice"><div class="h"><i data-icon="info" class="w-6"></i><h2>Notice for D-Clix Users / Notis untuk Pengguna D-Clix</h2></div>
-<div class="blk"><p>All existing and past D-Clix users can use their current club code, ID, and password to log in and register players for this tournament.</p><p class="ms">Semua pengguna D-Clix sedia ada dan lampau boleh menggunakan kod kelab, ID dan kata laluan semasa mereka untuk log masuk dan mendaftar pemain untuk kejohanan ini.</p></div>
+<div class="blk"><p>All existing and past D-Clix users can use their current club code, ID, and password to log in to the D-Clix club management system.</p><p class="ms">Semua pengguna D-Clix sedia ada dan lampau boleh menggunakan kod kelab, ID dan kata laluan semasa mereka untuk log masuk ke sistem pengurusan kelab D-Clix.</p></div>
 <div class="blk"><p>If you encounter any issues or have forgotten your ID or password, contact D-Clix directly for assistance with access.</p><p class="ms">Jika anda menghadapi sebarang masalah atau telah melupakan ID atau kata laluan anda, hubungi D-Clix secara langsung untuk bantuan akses.</p></div>
 <div class="blk"><p>This integrates seamlessly with the D-Clix club management system for martial arts and sports clubs in Malaysia.</p><p class="ms">Integrasi lancar dengan sistem pengurusan kelab D-Clix untuk kelab seni bela diri dan sukan di Malaysia.</p></div></div>
 <div class="modal" id="successModal" role="dialog" aria-modal="true"><div class="box"><div class="ok"><i data-icon="checkcircle" class=""></i></div><h2>Club saved!</h2><p>Club details saved. Redirecting to payment...</p><div class="bar"><i></i></div></div></div>
@@ -45,24 +45,29 @@
 
 <footer class="footer">
   <div class="footer-grid">
-    <div>
-      <div class="name">D-Clix</div>
-      <div class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</div>
-      <div class="social"><span class="follow">Follow</span><a href="https://www.facebook.com/share/15w1nqSqJe/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="D-Clix on Facebook"><i data-icon="facebook" class="w-5"></i></a></div>
-      
+    <div class="f-brand">
+      <a class="f-logo" href="../index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="../assets/dclix-logo.svg" alt="" /></span><span class="name">D-Clix</span></a>
+      <p class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</p>
+      <h4 class="t">Follow us</h4>
+      <div class="social">
+        <a href="https://www.facebook.com/share/15w1nqSqJe/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="D-Clix on Facebook"><i data-icon="facebook" class="w-5"></i></a>
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="D-Clix on Instagram"><i data-icon="instagram" class="w-5"></i></a>
+        <a href="https://www.tiktok.com/" target="_blank" rel="noopener" aria-label="D-Clix on TikTok"><i data-icon="tiktok" class="w-5"></i></a>
+      </div>
     </div>
     <div>
       <h4 class="t">Contact</h4>
-      <div class="f-line"><i data-icon="phone" class=""></i><b><a href="tel:+60378041412">+603-7804 1412</a></b></div>
-      <div class="f-line"><i data-icon="pin" class=""></i><span class="muted" style="font-weight:500">Suite 442 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, SS7, 47301 Petaling Jaya, Selangor</span></div>
+      <ul class="f-contact">
+        <li><span class="ic"><i data-icon="phone" class="w-5"></i></span><span><small>Call us</small><a href="tel:+60378041412">+603-7804 1412</a></span></li>
+        <li><span class="ic"><i data-icon="pin" class="w-5"></i></span><span><small>Visit us</small><span class="addr">Suite 442 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, SS7, 47301 Petaling Jaya, Selangor</span></span></li>
+      </ul>
     </div>
     <div>
       <h4 class="t">Links</h4>
-      <div class="f-links"><a href="../index.html">Home</a><a href="../about.html">About</a><a href="../pricing.html">Pricing</a><a href="../edu-hub.html">Edu-Hub</a><a href="../referral.html">Referral</a><a href="../community.html">Community</a><a href="competition.html">Competition Portal</a><a href="../admin/login.html">Club Login</a></div>
-      <div class="f-legal"><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms &amp; Conditions</a></div>
+      <div class="f-links"><a href="../index.html">Home</a><a href="../about.html">About</a><a href="../pricing.html">Pricing</a><a href="../edu-hub.html">Edu-Hub</a><a href="../referral.html">Referral</a><a href="../community.html">Community</a><a href="../admin/login.html">Club Login</a></div>
     </div>
   </div>
-  <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><span class="caps">D-Clix Club Management System</span></div></div>
+  <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms &amp; Conditions</a></nav></div></div>
 </footer>
 <script src="../js/shared/config.js"></script>
 <script src="../js/shared/icons.js"></script>
@@ -70,6 +75,6 @@
 <script src="../js/shared/main.js"></script>
 <script src="../js/shared/i18n.js"></script>
 <script src="../js/shared/whatsapp.js"></script>
-<script src="../js/arena/competition.js"></script>
+<script src="../js/arena/signup.js"></script>
 </body>
 </html>
