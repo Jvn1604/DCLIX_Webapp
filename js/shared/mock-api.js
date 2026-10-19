@@ -4,9 +4,9 @@
    GitHub Pages while PRODUCTION_API in js/shared/config.js is
    empty. It answers the same requests as the PHP API in api/:
      public.php · signup.php · checkout.php · contact.php
-   and saves everything into the admin portal's demo data in this
-   browser (localStorage), so new signups, invoices, payments and
-   emails appear in the admin (log in on the same browser).
+   and saves signups, invoices, payments and the emails that would
+   be sent into this browser only (localStorage key dclix_test_api).
+   To look at them, run DCLIX_MOCK.data() in the browser console.
    Payments go to arena/mock-gateway.html (Pay / Cancel, no money).
    Delete nothing here when going live: set PRODUCTION_API instead.
    ========================================================== */
@@ -19,9 +19,32 @@
     { id: 'premium', name: 'Premium Plan', monthly: 200, yearly: 2000 }] };
   var SALES = 'sales@example.com';
 
-  function DB() { var d = window.ADMIN_DB; if (!d.data) d.load(); var x = d.data; ['leads', 'subscriptions', 'emails', 'bills', 'signupTokens'].forEach(function (k) { if (!x[k]) x[k] = []; }); return d; }
+  var KEY = 'dclix_test_api', LOGIN = 'https://www.maclubsystem.com/index.php?/login/proceed';
+
+  /* ---------- storage (this browser only) ---------- */
+  function pad(n, len) { return ('000000' + n).slice(-len); }
+  var A = {
+    data: null,
+    load: function () {
+      var x = null;
+      try { x = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { x = null; }
+      x = x || {};
+      ['clubs', 'users', 'leads', 'subscriptions', 'emails', 'bills', 'signupTokens'].forEach(function (k) { if (!x[k]) x[k] = []; });
+      if (!x.seq) x.seq = {};
+      A.data = x;
+    },
+    save: function () { try { localStorage.setItem(KEY, JSON.stringify(A.data)); } catch (e) { /* storage full or blocked: keep in memory */ } },
+    nextId: function (coll, prefix) { var q = A.data.seq; q[coll] = (q[coll] || 0) + 1; return prefix + pad(q[coll], 4); },
+    iso: function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); },
+    addDays: function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; },
+    addMonths: function (d, n) { var x = new Date(d); x.setMonth(x.getMonth() + n); return x; },
+    newSalt: function () { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); },
+    // Test mode only: a simple checksum so a returning signup can resume payment. The real API uses password_hash().
+    hashPassword: function (pw, salt) { var h = 2166136261, t = salt + ':' + pw; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16); }
+  };
+  function DB() { if (!A.data) A.load(); return A; }
   function now() { return new Date().toISOString(); }
-  function today() { return window.ADMIN_DB.iso(new Date()); }
+  function today() { return A.iso(new Date()); }
   function err(status, message, extra) { var e = new Error(message); e.status = status; e.data = Object.assign({ error: message }, extra || {}); return e; }
   function token() { var a = new Uint8Array(24); (window.crypto || window.msCrypto).getRandomValues(a); return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
   function str(v, max) { return typeof v === 'string' || typeof v === 'number' ? String(v).trim().slice(0, max || 255) : ''; }
@@ -32,10 +55,9 @@
   function docNo(prefix, id) { return prefix + '-' + new Date().getFullYear() + '-' + ('00000' + String(id).replace(/\D/g, '')).slice(-5); }
   function money(n) { return 'RM ' + Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-  function audit(action, module, id, summary) { var d = DB().data; d.audit.unshift({ id: 'AU' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), at: now(), user: 'System (test API)', userId: '', action: action, module: module, recordId: id, changes: [], summary: summary, ip: 'browser test' }); }
   function save() { DB().save(); }
 
-  /* ---------- emails (saved to the Email Log, never sent) ---------- */
+  /* ---------- emails (saved in this browser, never sent) ---------- */
   function layout(title, intro, rows, button, outro) {
     var t = rows && rows.length ? '<table style="width:100%;border-collapse:collapse;margin:16px 0">' + rows.map(function (r) { return '<tr><td style="padding:8px 10px;border:1px solid #e5e7eb;background:#f9fafb;width:40%;font-weight:600">' + esc(r[0]) + '</td><td style="padding:8px 10px;border:1px solid #e5e7eb">' + esc(r[1]) + '</td></tr>'; }).join('') + '</table>' : '';
     var b = button ? '<p style="margin:22px 0"><a href="' + esc(button[1]) + '" style="background:#de9836;color:#1a1208;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700;display:inline-block">' + esc(button[0]) + '</a></p>' : '';
@@ -48,7 +70,7 @@
 
   /* ---------- endpoints ---------- */
   function signup(b) {
-    var d = DB().data, A = window.ADMIN_DB;
+    var d = DB().data;
     var f = { clubCode: str(b.clubCode, 30).toUpperCase(), clubName: str(b.clubName, 120), headInstructor: str(b.headInstructor, 120), sport: str(b.sport, 40), sportName: str(b.sportName, 60),
       address1: str(b.address1), address2: str(b.address2), state: str(b.state, 60), country: str(b.country, 60), phoneCode: str(b.phoneCode, 30), whatsapp: str(b.whatsapp, 30), email: str(b.email, 190).toLowerCase(), username: str(b.username, 60), branch: str(b.branch, 80), regNo: str(b.regNo, 60) };
     var pw = typeof b.password === 'string' ? b.password : '';
@@ -89,9 +111,8 @@
     if (!resume) d.leads.unshift(lead);
     var t = token();
     d.signupTokens.push({ token: t, leadId: lead.id, expires: Date.now() + 7 * 864e5 });
-    audit(resume ? 'Update' : 'Create', 'leads', lead.id, (resume ? 'Signup resumed: ' : 'Website signup: ') + f.clubName + ' (' + f.email + ')');
     if (!resume) {
-      mail(SALES, 'New signup: ' + f.clubName + ' (payment pending)', layout('New club signup', 'A club just registered on the website and is being sent to payment.', [['Club', f.clubName], ['Contact email', f.email], ['Phone', phone], ['Sport', sportName], ['Plan', p.name + ' (' + billing + ')'], ['Lead ID', lead.id]], ['Open in admin', root + 'admin/index.html#/leads']), 'sales_signup', lead.id);
+      mail(SALES, 'New signup: ' + f.clubName + ' (payment pending)', layout('New club signup', 'A club just registered on the website and is being sent to payment.', [['Club', f.clubName], ['Contact email', f.email], ['Phone', phone], ['Sport', sportName], ['Plan', p.name + ' (' + billing + ')'], ['Lead ID', lead.id]]), 'sales_signup', lead.id);
       mail(f.email, 'Complete your D-Clix registration', layout('Thanks for registering, ' + f.clubName, 'We have saved your club details. Your account will be activated as soon as payment is completed.', [['Plan', p.name + ' (' + billing + ')'], ['Login email', f.email]], ['Complete payment', root + 'arena/payment.html?t=' + t], 'If you have already paid, you can ignore this email.'), 'client_signup', lead.id);
     }
     save();
@@ -107,7 +128,7 @@
     return lead;
   }
   function checkout(b) {
-    var d = DB().data, A = window.ADMIN_DB, lead = leadFromToken(str(b.token, 200));
+    var d = DB().data, lead = leadFromToken(str(b.token, 200));
     if ((b.action || 'load') === 'load') return { lead: { clubName: lead.clubName, clubCode: lead.clubCode, email: lead.email, phone: lead.phone, plan: lead.plan, billing: lead.billing, billingInfo: lead.billingInfo || null, status: lead.status }, plans: PLANS };
     if (b.action !== 'pay') throw err(404, 'Unknown action.');
     var q = quote(str(b.plan, 20), str(b.billing, 10));
@@ -135,7 +156,7 @@
   }
 
   function contact(b) {
-    var d = DB().data, A = window.ADMIN_DB;
+    var d = DB().data;
     var f = { name: str(b.name, 120), phone: str(b.phone, 30), email: str(b.email, 190).toLowerCase(), club: str(b.club, 120), inquiries: str(b.inquiries, 2000) };
     if (str(b.website, 100)) return { ok: true };
     var e = {};
@@ -147,8 +168,7 @@
     if (Object.keys(e).length) throw err(422, 'Please fix the highlighted fields.', { fields: e });
     var id = A.nextId('leads', 'LD');
     d.leads.unshift({ id: id, createdAt: now(), source: 'Contact form', status: 'New', clubName: f.club, clubCode: '', contactName: f.name, email: f.email, phone: f.phone, sport: '', plan: '', planName: '', billing: '', amount: 0, clubId: '', userId: '', notes: 'Enquiry: ' + f.inquiries, followUp: '', assignedTo: '', ip: 'browser test' });
-    audit('Create', 'leads', id, 'Contact form enquiry from ' + f.name + ' (' + f.club + ')');
-    mail(SALES, 'New enquiry: ' + f.club + ' — ' + f.name, layout('New website enquiry', 'Someone filled in the contact form on the home page.', [['Name', f.name], ['Club', f.club], ['Phone', f.phone], ['Email', f.email], ['Enquiry', f.inquiries]], ['Open in admin', root + 'admin/index.html#/leads/' + id]), 'sales_enquiry', id);
+    mail(SALES, 'New enquiry: ' + f.club + ' — ' + f.name, layout('New website enquiry', 'Someone filled in the contact form on the home page.', [['Name', f.name], ['Club', f.club], ['Phone', f.phone], ['Email', f.email], ['Enquiry', f.inquiries]]), 'sales_enquiry', id);
     mail(f.email, 'We received your enquiry — D-Clix', layout('Thanks, ' + f.name + '!', 'We have received your enquiry about <b>' + esc(f.club) + '</b>. A D-Clix expert will contact you soon, usually within one working day.', [], ['See our plans', root + 'pricing.html'], 'Need help sooner? Call us at +603-7804 1412.'), 'client_enquiry', id);
     save();
     return { ok: true };
@@ -161,7 +181,7 @@
     return { bill: bill, sub: d.subscriptions.filter(function (s) { return s.id === bill.subscriptionId; })[0], lead: d.leads.filter(function (l) { return l.id === bill.leadId; })[0] };
   }
   function pay(billId, ok) {
-    var d = DB().data, A = window.ADMIN_DB, x = billInfo(billId);
+    var d = DB().data, x = billInfo(billId);
     if (!x) throw err(404, 'Unknown bill.');
     var bill = x.bill, sub = x.sub, lead = x.lead, club = d.clubs.filter(function (c) { return c.id === bill.clubId; })[0];
     if (bill.paid) return { status: 'paid', ref: sub.id };
@@ -178,16 +198,11 @@
     Object.assign(sub, { status: 'Paid', paidAt: now(), paidAmount: sub.total, receiptNo: docNo('DCX-R', sub.id), method: 'Test payment', txnId: bill.id, periodStart: start, periodEnd: end });
     Object.assign(club, { status: 'Active', plan: sub.planName.split(' ')[0], billing: sub.billing, subEnd: end });
     if (!club.subStart || club.subStart > start) club.subStart = start;
-    if (!d.centres.some(function (c) { return c.clubId === club.id; })) {
-      d.centres.unshift({ id: A.nextId('centres', 'TC'), name: club.name + ' — Main Centre', clubId: club.id, address: club.address || '', phone: club.phone || '', email: club.email || '', hours: '', capacity: 100, status: 'Active', createdAt: today() });
-    }
     d.users.forEach(function (u) { if (u.id === lead.userId && u.status === 'Pending Payment') u.status = 'Active'; });
     Object.assign(lead, { status: 'Paid', paidAt: now(), subscriptionId: sub.id });
-    audit('Update', 'subscriptions', sub.id, 'Payment received for ' + club.name + ' (' + money(sub.total) + ', bill ' + bill.id + ')');
-    var login = root + 'admin/login.html';
-    mail(lead.email, 'Welcome to D-Clix — your club is active', layout('Welcome to D-Clix!', 'Your payment was successful and <b>' + esc(club.name) + '</b> is now active. Log in with the email and password you chose during registration.', [['Login email', lead.email], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Active until', end.split('-').reverse().join('/')]], ['Log in to D-Clix', login], 'Next steps: add your training centres, instructors and students.'), 'client_welcome', lead.id);
+    mail(lead.email, 'Welcome to D-Clix — your club is active', layout('Welcome to D-Clix!', 'Your payment was successful and <b>' + esc(club.name) + '</b> is now registered with D-Clix. Use the Club Login button on our website, or the link below, to log in.', [['Login email', lead.email], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Active until', end.split('-').reverse().join('/')]], ['Log in to D-Clix', LOGIN], 'Our team has been notified and will contact you to help you get started.'), 'client_welcome', lead.id);
     mail(lead.email, 'Receipt ' + sub.receiptNo + ' — D-Clix subscription', layout('Payment receipt', 'Thank you for your payment.', [['Receipt no.', sub.receiptNo], ['Invoice no.', sub.invoiceNo], ['Club', club.name], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Subscription', money(sub.price)], ['Gateway fee', money(sub.fee)], ['Total paid', money(sub.total)], ['Payment method', sub.method], ['Transaction ID', sub.txnId]], null, 'This is a computer-generated receipt. No signature is required.'), 'client_receipt', sub.id);
-    mail(SALES, 'Payment received: ' + club.name + ' — ' + money(sub.total), layout('Payment received', 'A new club has paid and been activated automatically.', [['Club', club.name + ' (' + club.id + ')'], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Amount', money(sub.total)], ['Bill', bill.id], ['Contact', lead.email + ' · ' + lead.phone]], ['Open in admin', root + 'admin/index.html#/leads']), 'sales_paid', sub.id);
+    mail(SALES, 'Payment received: ' + club.name + ' — ' + money(sub.total), layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', [['Club', club.name + ' (' + club.id + ')'], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Amount', money(sub.total)], ['Bill', bill.id], ['Contact', lead.email + ' · ' + lead.phone]]), 'sales_paid', sub.id);
     save();
     return { status: 'paid', ref: sub.id };
   }
@@ -206,6 +221,8 @@
   window.DCLIX_MOCK = {
     handle: function (path, opts) { return new Promise(function (resolve, reject) { setTimeout(function () { try { resolve(handle(path, opts)); } catch (e) { reject(e); } }, 250); }); },
     billInfo: function (id) { return billInfo(id); },
-    pay: pay
+    pay: pay,
+    data: function () { return DB().data; },
+    reset: function () { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } A.data = null; }
   };
 })();

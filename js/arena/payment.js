@@ -46,7 +46,7 @@
       try { sessionStorage.setItem('dclixSignup', JSON.stringify({ token: token, clubName: lead.clubName })); } catch (e) {}
       updateSummary();
     }, function (e) {
-      if (e.data && e.data.reason === 'paid') { lock(e.message); btn.insertAdjacentHTML('afterend', ' <a class="btn-ghost" href="../admin/login.html">Log in</a>'); return; }
+      if (e.data && e.data.reason === 'paid') { lock(e.message); btn.insertAdjacentHTML('afterend', ' <a class="btn-ghost" href="https://www.maclubsystem.com/index.php?/login/proceed">Log in</a>'); return; }
       lock(e.offline ? 'Online payment is not available yet. Please contact D-Clix at +603-7804 1412.' : e.message);
     });
 

@@ -19,7 +19,7 @@ $f = [
     'username' => str_in($in, 'username', 60), 'branch' => str_in($in, 'branch', 80), 'regNo' => str_in($in, 'regNo', 60),
 ];
 $password = is_string($in['password'] ?? null) ? $in['password'] : '';
-// "Simulate signup" in the admin marks its records so they can be told apart and removed (test payment mode only)
+// A request with simulated=true marks its records so they can be told apart and removed (test payment mode only)
 $isTest = !empty($in['simulated']) && billplz_mode() === 'mock';
 
 $errors = [];
