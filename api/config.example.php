@@ -20,6 +20,9 @@ return [
     // Public address of this API folder (Billplz must be able to reach the callback here)
     'api_url'  => 'http://127.0.0.1:8000/api',
 
+    // Where clubs log in (the D-Clix club system). Used in the welcome email after payment.
+    'login_url' => 'https://www.maclubsystem.com/index.php?/login/proceed',
+
     // Websites allowed to call this API from the browser (e.g. the GitHub Pages site)
     'allowed_origins' => [
         'http://127.0.0.1:8000',

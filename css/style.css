@@ -649,6 +649,8 @@ html.dark .ticker::before { background: linear-gradient(to right, #0e0e10, trans
 .flow-steps { list-style: none; display: flex; align-items: center; gap: 8px; padding: 0; margin: 0 0 32px; flex-wrap: wrap; }
 .flow-steps li { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 600; }
 .flow-steps li a { display: flex; align-items: center; gap: 8px; color: inherit; }
+.test-mode-note { margin: -16px 0 28px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.35); color: #f59e0b; }
+html.light .test-mode-note { color: #92400e; }
 .flow-steps li:not(:last-child)::after { content: ""; width: 32px; height: 2px; background: var(--line2); border-radius: 2px; margin-left: 4px; }
 .flow-steps .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line2); font-size: 13px; }
 .flow-steps li.done { color: var(--fg); } .flow-steps li.done .n { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }

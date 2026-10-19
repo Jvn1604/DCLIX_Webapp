@@ -1,11 +1,10 @@
 -- D-Clix database schema (MySQL 5.7+ / MariaDB 10.3+)
--- Run through `php api/install.php`, which also seeds settings and roles.
+-- Run through `php api/install.php`, which also saves the plan prices.
 
 SET NAMES utf8mb4;
 
--- Admin-portal records (clubs, centres, students, payments, leads, subscriptions …).
--- One row per record; the JSON in `data` is exactly what the admin portal uses.
--- club_id / centre_id are copied out of the JSON so the server can filter by scope.
+-- Website records (clubs, leads, subscriptions …) saved by signup, payment and the contact form.
+-- One row per record, stored as JSON in `data`; club_id / centre_id are copied out for lookups.
 CREATE TABLE IF NOT EXISTS records (
   coll        VARCHAR(40)  NOT NULL,
   id          VARCHAR(40)  NOT NULL,
