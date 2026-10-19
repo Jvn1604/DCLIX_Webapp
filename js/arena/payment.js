@@ -70,9 +70,10 @@
       var required = [['#bFirst', 'Please enter your first name.'], ['#bLast', 'Please enter your last name.'], ['#bAddr', 'Please enter your address.'], ['#bZip', 'Please enter your zip code.'], ['#bCity', 'Please enter your city.']];
       for (var i = 0; i < required.length; i++) if (!$(required[i][0]).value.trim()) return fail(required[i][1], required[i][0]);
       if (!/^\S+@\S+\.\S+$/.test($('#bEmail').value.trim())) return fail('Please enter a valid email address.', '#bEmail');
+      if (!$('#agreeTerms').checked) return fail('Please read and agree to the Terms & Conditions and Privacy Policy to continue.', '#agreeTerms');
       var c = current();
       btn.disabled = true; btn.textContent = 'Preparing payment…';
-      window.dclixApi('checkout.php', { body: { action: 'pay', token: token, plan: c.plan.id, billing: c.billing, billingInfo: {
+      window.dclixApi('checkout.php', { body: { action: 'pay', token: token, agreeTerms: true, plan: c.plan.id, billing: c.billing, billingInfo: {
         company: $('#bCompany').value, firstName: $('#bFirst').value, lastName: $('#bLast').value, address: $('#bAddr').value,
         zip: $('#bZip').value, city: $('#bCity').value, country: $('#bCountry').value, email: $('#bEmail').value, phone: $('#bPhone').value } } })
         .then(function (res) {
@@ -81,7 +82,7 @@
         }, function (e2) {
           btn.disabled = false; btn.textContent = 'Continue to payment';
           var f = e2.data && e2.data.fields;
-          var map = { firstName: '#bFirst', lastName: '#bLast', address: '#bAddr', zip: '#bZip', city: '#bCity', email: '#bEmail', phone: '#bPhone', plan: '#pPlan' };
+          var map = { agreeTerms: '#agreeTerms', firstName: '#bFirst', lastName: '#bLast', address: '#bAddr', zip: '#bZip', city: '#bCity', email: '#bEmail', phone: '#bPhone', plan: '#pPlan' };
           var k = f && Object.keys(f)[0];
           fail(k ? f[k] : e2.message, k ? map[k] : null);
         });
