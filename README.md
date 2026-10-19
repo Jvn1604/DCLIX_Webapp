@@ -182,7 +182,7 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 ### 🔄 Update / connect
 - [ ] **P1** Connect the **Billplz sandbox** (API secret key, collection ID, XSignature key in `api/config.php`, `billplz.mode = sandbox`) and test real FPX/card test payments.
 - [ ] **P1** Connect **email (SMTP)** — Brevo or company mail — set `mail.driver = smtp`, `from_email`, `sales_to`, then test every email type. The SMTP code is written but untested.
-- [ ] **P1** Have **Privacy Policy** and **Terms & Conditions** reviewed by the company before launch.
+- [x] **P1** Privacy Policy and Terms & Conditions replaced with the company's own published text (see "Match the live site" for open issues).
 - [ ] **P1** Confirm contact details, FAQ wording and the copyright year in every footer.
 - [x] **P2** Facebook link added to every footer (the live site has no Instagram / LinkedIn).
 - [ ] **P2** Download the remote images (Boxing/MMA tiles, testimonials, news, referral slides) into `assets/images/` and update the `src` values.
@@ -194,7 +194,9 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] **P1** Put the sales **WhatsApp number** in `NUMBER` at the top of `js/shared/whatsapp.js` (the chat button currently offers the contact form and office phone instead).
 - [ ] **P1** Confirm the **office address**: live English site says Suite **3A42** Level 4, live Malay site says Suite **650** Level 6, this site says Suite **442** Level 4.
 - [ ] **P1** Plan names and prices: live site uses **Basic / Advance / Premium**, monthly only, with promo prices (~~RM199.90~~ RM100, ~~RM269.90~~ RM150, ~~RM309.90~~ RM200) and different feature lists; this site uses Basic / Standard / Premium, monthly + yearly.
-- [ ] **P1** Replace the draft Privacy Policy and Terms with the company's real text from the live site (PDPA 2010, 12-month auto-renewal, early-termination penalty) and align the signup with it.
+- [x] **P1** Privacy Policy and Terms now use the company's exact text from the live site; clients must tick "I agree" on the payment page (time + IP saved on the lead).
+- [ ] **P1** Signup sells **monthly or yearly** plans, but the Terms say subscriptions **auto-renew every 12 months** with an early-termination penalty — the company must decide which is correct, then update either the plans or the Terms.
+- [ ] **P2** Ask the company to fix their legal text: the Privacy Policy contains a drafting note ("This revised section aligns with the Software Subscription Agreement…"), refers to Sections 9.1, 10, 11.4 and 12.1 that do not exist, and one Terms list item is missing "iii.". The Privacy Policy is also mostly contract terms — PDPA 2010 normally needs a notice saying what personal data is collected, why, and how to request access or correction.
 - [x] **P2** Testimonials now match the live English site (Coach Ashraff, Master Uthaya Kumar, Cikgu Akmal Hamdi).
 - [ ] **P2** Hero wording: live site says "Your club details at your fingertips manage it anytime anywhere".
 - [ ] **P2** Decide which "Club Login" is real: live site opens maclubsystem.com, this site opens the new admin portal.

@@ -39,12 +39,13 @@ $errors = [];
 foreach (['firstName' => 'First name', 'lastName' => 'Last name', 'address' => 'Address', 'zip' => 'Zip', 'city' => 'City'] as $k => $label) if ($info[$k] === '') $errors[$k] = $label . ' is required.';
 if (!valid_email($info['email'])) $errors['email'] = 'Please enter a valid email address.';
 if ($info['phone'] !== '' && !preg_match('/^\+?[0-9 \-]{7,20}$/', $info['phone'])) $errors['phone'] = 'Please enter a valid phone number.';
+if (empty($in['agreeTerms'])) $errors['agreeTerms'] = 'Please read and agree to the Terms & Conditions and Privacy Policy to continue.';
 if ($errors) fail('Please fix the highlighted fields.', 422, ['fields' => $errors]);
 
 $pdo = db();
 $pdo->beginTransaction();
 try {
-    $lead = array_merge($lead, ['plan' => $quote['plan']['id'], 'planName' => $quote['plan']['name'], 'billing' => $quote['billing'], 'amount' => $quote['total'], 'billingInfo' => $info, 'status' => 'Payment Pending']);
+    $lead = array_merge($lead, ['plan' => $quote['plan']['id'], 'planName' => $quote['plan']['name'], 'billing' => $quote['billing'], 'amount' => $quote['total'], 'billingInfo' => $info, 'status' => 'Payment Pending', 'termsAcceptedAt' => date('c'), 'termsAcceptedIp' => client_ip()]);
     rec_put('leads', $lead, 'website');
     $club = rec_get('clubs', $lead['clubId']);
     if ($club && $club['status'] !== 'Active') { $club['plan'] = explode(' ', $quote['plan']['name'])[0]; $club['billing'] = $quote['billing']; rec_put('clubs', $club, 'website'); }

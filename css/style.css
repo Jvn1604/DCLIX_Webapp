@@ -722,3 +722,16 @@ html.dark .ticker::before { background: linear-gradient(to right, #0b0f16, trans
 .benefit, .elevate-card, .demo-card { background: var(--hero); }
 .test-mode-note { margin: -16px 0 28px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.35); color: #f59e0b; }
 html.light .test-mode-note { color: #92400e; }
+
+/* ---------- Legal text (privacy / terms) ---------- */
+.legal-body { line-height: 1.75; }
+.legal-body h2 { font-size: 22px; font-weight: 600; margin: 36px 0 12px; color: var(--fg); }
+.legal-body h3 { font-size: 17px; font-weight: 600; margin: 22px 0 8px; color: var(--fg); }
+.legal-body p { color: var(--muted); margin: 0 0 10px; }
+.legal-body p.l1 { padding-left: 24px; }
+.legal-body p.l2 { padding-left: 52px; }
+.legal-body p.caps { font-size: 13.5px; letter-spacing: .01em; }
+@media (max-width: 640px) { .legal-body p.l1 { padding-left: 12px; } .legal-body p.l2 { padding-left: 26px; } }
+.agree { display: flex; gap: 10px; align-items: flex-start; margin-top: 24px; font-size: 14px; color: var(--muted); line-height: 1.6; cursor: pointer; }
+.agree input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.agree a { color: var(--accent); text-decoration: underline; }
