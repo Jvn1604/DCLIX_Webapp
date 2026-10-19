@@ -188,7 +188,7 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] **P1** Confirm the **office address**: live English site says Suite **3A42** Level 4, live Malay site says Suite **650** Level 6, this site says Suite **442** Level 4.
 - [ ] **P1** Plan names and prices: live site uses **Basic / Advance / Premium**, monthly only, with promo prices (~~RM199.90~~ RM100, ~~RM269.90~~ RM150, ~~RM309.90~~ RM200) and different feature lists; this site uses Basic / Standard / Premium, monthly + yearly.
 - [ ] **P1** Replace the draft Privacy Policy and Terms with the company's real text from the live site (PDPA 2010, 12-month auto-renewal, early-termination penalty) and align the signup with it.
-- [ ] **P2** Testimonials: live English site shows Coach Ashraff and Master Uthaya Kumar; this site shows Master Prem Kumar and Master Sivam Arumugam.
+- [x] **P2** Testimonials now match the live English site (Coach Ashraff, Master Uthaya Kumar, Cikgu Akmal Hamdi).
 - [ ] **P2** Hero wording: live site says "Your club details at your fingertips manage it anytime anywhere".
 - [ ] **P2** Decide which "Club Login" is real: live site opens maclubsystem.com, this site opens the new admin portal.
 - [ ] **P3** Report to the live site owner: the "No Refund Policy" link on the pricing page is broken, and the Malay home page still shows template text ("Ini adalah ruang untuk mengalu-alukan pengunjung…").
