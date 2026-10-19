@@ -21,7 +21,6 @@
     initHexTilt();
     initPricing();
     initReferral();
-    initEduDownload();
     initImageFallbacks();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
@@ -233,7 +232,7 @@
     show(0);
   }
 
-  /* ---------- Edu-Hub: build + download a simple PDF guide (no libraries) ---------- */
+  /* ---------- Image fallbacks (placeholder when a photo fails to load) ---------- */
   function initImageFallbacks() {
     var person = '<svg viewBox="0 0 100 140" fill="currentColor" aria-hidden="true" style="color:#cfd3da;width:50%;height:100%"><circle cx="50" cy="20" r="13"/><path d="M28 140V70c0-14 9-24 22-24s22 10 22 24v70h-14V92h-16v48z"/></svg>';
     function bind(img) {
