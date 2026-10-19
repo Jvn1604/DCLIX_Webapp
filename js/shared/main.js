@@ -234,41 +234,6 @@
   }
 
   /* ---------- Edu-Hub: build + download a simple PDF guide (no libraries) ---------- */
-  function initEduDownload() {
-    var btn = $('#downloadGuide'); if (!btn) return;
-    btn.addEventListener('click', function () {
-      var lines = [
-        ['Elevate Your Club: A Comprehensive Guide to D-Clix', 18, 780, 'F2', '0.97 0.45 0.09'],
-        ['A quick start guide for registration, payments, attendance, and reporting.', 11, 752, 'F1', '0.35 0.38 0.42'],
-        ['1) Digitalize member registration and approvals', 12, 700, 'F1', '0.12 0.12 0.12'],
-        ['2) Enable online payments and automated receipts', 12, 678, 'F1', '0.12 0.12 0.12'],
-        ['3) Track attendance with QR / fingerprint / manual methods', 12, 656, 'F1', '0.12 0.12 0.12'],
-        ['4) Manage grading schedules and results', 12, 634, 'F1', '0.12 0.12 0.12'],
-        ['5) Use reports to retain members and improve operations', 12, 612, 'F1', '0.12 0.12 0.12'],
-        ['Need help? Contact D-Clix support for onboarding assistance.', 12, 568, 'F1', '0.12 0.12 0.12']
-      ];
-      var esc = function (s) { return s.replace(/[\\()]/g, '\\$&'); };
-      var stream = lines.map(function (l) { return 'BT /' + l[3] + ' ' + l[1] + ' Tf ' + l[4] + ' rg 56 ' + l[2] + ' Td (' + esc(l[0]) + ') Tj ET'; }).join('\n');
-      var objs = [
-        '<< /Type /Catalog /Pages 2 0 R >>',
-        '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>',
-        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
-        '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>',
-        '<< /Length ' + stream.length + ' >>\nstream\n' + stream + '\nendstream'
-      ];
-      var pdf = '%PDF-1.4\n', offs = [];
-      objs.forEach(function (o, n) { offs.push(pdf.length); pdf += (n + 1) + ' 0 obj\n' + o + '\nendobj\n'; });
-      var xref = pdf.length;
-      pdf += 'xref\n0 ' + (objs.length + 1) + '\n0000000000 65535 f \n' + offs.map(function (o) { return ('0000000000' + o).slice(-10) + ' 00000 n \n'; }).join('');
-      pdf += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF';
-      var url = URL.createObjectURL(new Blob([pdf], { type: 'application/pdf' }));
-      var a = document.createElement('a'); a.href = url; a.download = 'Elevate-Your-Club-DClix-Guide.pdf'; a.click();
-      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-    });
-  }
-
-  /* ---------- Remote images: hide broken ones so the gradient shows ---------- */
   function initImageFallbacks() {
     var person = '<svg viewBox="0 0 100 140" fill="currentColor" aria-hidden="true" style="color:#cfd3da;width:50%;height:100%"><circle cx="50" cy="20" r="13"/><path d="M28 140V70c0-14 9-24 22-24s22 10 22 24v70h-14V92h-16v48z"/></svg>';
     function bind(img) {
