@@ -70,7 +70,7 @@
       var required = [['#bFirst', 'Please enter your first name.'], ['#bLast', 'Please enter your last name.'], ['#bAddr', 'Please enter your address.'], ['#bZip', 'Please enter your zip code.'], ['#bCity', 'Please enter your city.']];
       for (var i = 0; i < required.length; i++) if (!$(required[i][0]).value.trim()) return fail(required[i][1], required[i][0]);
       if (!/^\S+@\S+\.\S+$/.test($('#bEmail').value.trim())) return fail('Please enter a valid email address.', '#bEmail');
-      if (!$('#agreeTerms').checked) return fail('Please read and agree to the Terms & Conditions and Privacy Policy to continue.', '#agreeTerms');
+      if (!$('#agreeTerms').checked) return fail('Please read and agree to the Terms & Conditions, No Refund Policy and Privacy Policy to continue.', '#agreeTerms');
       var c = current();
       btn.disabled = true; btn.textContent = 'Preparing payment…';
       window.dclixApi('checkout.php', { body: { action: 'pay', token: token, agreeTerms: true, plan: c.plan.id, billing: c.billing, billingInfo: {
