@@ -63,6 +63,8 @@
     '“The grading process is seamless. Tracking, payment, and results are clear and consistent for every session.”': '“Proses penggredan sangat lancar. Penjejakan, pembayaran dan keputusan jelas dan konsisten untuk setiap sesi.”',
     '“Online payment helped improve fee collection revenue. It is simple for parents and easy for admins to track.”': '“Pembayaran dalam talian membantu meningkatkan kutipan yuran. Mudah untuk ibu bapa dan senang untuk admin menjejak.”',
     '“New student registration increased due to easier registration and communication flows.”': '“Pendaftaran pelajar baharu meningkat kerana urusan pendaftaran dan komunikasi menjadi lebih mudah.”',
+    '“D-CLIX helps transforming my academy from doing manual work to a proper online system, That i can use at any time”': '“D-CLIX membantu mengubah akademi saya daripada kerja manual kepada sistem dalam talian yang teratur, yang boleh saya gunakan pada bila-bila masa”',
+    '“D-CLIX contributes to an INCREASE in student fee collection revenue with the availability of ONLINE PAYMENT FACILITIES. All at your fingertips!”': '“D-CLIX menyumbang kepada PENINGKATAN hasil kutipan yuran pelajar dengan adanya KEMUDAHAN PEMBAYARAN DALAM TALIAN. Semua di hujung jari anda!”',
     'FAQ': 'Soalan Lazim', 'Common questions about D-Clix': 'Soalan lazim tentang D-Clix',
     'What is D-Clix Club Management System?': 'Apakah itu Sistem Pengurusan Kelab D-Clix?',
     'D-Clix is a web + mobile club management system designed to streamline registration, attendance, payments, and communications for sports and martial arts clubs.':
