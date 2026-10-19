@@ -39,7 +39,7 @@ $errors = [];
 foreach (['firstName' => 'First name', 'lastName' => 'Last name', 'address' => 'Address', 'zip' => 'Zip', 'city' => 'City'] as $k => $label) if ($info[$k] === '') $errors[$k] = $label . ' is required.';
 if (!valid_email($info['email'])) $errors['email'] = 'Please enter a valid email address.';
 if ($info['phone'] !== '' && !preg_match('/^\+?[0-9 \-]{7,20}$/', $info['phone'])) $errors['phone'] = 'Please enter a valid phone number.';
-if (empty($in['agreeTerms'])) $errors['agreeTerms'] = 'Please read and agree to the Terms & Conditions and Privacy Policy to continue.';
+if (empty($in['agreeTerms'])) $errors['agreeTerms'] = 'Please read and agree to the Terms & Conditions, No Refund Policy and Privacy Policy to continue.';
 if ($errors) fail('Please fix the highlighted fields.', 422, ['fields' => $errors]);
 
 $pdo = db();

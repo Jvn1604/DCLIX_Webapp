@@ -46,7 +46,7 @@ The admin portal, its charts and printed documents follow the same colour automa
 | admin/index.html | Admin portal (all modules, see below) |
 | arena/payment.html | Signup step 2: plan + billing details, then Billplz |
 | arena/payment-status.html | Where clients land after paying (paid / failed / pending) |
-| privacy.html · terms.html | Privacy Policy and Terms & Conditions (have them reviewed before launch) |
+| privacy.html · terms.html · refund.html | Privacy Policy, Terms & Conditions (company text) and No Refund Policy (draft) |
 | 404.html | "Page not found" page (GitHub Pages shows it for any missing address) |
 
 ## Files
@@ -186,6 +186,7 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [x] **P2** Testimonials now match the live English site (Coach Ashraff, Master Uthaya Kumar, Cikgu Akmal Hamdi).
 - [ ] **P2** Hero wording: live site says "Your club details at your fingertips manage it anytime anywhere".
 - [ ] **P2** Decide which "Club Login" is real: live site opens maclubsystem.com, this site opens the new admin portal.
+- [ ] **P1** **No Refund Policy** (`refund.html`) is a draft written from the company's Terms because the live page does not exist — the company must approve or replace it, then remove the yellow "Draft for company approval" box. It is linked from every footer, the pricing page and the payment "I agree" box.
 - [ ] **P3** Report to the live site owner: the "No Refund Policy" link on the pricing page is broken, and the Malay home page still shows template text ("Ini adalah ruang untuk mengalu-alukan pengunjung…").
 - [ ] **P3** The user manual PDF links to the live site's copy; save it into `assets/` if it should not depend on d-clix.com.
 - [ ] **P3** Bahasa Melayu covers the main website pages; the signup forms, admin portal and legal pages are English only.
