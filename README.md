@@ -15,13 +15,13 @@ Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite ru
 
 ## Folder layout
 ```
-index.html, about.html, pricing.html, edu-hub.html, referral.html   Marketing site (root)
+index.html, about.html, pricing.html, edu-hub.html, referral.html, community.html   Marketing site (root)
 privacy.html, terms.html, 404.html                                   Legal pages + "page not found"
 arena/      competition, live, club-register, payment, payment-status, player-register, dashboard
 admin/      login.html, index.html (admin portal)
 api/        PHP + MySQL backend (see "Backend" below; api/config.php is never committed)
 css/        style.css (shared + theme colour), admin.css
-js/shared/      theme.js, icons.js, main.js, config.js (where the API is) — used by every page
+js/shared/      theme.js, icons.js, main.js, config.js (where the API is), i18n.js (English / Bahasa Melayu), whatsapp.js (chat button)
 js/arena/       sports.js (18 sports), competition.js (portal + club registration), payment.js
 js/marketing/   referral-data.js (slides)
 js/admin/       admin-*.js (see table below)
@@ -41,6 +41,7 @@ The admin portal, its charts and printed documents follow the same colour automa
 | pricing.html | Plans (monthly / yearly) |
 | edu-hub.html | Edu-Hub + PDF guide download |
 | referral.html | Referral program slideshow |
+| community.html | Join Our Community (WhatsApp + Facebook) |
 | arena/competition.html | D-CLIX Arena: sport selector, news, rankings, fixtures |
 | arena/live.html?sport=karate | Watch Live (live / brackets / schedule / winners) |
 | arena/club-register.html?sport=karate | Club registration |
@@ -153,7 +154,7 @@ pricing.html → Select Plan → arena/club-register.html ──POST api/signup.
 ## Things to connect (marked `TODO` in the JS)
 1. Player registration (arena/competition.js) only validates in the browser. Club registration and the home page contact form
    (saved as a lead, source "Contact form", with emails to sales and the visitor) are connected to the API.
-2. Social media icons were removed from the footers until real Facebook / Instagram / LinkedIn addresses are available.
+2. Only the Facebook link is shown in the footers (the live site has no Instagram / LinkedIn).
 3. Boxing/MMA hero tiles, testimonial avatars, dashboard photos, news and referral slides load from the same remote
    image URLs the prototype used. Download them (or your own photos) into assets/images and update the src values.
 4. Live scores, rankings, fixtures and tournaments are sample data.
@@ -176,11 +177,23 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] **P1** Connect **email (SMTP)** — Brevo or company mail — set `mail.driver = smtp`, `from_email`, `sales_to`, then test every email type. The SMTP code is written but untested.
 - [ ] **P1** Have **Privacy Policy** and **Terms & Conditions** reviewed by the company before launch.
 - [ ] **P1** Confirm contact details, FAQ wording and the copyright year in every footer.
-- [ ] **P2** Add the real Facebook / Instagram / LinkedIn links (icons were removed until then).
+- [x] **P2** Facebook link added to every footer (the live site has no Instagram / LinkedIn).
 - [ ] **P2** Download the remote images (Boxing/MMA tiles, testimonials, news, referral slides) into `assets/images/` and update the `src` values.
 - [ ] **P2** Replace sample data (live scores, rankings, fixtures, tournaments, admin demo data) with real data.
 - [ ] **P2** The "Online Registration" link in the admin points to the player form, which is not connected yet — connect it so applications appear under Registration.
 - [ ] **P3** WhatsApp and push notifications are recorded but not sent — connect a WhatsApp Business API / push provider.
+
+### 🆚 Match the live site (d-clix.com)
+- [ ] **P1** Put the sales **WhatsApp number** in `NUMBER` at the top of `js/shared/whatsapp.js` (the chat button currently offers the contact form and office phone instead).
+- [ ] **P1** Confirm the **office address**: live English site says Suite **3A42** Level 4, live Malay site says Suite **650** Level 6, this site says Suite **442** Level 4.
+- [ ] **P1** Plan names and prices: live site uses **Basic / Advance / Premium**, monthly only, with promo prices (~~RM199.90~~ RM100, ~~RM269.90~~ RM150, ~~RM309.90~~ RM200) and different feature lists; this site uses Basic / Standard / Premium, monthly + yearly.
+- [ ] **P1** Replace the draft Privacy Policy and Terms with the company's real text from the live site (PDPA 2010, 12-month auto-renewal, early-termination penalty) and align the signup with it.
+- [ ] **P2** Testimonials: live English site shows Coach Ashraff and Master Uthaya Kumar; this site shows Master Prem Kumar and Master Sivam Arumugam.
+- [ ] **P2** Hero wording: live site says "Your club details at your fingertips manage it anytime anywhere".
+- [ ] **P2** Decide which "Club Login" is real: live site opens maclubsystem.com, this site opens the new admin portal.
+- [ ] **P3** Report to the live site owner: the "No Refund Policy" link on the pricing page is broken, and the Malay home page still shows template text ("Ini adalah ruang untuk mengalu-alukan pengunjung…").
+- [ ] **P3** The user manual PDF links to the live site's copy; save it into `assets/` if it should not depend on d-clix.com.
+- [ ] **P3** Bahasa Melayu covers the main website pages; the signup forms, competition portal, admin portal and legal pages are English only.
 
 ### ✨ Improve
 - [ ] **P2** Automatic **renewal invoices** before a subscription ends, and automatic **suspension** of clubs whose subscription expired.
