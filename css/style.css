@@ -754,3 +754,7 @@ html.light .wa-pop { --wa-bg: #ffffff; --wa-card: #f0f1f6; --wa-hover: #f1f8f3; 
 .agree input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); flex: none; }
 .agree a { color: var(--accent); text-decoration: underline; }
 
+.draft-note { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.6; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.35); color: var(--muted); }
+.draft-note b { color: #f59e0b; } .draft-note a, .legal-body a { color: var(--accent); text-decoration: underline; }
+.legal-body b { color: var(--fg); }
+.refund-note { text-align: center; color: var(--muted); font-size: 14px; } .refund-note a { color: var(--accent); text-decoration: underline; }

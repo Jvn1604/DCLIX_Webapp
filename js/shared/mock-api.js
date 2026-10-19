@@ -117,7 +117,7 @@
     [['firstName', 'First name'], ['lastName', 'Last name'], ['address', 'Address'], ['zip', 'Zip'], ['city', 'City']].forEach(function (x) { if (!info[x[0]]) e[x[0]] = x[1] + ' is required.'; });
     if (!validEmail(info.email)) e.email = 'Please enter a valid email address.';
     if (info.phone && !/^\+?[0-9 \-]{7,20}$/.test(info.phone)) e.phone = 'Please enter a valid phone number.';
-    if (!b.agreeTerms) e.agreeTerms = 'Please read and agree to the Terms & Conditions and Privacy Policy to continue.';
+    if (!b.agreeTerms) e.agreeTerms = 'Please read and agree to the Terms & Conditions, No Refund Policy and Privacy Policy to continue.';
     if (Object.keys(e).length) throw err(422, 'Please fix the highlighted fields.', { fields: e });
     Object.assign(lead, { plan: q.plan.id, planName: q.plan.name, billing: q.billing, amount: q.total, billingInfo: info, status: 'Payment Pending', termsAcceptedAt: now(), termsAcceptedIp: 'browser test' });
     var club = d.clubs.filter(function (c) { return c.id === lead.clubId; })[0];
