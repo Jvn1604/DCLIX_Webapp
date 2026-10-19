@@ -16,7 +16,7 @@ $f = [
     'address1' => str_in($in, 'address1', 255), 'address2' => str_in($in, 'address2', 255), 'state' => str_in($in, 'state', 60),
     'country' => str_in($in, 'country', 60), 'phoneCode' => str_in($in, 'phoneCode', 30), 'whatsapp' => str_in($in, 'whatsapp', 30),
     'email' => strtolower(str_in($in, 'email', 190)),
-    'username' => str_in($in, 'username', 60), 'branch' => str_in($in, 'branch', 80),
+    'username' => str_in($in, 'username', 60), 'branch' => str_in($in, 'branch', 80), 'regNo' => str_in($in, 'regNo', 60),
 ];
 $password = is_string($in['password'] ?? null) ? $in['password'] : '';
 // "Simulate signup" in the admin marks its records so they can be told apart and removed (test payment mode only)
@@ -24,6 +24,7 @@ $isTest = !empty($in['simulated']) && billplz_mode() === 'mock';
 
 $errors = [];
 if ($f['clubName'] === '') $errors['clubName'] = 'Club name is required.';
+if ($f['regNo'] === '') $errors['regNo'] = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
 if (!preg_match('/^[A-Za-z0-9._-]{3,30}$/', $f['username'])) $errors['username'] = 'Use 3–30 letters, numbers, . _ or -.';
 if ($f['clubCode'] === '') $errors['clubCode'] = 'Club code is required.';
 elseif (!preg_match('/^[A-Z0-9][A-Z0-9_-]{1,29}$/', $f['clubCode'])) $errors['clubCode'] = 'Use 2–30 letters, numbers, - or _ (no spaces).';
@@ -59,7 +60,7 @@ $pdo->beginTransaction();
 try {
     $clubId = $resume['clubId'] ?? next_id('clubs', 'CLB');
     $club = rec_get('clubs', $clubId) ?: ['id' => $clubId, 'createdAt' => today(), 'regNo' => '', 'type' => 'Private Club', 'monthlyFee' => 100, 'subStart' => '', 'subEnd' => '', 'source' => $isTest ? 'Simulated test' : 'Website signup'];
-    $club = array_merge($club, ['name' => $f['clubName'], 'clubCode' => $f['clubCode'], 'owner' => $f['headInstructor'], 'phone' => $phone, 'email' => $f['email'], 'username' => $f['username'], 'branch' => $f['branch'],
+    $club = array_merge($club, ['name' => $f['clubName'], 'clubCode' => $f['clubCode'], 'owner' => $f['headInstructor'], 'phone' => $phone, 'email' => $f['email'], 'username' => $f['username'], 'branch' => $f['branch'], 'regNo' => $f['regNo'],
         'address' => $address, 'state' => $f['state'], 'country' => $f['country'], 'sport' => $sportName, 'plan' => explode(' ', $plan['name'])[0], 'billing' => $billing, 'status' => 'Pending Payment']);
     rec_put('clubs', $club, 'website');
 
