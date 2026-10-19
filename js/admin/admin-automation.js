@@ -211,7 +211,7 @@
       feed.sort(function (a, b) { return new Date(b.at) - new Date(a.at); });
 
       host.innerHTML =
-        (DB.mode !== 'api' ? '<p class="a-warn">' + A.icon('info') + ' Test mode (no server): this shows website signups made in <b>this browser</b>. For shared data across testers, connect the real API (PRODUCTION_API in js/shared/config.js).</p>' : '') +
+        (DB.mode !== 'api' ? '<p class="a-warn">' + A.icon('info') + ' Offline demo: website signups only appear here when the portal is connected to the server (run start-local.bat).</p>' : '') +
         '<div class="a-health">' + health.map(function (h) { return '<div class="' + h[2] + '"><span>' + esc(h[0]) + '</span><b>' + h[1] + '</b><small>' + h[3] + '</small></div>'; }).join('') + '</div>' +
         '<div class="a-stats">' +
           A.statCard('Signups', A.num(info.length), 'userplus', PERIODS.filter(function (p) { return p[0] === pref.period; })[0][1].toLowerCase(), '#/leads') +
