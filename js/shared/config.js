@@ -15,37 +15,16 @@
   var me = document.currentScript && document.currentScript.src;
   var siteRoot = me ? me.replace(/js\/shared\/config\.js(\?.*)?$/, '') : location.href.replace(/[^\/]*$/, '');
   var base = local ? siteRoot + 'api' : PRODUCTION_API;
-  // No real API (e.g. GitHub Pages with PRODUCTION_API empty) → use the built-in browser TEST API for UAT.
-  window.DCLIX_CONFIG = { apiBase: base.replace(/\/$/, ''), siteRoot: siteRoot, testMode: !base };
-
-  function loadScript(src) {
-    return new Promise(function (resolve, reject) {
-      if (document.querySelector('script[data-src="' + src + '"]')) { resolve(); return; }
-      var s = document.createElement('script'); s.src = siteRoot + src; s.setAttribute('data-src', src);
-      s.onload = resolve; s.onerror = function () { reject(new Error('Could not load ' + src)); };
-      document.head.appendChild(s);
-    });
-  }
-  // Tell testers on the signup pages that this is the browser test mode
-  if (!base) document.addEventListener('DOMContentLoaded', function () {
-    var steps = document.querySelector('.flow-steps');
-    if (!steps) return;
-    var n = document.createElement('p'); n.className = 'test-mode-note';
-    n.innerHTML = '<b>UAT test mode:</b> no real payment is taken and your registration is saved only in this browser. Log in at Club Login on the same browser to see it in the admin.';
-    steps.insertAdjacentElement('afterend', n);
-  });
-  var mockReady = null;
-  function testApi(path, opts) {
-    // admin-data.js holds the browser database the admin portal reads in demo mode
-    mockReady = mockReady || (window.ADMIN_DB ? Promise.resolve() : loadScript('js/admin/admin-data.js')).then(function () { return window.DCLIX_MOCK ? null : loadScript('js/shared/mock-api.js'); });
-    return mockReady.then(function () { return window.DCLIX_MOCK.handle(path, opts); });
-  }
+  window.DCLIX_CONFIG = { apiBase: base.replace(/\/$/, '') };
 
   /* Call the API. Resolves with the JSON reply; rejects with an Error that has
      .status, .data (the JSON error body) and .network (true if the server could not be reached). */
   window.dclixApi = function (path, opts) {
     opts = opts || {};
-    if (!window.DCLIX_CONFIG.apiBase) return testApi(path, opts);
+    if (!window.DCLIX_CONFIG.apiBase) {
+      var off = new Error('Online services are not connected yet.'); off.network = true; off.offline = true;
+      return Promise.reject(off);
+    }
     var headers = { 'Accept': 'application/json' };
     if (opts.body !== undefined) headers['Content-Type'] = 'application/json';
     if (opts.token) headers['Authorization'] = 'Bearer ' + opts.token;
