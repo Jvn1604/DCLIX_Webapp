@@ -154,11 +154,6 @@ function complete_payment(string $billId, array $raw = []): ?array
         if (($club['subStart'] ?? '') === '' || $club['subStart'] > $start) $club['subStart'] = $start;
         rec_put('clubs', $club, 'system');
 
-        $hasCentre = (int) q("SELECT COUNT(*) FROM records WHERE coll = 'centres' AND club_id = ?", [$club['id']])->fetchColumn();
-        if (!$hasCentre) {
-            rec_put('centres', ['id' => next_id('centres', 'TC'), 'name' => $club['name'] . ' — Main Centre', 'clubId' => $club['id'], 'address' => $club['address'] ?? '',
-                'phone' => $club['phone'] ?? '', 'email' => $club['email'] ?? '', 'hours' => '', 'capacity' => 100, 'status' => 'Active', 'createdAt' => today()], 'system');
-        }
         if (!empty($lead['userId'])) q("UPDATE users SET status = 'Active' WHERE id = ? AND status = 'Pending Payment'", [$lead['userId']]);
         $lead = array_merge($lead, ['status' => 'Paid', 'paidAt' => date('c'), 'subscriptionId' => $sub['id']]);
         rec_put('leads', $lead, 'system');
@@ -194,7 +189,7 @@ function signup_emails(array $lead, string $resumeUrl): void
 {
     $rows = [['Club', $lead['clubName']], ['Contact email', $lead['email']], ['Phone', $lead['phone']], ['Sport', $lead['sport']], ['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')'], ['Lead ID', $lead['id']]];
     send_mail((string) cfg('mail.sales_to'), 'New signup: ' . $lead['clubName'] . ' (payment pending)',
-        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows, ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin/index.html#/leads']), 'sales_signup', $lead['id']);
+        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows), 'sales_signup', $lead['id']);
     send_mail($lead['email'], 'Complete your D-Clix registration',
         email_layout('Thanks for registering, ' . $lead['clubName'], 'We have saved your club details. Your account will be activated as soon as payment is completed.',
             [['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')'], ['Login email', $lead['email']]], ['Complete payment', $resumeUrl], 'If you have already paid, you can ignore this email.'), 'client_signup', $lead['id']);
@@ -202,11 +197,11 @@ function signup_emails(array $lead, string $resumeUrl): void
 
 function payment_emails(array $lead, array $club, array $sub): void
 {
-    $login = rtrim((string) cfg('site_url'), '/') . '/admin/login.html';
+    $login = (string) cfg('login_url', 'https://www.maclubsystem.com/index.php?/login/proceed');
     send_mail($lead['email'], 'Welcome to D-Clix — your club is active',
-        email_layout('Welcome to D-Clix!', 'Your payment was successful and <b>' . esc($club['name']) . '</b> is now active. Log in with the email and password you chose during registration.',
+        email_layout('Welcome to D-Clix!', 'Your payment was successful and <b>' . esc($club['name']) . '</b> is now registered with D-Clix. Use the Club Login button on our website, or the link below, to log in.',
             [['Login email', $lead['email']], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Active until', date('d/m/Y', strtotime($sub['periodEnd']))]], ['Log in to D-Clix', $login],
-            'Next steps: add your training centres, instructors and students. Our team will contact you on WhatsApp to help you get started.'), 'client_welcome', $lead['id']);
+            'Our team has been notified and will contact you on WhatsApp to help you get started.'), 'client_welcome', $lead['id']);
     send_mail($lead['email'], 'Receipt ' . $sub['receiptNo'] . ' — D-Clix subscription',
         email_layout('Payment receipt', 'Thank you for your payment.', [
             ['Receipt no.', $sub['receiptNo']], ['Invoice no.', $sub['invoiceNo']], ['Club', $club['name']], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'],
@@ -214,6 +209,5 @@ function payment_emails(array $lead, array $club, array $sub): void
             ['Payment method', $sub['method']], ['Transaction ID', $sub['txnId']], ['Period', date('d/m/Y', strtotime($sub['periodStart'])) . ' – ' . date('d/m/Y', strtotime($sub['periodEnd']))],
         ], null, 'This is a computer-generated receipt. No signature is required.'), 'client_receipt', $sub['id']);
     send_mail((string) cfg('mail.sales_to'), 'Payment received: ' . $club['name'] . ' — ' . money_fmt($sub['total']),
-        email_layout('Payment received', 'A new club has paid and been activated automatically.', [['Club', $club['name'] . ' (' . $club['id'] . ')'], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Amount', money_fmt($sub['total'])], ['Bill', $sub['txnId']], ['Contact', $lead['email'] . ' · ' . $lead['phone']]],
-            ['Open in admin', rtrim((string) cfg('site_url'), '/') . '/admin/index.html#/leads']), 'sales_paid', $sub['id']);
+        email_layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', [['Club', $club['name'] . ' (' . $club['id'] . ')'], ['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Amount', money_fmt($sub['total'])], ['Bill', $sub['txnId']], ['Contact', $lead['email'] . ' · ' . $lead['phone']]]), 'sales_paid', $sub['id']);
 }
