@@ -17,11 +17,13 @@
   });
 
   function initClub() {
-    if (!sport) { sportId = 'taekwondo'; sport = window.getSport(sportId); }
+    // Pre-selected only when the visitor came from a sport page (?sport=…); from the pricing page they must choose one.
+    var chosen = new URLSearchParams(location.search).get('sport') && sport ? sport.id : '';
     var typeSel = $('#clubType');
-    typeSel.innerHTML = window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
-    typeSel.value = sport.id; // pre-selected from the sport chosen earlier, but the user can change it
-    typeSel.addEventListener('change', function () { sportId = typeSel.value; sport = window.getSport(sportId); });
+    typeSel.innerHTML = '<option value="">Select your club type</option>' + window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
+    typeSel.value = chosen;
+    if (!chosen) sport = null;
+    typeSel.addEventListener('change', function () { sportId = typeSel.value || 'taekwondo'; sport = window.getSport(typeSel.value); });
     var form = $('#clubForm'), modal = $('#successModal'), errBox = $('#clubErr'), btn = $('#clubSubmit');
     var qs = new URLSearchParams(location.search);
     // Plan chosen on the pricing page (?plan=…&billing=…); visitors from the competition portal pick one here.
@@ -30,7 +32,7 @@
     if (!PLANS.some(function (p) { return p[0] === plan; })) plan = 'basic';
     var pick = $('#planPick');
     pick.innerHTML = '<div class="pp-l"><label class="lbl" for="planSel">Your plan</label><select class="select" id="planSel">' +
-      PLANS.map(function (p) { return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p[0] + '-' + m + '">' + p[1] + ' — RM' + (m === 'monthly' ? p[2] + ' / month' : p[3] + ' / year') + '</option>'; }).join(''); }).join('') +
+      PLANS.map(function (p) { return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p[0] + '-' + m + '">' + p[1].replace(' Plan', '') + ' — RM' + (m === 'monthly' ? p[2] + ' / month' : p[3] + ' / year') + '</option>'; }).join(''); }).join('') +
       '</select></div><a class="accent" href="../pricing.html">Compare plans</a>';
     pick.hidden = false;
     var planSel = $('#planSel');
@@ -53,9 +55,10 @@
         input.setAttribute('aria-invalid', 'true');
         var p = document.createElement('small'); p.className = 'field-err'; p.textContent = fields[k];
         input.insertAdjacentElement('afterend', p);
-        first = first || input;
       });
       errBox.textContent = summary || 'Please fix the highlighted fields.'; errBox.classList.add('show');
+      // Focus the first problem in page order, so the visitor starts at the top of the form
+      first = $$('[aria-invalid="true"]', form)[0];
       if (first) first.focus();
     }
     form.addEventListener('submit', function (e) {
@@ -65,6 +68,7 @@
       var errs = {};
       if (!v('clubCode')) errs.clubCode = 'Club code is required.';
       if (!v('clubName')) errs.clubName = 'Club name is required.';
+      if (!typeSel.value) errs.sport = 'Please choose your club type.';
       if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('username'))) errs.username = 'Use 3–30 letters, numbers, . _ or -.';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('clubEmail'))) errs.email = 'Please enter a valid email address.';
       var pw = $('#pw').value;

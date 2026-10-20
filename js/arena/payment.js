@@ -36,8 +36,15 @@
       $('#bEmail').value = b.email || lead.email; $('#bPhone').value = b.phone || lead.phone || '';
       ['company', 'firstName', 'lastName', 'address', 'zip', 'city'].forEach(function (k) { var id = { company: '#bCompany', firstName: '#bFirst', lastName: '#bLast', address: '#bAddr', zip: '#bZip', city: '#bCity' }[k]; if (b[k]) $(id).value = b[k]; });
       if (b.country) $('#bCountry').value = b.country;
+      // First visit: start from what the club entered on the registration page
+      if (!lead.billingInfo) {
+        var name = (lead.contactName || '').trim().split(/\s+/);
+        if (name[0]) { $('#bFirst').value = name[0]; $('#bLast').value = name.slice(1).join(' '); }
+        if (lead.address) $('#bAddr').value = lead.address;
+        if (lead.country && [].some.call($('#bCountry').options, function (o) { return o.value === lead.country; })) $('#bCountry').value = lead.country;
+      }
       sel.innerHTML = PLANS.map(function (p) {
-        return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p.id + '-' + m + '">' + p.name + ' – RM' + p[m] + (m === 'monthly' ? ' / month' : ' / year') + '</option>'; }).join('');
+        return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p.id + '-' + m + '">' + p.name.replace(' Plan', '') + ' — RM' + p[m] + (m === 'monthly' ? ' / month' : ' / year') + '</option>'; }).join('');
       }).join('');
       sel.value = lead.plan + '-' + lead.billing;
       if (!sel.value) sel.selectedIndex = 0;

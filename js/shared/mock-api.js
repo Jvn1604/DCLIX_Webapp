@@ -68,6 +68,15 @@
     d.emails.unshift({ id: 'EM' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: kind, to: to, subject: subject, status: 'logged', error: '', relatedId: related || '', createdAt: now(), sentAt: '', html: html });
   }
 
+  // Everything the sales team needs to set the club up in the D-Clix club system (same as api/lib/billing.php)
+  function setupRows(l) {
+    var addr = [l.address, l.state, l.country].filter(Boolean).join(', ');
+    return [['Club', l.clubName], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
+      ['Sport', l.sport || ''], ['Email', l.email], ['Phone', l.phone || '—'], ['Address', addr || '—']];
+  }
+  // Club code + username the client uses on the club system's login page
+  function loginRows(l) { return [['Club code', l.clubCode || ''], ['Username', l.username || '']].filter(function (r) { return r[1]; }); }
+
   /* ---------- endpoints ---------- */
   function signup(b) {
     var d = DB().data;
@@ -105,14 +114,14 @@
       d.users.push(user);
     }
     var lead = resume || { id: A.nextId('leads', 'LD'), createdAt: now(), source: 'Website', notes: '', followUp: '', assignedTo: '' };
-    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
+    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, username: f.username, branch: f.branch, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
       plan: p.id, planName: p.name, billing: billing, amount: q.total, clubId: clubId, userId: user.id, ip: 'browser test' });
     if (!resume) d.leads.unshift(lead);
     var t = token();
     d.signupTokens.push({ token: t, leadId: lead.id, expires: Date.now() + 7 * 864e5 });
     if (!resume) {
-      mail(SALES, 'New signup: ' + f.clubName + ' (payment pending)', layout('New club signup', 'A club just registered on the website and is being sent to payment.', [['Club', f.clubName], ['Contact email', f.email], ['Phone', phone], ['Sport', sportName], ['Plan', p.name + ' (' + billing + ')'], ['Lead ID', lead.id]]), 'sales_signup', lead.id);
-      mail(f.email, 'Complete your D-Clix registration', layout('Thanks for registering, ' + f.clubName, 'We have saved your club details. Your account will be activated as soon as payment is completed.', [['Plan', p.name + ' (' + billing + ')'], ['Login email', f.email]], ['Complete payment', root + 'arena/payment.html?t=' + t], 'If you have already paid, you can ignore this email.'), 'client_signup', lead.id);
+      mail(SALES, 'New signup: ' + f.clubName + ' (payment pending)', layout('New club signup', 'A club just registered on the website and is being sent to payment.', setupRows(lead).concat([['Plan', p.name + ' (' + billing + ')'], ['Lead ID', lead.id]])), 'sales_signup', lead.id);
+      mail(f.email, 'Complete your D-Clix registration', layout('Thanks for registering, ' + f.clubName, 'We have saved your club details. Your account will be activated as soon as payment is completed.', [['Plan', p.name + ' (' + billing + ')']].concat(loginRows(lead)), ['Complete payment', root + 'arena/payment.html?t=' + t], 'If you have already paid, you can ignore this email.'), 'client_signup', lead.id);
     }
     save();
     return { ok: true, token: t, leadId: lead.id, resumed: !!resume };
@@ -128,7 +137,7 @@
   }
   function checkout(b) {
     var d = DB().data, lead = leadFromToken(str(b.token, 200));
-    if ((b.action || 'load') === 'load') return { lead: { clubName: lead.clubName, clubCode: lead.clubCode, email: lead.email, phone: lead.phone, plan: lead.plan, billing: lead.billing, billingInfo: lead.billingInfo || null, status: lead.status }, plans: PLANS };
+    if ((b.action || 'load') === 'load') return { lead: { clubName: lead.clubName, clubCode: lead.clubCode, email: lead.email, phone: lead.phone, contactName: lead.contactName || '', address: lead.address || '', country: lead.country || '', plan: lead.plan, billing: lead.billing, billingInfo: lead.billingInfo || null, status: lead.status }, plans: PLANS };
     if (b.action !== 'pay') throw err(404, 'Unknown action.');
     var q = quote(str(b.plan, 20), str(b.billing, 10));
     if (!q) throw err(422, 'Please choose a plan.', { fields: { plan: 'Please choose a plan.' } });
@@ -199,9 +208,9 @@
     if (!club.subStart || club.subStart > start) club.subStart = start;
     d.users.forEach(function (u) { if (u.id === lead.userId && u.status === 'Pending Payment') u.status = 'Active'; });
     Object.assign(lead, { status: 'Paid', paidAt: now(), subscriptionId: sub.id });
-    mail(lead.email, 'Welcome to D-Clix — your club is active', layout('Welcome to D-Clix!', 'Your payment was successful and <b>' + esc(club.name) + '</b> is now registered with D-Clix. Use the Club Login button on our website, or the link below, to log in.', [['Login email', lead.email], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Active until', end.split('-').reverse().join('/')]], ['Log in to D-Clix', LOGIN], 'Our team has been notified and will contact you to help you get started.'), 'client_welcome', lead.id);
+    mail(lead.email, 'Welcome to D-Clix — your club is active', layout('Welcome to D-Clix!', 'Your payment was successful and <b>' + esc(club.name) + '</b> is now registered with D-Clix. Use the Club Login button on our website, or the link below, to log in.', loginRows(lead).concat([['Plan', sub.planName + ' (' + sub.billing + ')'], ['Active until', end.split('-').reverse().join('/')]]), ['Log in to D-Clix', LOGIN], 'Our team has been notified and will contact you to help you get started.'), 'client_welcome', lead.id);
     mail(lead.email, 'Receipt ' + sub.receiptNo + ' — D-Clix subscription', layout('Payment receipt', 'Thank you for your payment.', [['Receipt no.', sub.receiptNo], ['Invoice no.', sub.invoiceNo], ['Club', club.name], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Subscription', money(sub.price)], ['Gateway fee', money(sub.fee)], ['Total paid', money(sub.total)], ['Payment method', sub.method], ['Transaction ID', sub.txnId]], null, 'This is a computer-generated receipt. No signature is required.'), 'client_receipt', sub.id);
-    mail(SALES, 'Payment received: ' + club.name + ' — ' + money(sub.total), layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', [['Club', club.name + ' (' + club.id + ')'], ['Plan', sub.planName + ' (' + sub.billing + ')'], ['Amount', money(sub.total)], ['Bill', bill.id], ['Contact', lead.email + ' · ' + lead.phone]]), 'sales_paid', sub.id);
+    mail(SALES, 'Payment received: ' + club.name + ' — ' + money(sub.total), layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', setupRows(lead).concat([['Plan', sub.planName + ' (' + sub.billing + ')'], ['Active until', end.split('-').reverse().join('/')], ['Amount paid', money(sub.total)], ['Receipt no.', sub.receiptNo], ['Bill', bill.id], ['Club ID', club.id]])), 'sales_paid', sub.id);
     save();
     return { status: 'paid', ref: sub.id };
   }
