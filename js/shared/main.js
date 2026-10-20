@@ -194,7 +194,7 @@
       grid.innerHTML = plans.map(function (p, i) {
         return '<div class="reveal in" style="transition-delay:' + (i * .08) + 's"><div class="card plan' + (p.featured ? ' featured' : '') + '">' +
           '<div class="pn">' + p.name + '</div>' +
-          '<div class="price">' + (mode === 'monthly' ? p.m : p.y) + '<small>/' + (mode === 'monthly' ? 'month' : 'Year') + '</small></div>' +
+          '<div class="price">' + (mode === 'monthly' ? p.m : p.y) + '<small>/' + (mode === 'monthly' ? 'month' : 'year') + '</small></div>' +
           '<div class="save">' + (mode === 'yearly' ? p.save : '') + '</div>' +
           '<div class="desc">' + p.desc + '</div>' +
           '<ul>' + p.items.map(function (t) { return '<li><span class="tick">' + window.icon('check') + '</span><span>' + t + '</span></li>'; }).join('') + '</ul>' +

@@ -21,6 +21,7 @@ $action = $in['action'] ?? 'load';
 if ($action === 'load') {
     json_out(['lead' => [
         'clubName' => $lead['clubName'], 'clubCode' => $lead['clubCode'], 'email' => $lead['email'], 'phone' => $lead['phone'],
+        'contactName' => $lead['contactName'] ?? '', 'address' => $lead['address'] ?? '', 'country' => $lead['country'] ?? '',
         'plan' => $lead['plan'], 'billing' => $lead['billing'], 'billingInfo' => $lead['billingInfo'] ?? null, 'status' => $lead['status'],
     ], 'plans' => plans()]);
 }

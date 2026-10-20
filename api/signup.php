@@ -74,7 +74,7 @@ try {
 
     $leadId = $resume['id'] ?? next_id('leads', 'LD');
     $lead = array_merge($resume ?? ['id' => $leadId, 'createdAt' => date('c'), 'source' => $isTest ? 'Simulated test' : 'Website', 'notes' => '', 'followUp' => '', 'assignedTo' => ''], [
-        'status' => 'Payment Pending', 'clubName' => $f['clubName'], 'clubCode' => $f['clubCode'], 'contactName' => $f['headInstructor'], 'email' => $f['email'],
+        'status' => 'Payment Pending', 'clubName' => $f['clubName'], 'clubCode' => $f['clubCode'], 'username' => $f['username'], 'branch' => $f['branch'], 'contactName' => $f['headInstructor'], 'email' => $f['email'],
         'phone' => $phone, 'sport' => $sportName, 'address' => $address, 'state' => $f['state'], 'country' => $f['country'],
         'plan' => $plan['id'], 'planName' => $plan['name'], 'billing' => $billing, 'amount' => $quote['total'], 'clubId' => $clubId, 'userId' => $userId, 'ip' => client_ip(),
     ]);

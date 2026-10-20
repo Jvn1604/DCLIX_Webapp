@@ -25,7 +25,7 @@
     'Martial Arts Club Platform': 'Platform Kelab Seni Mempertahankan Diri', 'Grow revenue and streamline your club with': 'Tingkatkan pendapatan dan lancarkan kelab anda dengan',
     'club management system': 'sistem pengurusan kelab', 'Built for dojos and combat sports academies.': 'Dibina untuk dojo dan akademi sukan tempur.',
     'Anytime. Anywhere.': 'Bila-bila masa. Di mana sahaja.', 'Start Your Journey': 'Mulakan Perjalanan Anda', 'Watch Demo': 'Tonton Demo', 'Sports supported': 'Sukan yang disokong',
-    'Why D-Clix': 'Kenapa D-Clix', 'Key Benefits That Helps Manage Your Club': 'Faedah Utama yang Membantu Mengurus Kelab Anda',
+    'Why D-Clix': 'Kenapa D-Clix', 'Key Benefits That Help Manage Your Club': 'Faedah Utama yang Membantu Mengurus Kelab Anda',
     'Streamlined Operations and Cost Efficiency': 'Operasi Diperkemas dan Kecekapan Kos',
     'Automate registration, fees and attendance so your team spends less time on admin.': 'Automasikan pendaftaran, yuran dan kehadiran supaya pasukan anda kurang masa untuk kerja pentadbiran.',
     'Enhanced Member Experience': 'Pengalaman Ahli yang Dipertingkatkan',
@@ -121,7 +121,7 @@
     /* ---- pricing (text built by js/shared/main.js) ---- */
     'D-CLIX Subscription Plan': 'Pelan Langganan D-CLIX', 'Tailored for Your Needs: Optimal Value with Every Plan': 'Disesuaikan Mengikut Keperluan Anda: Nilai Terbaik untuk Setiap Pelan',
     'Monthly': 'Bulanan', 'Yearly': 'Tahunan', 'Billing period': 'Tempoh bil', '* Gateway payment fee per online payment:': '* Caj gerbang pembayaran bagi setiap pembayaran dalam talian:',
-    'Basic Plan': 'Pelan Asas', 'Standard Plan': 'Pelan Standard', 'Premium Plan': 'Pelan Premium', '/month': '/bulan', '/Year': '/tahun', 'Select Plan': 'Pilih Pelan',
+    'Basic Plan': 'Pelan Asas', 'Standard Plan': 'Pelan Standard', 'Premium Plan': 'Pelan Premium', '/month': '/bulan', '/year': '/tahun', 'Select Plan': 'Pilih Pelan',
     '(Save RM200)': '(Jimat RM200)', '(Save RM300)': '(Jimat RM300)', '(Save RM400)': '(Jimat RM400)',
     'Essential Features': 'Ciri-ciri Asas', 'Essential Features +': 'Ciri-ciri Asas +', 'BASIC + STANDARD +': 'ASAS + STANDARD +',
     'User management tools': 'Alat pengurusan pengguna', 'Online student registrations': 'Pendaftaran pelajar dalam talian', 'Fee management': 'Pengurusan yuran',
