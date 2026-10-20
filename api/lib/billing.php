@@ -189,7 +189,7 @@ function resume_link(string $leadId): string
 function club_setup_rows(array $lead): array
 {
     $address = implode(', ', array_filter([$lead['address'] ?? '', $lead['state'] ?? '', $lead['country'] ?? ''], 'strlen'));
-    return [['Club', $lead['clubName']], ['Club code', $lead['clubCode'] ?? ''], ['Branch', ($lead['branch'] ?? '') ?: '—'], ['Username', ($lead['username'] ?? '') ?: '—'],
+    return [['Club', $lead['clubName']], ['Registration no.', ($lead['regNo'] ?? '') ?: '—'], ['Club code', $lead['clubCode'] ?? ''], ['Branch', ($lead['branch'] ?? '') ?: '—'], ['Username', ($lead['username'] ?? '') ?: '—'],
         ['Head instructor', ($lead['contactName'] ?? '') ?: '—'], ['Sport', $lead['sport'] ?? ''], ['Email', $lead['email']], ['Phone', ($lead['phone'] ?? '') ?: '—'], ['Address', $address ?: '—']];
 }
 

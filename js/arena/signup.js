@@ -42,7 +42,7 @@
       try { history.replaceState(null, '', '?sport=' + sportId + '&plan=' + plan + '&billing=' + billing); } catch (e) {}
     });
     // Field name in the API → input id on this page
-    var FIELD_IDS = { username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
+    var FIELD_IDS = { regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
     function clearErrors() {
       errBox.classList.remove('show'); errBox.textContent = '';
       $$('.field-err', form).forEach(function (el) { el.remove(); });
@@ -69,6 +69,7 @@
       if (!v('clubCode')) errs.clubCode = 'Club code is required.';
       if (!v('clubName')) errs.clubName = 'Club name is required.';
       if (!typeSel.value) errs.sport = 'Please choose your club type.';
+      if (!v('regNo')) errs.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
       if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('username'))) errs.username = 'Use 3–30 letters, numbers, . _ or -.';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('clubEmail'))) errs.email = 'Please enter a valid email address.';
       var pw = $('#pw').value;
@@ -77,7 +78,7 @@
       if (Object.keys(errs).length) return showErrors(errs);
       btn.disabled = true; btn.textContent = 'Saving…';
       window.dclixApi('signup.php', { body: {
-        plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), clubName: v('clubName'), headInstructor: v('headInstructor'),
+        plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), regNo: v('regNo'), clubName: v('clubName'), headInstructor: v('headInstructor'),
         sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
         country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw
       } }).then(function (res) {

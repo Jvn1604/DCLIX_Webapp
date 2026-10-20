@@ -17,14 +17,13 @@ Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite ru
 
 ## Folder layout
 ```
-index.html, about.html, pricing.html, edu-hub.html, referral.html, community.html   Marketing site (root)
+index.html, about.html, pricing.html, edu-hub.html, community.html   Marketing site (root)
 privacy.html, terms.html, refund.html, 404.html                     Legal pages + "page not found"
 arena/      club-register, payment, payment-status, mock-gateway (signup + payment flow)
 api/        PHP + MySQL backend (see "Backend" below; api/config.php is never committed)
 css/        style.css (shared + theme colour)
 js/shared/      theme.js, icons.js, main.js, config.js (where the API is), mock-api.js (browser test API), i18n.js (English / Bahasa Melayu), whatsapp.js (chat button)
 js/arena/       sports.js (club types), signup.js (club registration), payment.js
-js/marketing/   referral-data.js (slides)
 assets/     logo, favicon, images
 ```
 Pages inside `arena/` load shared files with `../` (for example `../css/style.css`).
@@ -39,7 +38,6 @@ Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light`
 | about.html | About D-Clix |
 | pricing.html | Plans (monthly / yearly) |
 | edu-hub.html | Edu-Hub + PDF guide download |
-| referral.html | Referral program slideshow |
 | community.html | Join Our Community (WhatsApp + Facebook) |
 | arena/club-register.html?sport=karate | Club registration |
 | arena/payment.html | Signup step 2: plan + billing details, then Billplz |
@@ -50,7 +48,7 @@ Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light`
 
 ## Files
 css/style.css · js/shared/theme.js (saved theme) · js/shared/icons.js · js/arena/sports.js (18 sports) · js/shared/main.js (shared behaviour)
-· js/arena/signup.js (club signup) · js/marketing/referral-data.js (slides) · assets/ (logo + images)
+· js/arena/signup.js (club signup) · assets/ (logo + images)
 
 | File | Purpose |
 |---|---|
