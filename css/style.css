@@ -609,7 +609,7 @@ html.dark .ticker::before { background: linear-gradient(to right, #0e0e10, trans
 
 /* nav button must keep its own colours */
 .nav-links a.btn-primary { background: var(--accent); color: var(--on-accent); font-weight: 700; padding: 10px 24px; font-size: 14px; }
-.nav-links a.btn-primary:hover { background: var(--accent-light); color: #fff; }
+.nav-links a.btn-primary:hover { background: var(--accent-light); color: var(--on-accent); }
 
 /* hex tiles scale with their column so the hero never overflows */
 .hex-card { width: 100%; min-width: 0; }
@@ -761,3 +761,129 @@ html.light .wa-pop { --wa-bg: #ffffff; --wa-card: #f0f1f6; --wa-hover: #f1f8f3; 
 .draft-note b { color: #f59e0b; } .draft-note a, .legal-body a { color: var(--accent); text-decoration: underline; }
 .legal-body b { color: var(--fg); }
 .refund-note { text-align: center; color: var(--muted); font-size: 14px; } .refund-note a { color: var(--accent); text-decoration: underline; }
+
+/* ---------- Micro-interactions (buttons, links, cards, fields) ----------
+   One shared feel for everything clickable: lift on hover, press on click,
+   a ripple from the click point (js/shared/main.js initRipple) and a soft
+   glow that follows the mouse on cards (initCardGlow). Turned off for
+   visitors who ask their device for reduced motion. */
+:root { --ease-out: cubic-bezier(.22,1,.36,1); --ease-spring: cubic-bezier(.34,1.56,.64,1); }
+
+/* Buttons: lift + glow on hover, press on click */
+.btn-primary, .btn-outline, .btn-ghost, .billing button, .lang-btn, .icon-btn, .wa-fab {
+  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out), background-color .25s, border-color .25s, color .25s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(var(--accent-rgb),.38); }
+.btn-outline:hover, .btn-ghost:hover { transform: translateY(-2px); background: rgba(var(--accent-rgb),.08); box-shadow: 0 10px 24px rgba(var(--accent-rgb),.14); }
+.btn-primary:active, .btn-outline:active, .btn-ghost:active, .billing button:active, .lang-btn:active { transform: translateY(0) scale(.96); box-shadow: none; transition-duration: .08s; }
+.btn-primary:disabled, .btn-primary[disabled] { transform: none; box-shadow: none; opacity: .7; cursor: progress; }
+.billing button:hover:not(.active) { color: var(--fg); border-color: rgba(var(--accent-rgb),.5); transform: translateY(-1px); }
+.billing button.active { animation: popIn .35s var(--ease-spring); }
+
+/* Icons inside buttons nudge forward */
+.btn-primary svg, .btn-outline svg, .btn-ghost svg { transition: transform .25s var(--ease-out); }
+.btn-primary:hover svg, .btn-outline:hover svg, .btn-ghost:hover svg { transform: translateX(3px); }
+
+/* Round icon buttons: theme toggle spins, others pop */
+.icon-btn:hover { transform: scale(1.08); }
+.icon-btn:active { transform: scale(.9); transition-duration: .08s; }
+[data-theme-toggle] svg { transition: transform .4s var(--ease-spring); }
+[data-theme-toggle]:hover svg { transform: rotate(25deg); }
+.lang-btn:hover { transform: translateY(-1px); }
+.lang-menu:not([hidden]) { animation: dropIn .22s var(--ease-out); transform-origin: top right; }
+.lang-menu button { transition: background .15s, padding-left .2s var(--ease-out); }
+.lang-menu button:hover { padding-left: 16px; }
+
+/* Click ripple */
+.ripple-host { position: relative; overflow: hidden; isolation: isolate; }
+.ripple { position: absolute; border-radius: 50%; pointer-events: none; transform: scale(0); background: currentColor; opacity: .28; animation: ripple .6s var(--ease-out) forwards; z-index: -1; }
+
+/* Top navigation: underline grows from the centre */
+.nav-links a:not(.btn-primary)::after { content: ""; position: absolute; left: 50%; right: 50%; width: auto; bottom: -8px; height: 2px; border-radius: 99px; background: var(--accent); transition: left .25s var(--ease-out), right .25s var(--ease-out); }
+.nav-links a:not(.btn-primary):hover::after, .nav-links a.active::after { left: 0; right: 0; }
+.brand-logo { transition: transform .3s var(--ease-spring), box-shadow .3s; }
+.brand:hover .brand-logo { transform: rotate(-6deg) scale(1.06); box-shadow: 0 8px 20px rgba(var(--accent-rgb),.25); }
+
+/* Mobile menu: items slide in one after another */
+.mobile-menu.open { animation: dropIn .25s var(--ease-out); }
+.mobile-menu.open a { animation: slideIn .35s var(--ease-out) both; }
+.mobile-menu.open a:nth-child(2) { animation-delay: .04s; } .mobile-menu.open a:nth-child(3) { animation-delay: .08s; }
+.mobile-menu.open a:nth-child(4) { animation-delay: .12s; } .mobile-menu.open a:nth-child(5) { animation-delay: .16s; }
+.mobile-menu.open a:nth-child(6) { animation-delay: .2s; } .mobile-menu.open a:nth-child(7) { animation-delay: .24s; }
+.mobile-menu a { transition: transform .2s var(--ease-out), border-color .2s, background .2s, color .2s; }
+.mobile-menu a:not(.btn-primary):hover { transform: translateX(4px); border-color: rgba(var(--accent-rgb),.4); color: var(--accent); }
+.mobile-menu a:active { transform: scale(.98); }
+#menuToggle svg { transition: transform .3s var(--ease-spring); }
+#menuToggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+
+/* Cards: lift, accent border and a glow that follows the mouse */
+.benefit, .feature-card, .elevate-card, .t-card, .plan, .demo-card { position: relative; transition: transform .35s var(--ease-out), box-shadow .35s var(--ease-out), border-color .35s, background .35s; }
+.benefit:hover, .elevate-card:hover, .t-card:hover, .plan:hover, .demo-card:hover { transform: translateY(-6px); border-color: rgba(var(--accent-rgb),.35); box-shadow: 0 22px 44px rgba(0,0,0,.28), 0 0 0 1px rgba(var(--accent-rgb),.08); }
+.feature-card:hover { box-shadow: 0 22px 44px rgba(0,0,0,.28); }
+.plan.featured:hover { transform: translateY(-8px); }
+.glow-card { isolation: isolate; }
+.glow-card::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(var(--accent-rgb),.13), transparent 45%); }
+.glow-card:hover::before { opacity: 1; }
+.benefit .icon-box, .feature-card .icon-box, .elevate-card .icon-box { transition: transform .4s var(--ease-spring), background .3s, color .3s; }
+.benefit:hover .icon-box, .feature-card:hover .icon-box, .elevate-card:hover .icon-box { transform: rotate(-8deg) scale(1.1); }
+.plan li { transition: transform .2s var(--ease-out); }
+.plan li:hover { transform: translateX(4px); }
+.hex-card { transition: transform .3s var(--ease-out); }
+.hex-card:hover { transform: translateY(-6px); }
+
+/* FAQ: question row reacts */
+.faq-q { transition: background .2s, color .2s; }
+.faq-q:hover { color: var(--accent); }
+.faq-q .i { transition: transform .35s var(--ease-spring), color .2s; }
+
+/* Form fields: soft focus ring, shake on error */
+.input, .select, .textarea { transition: border-color .2s, box-shadow .25s var(--ease-out), background .2s; }
+.input:hover, .select:hover, .textarea:hover { border-color: rgba(var(--accent-rgb),.3); }
+.input:focus, .select:focus, .textarea:focus { box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.15); }
+.input[aria-invalid="true"], .select[aria-invalid="true"], .textarea[aria-invalid="true"] { animation: shake .4s ease both; box-shadow: 0 0 0 4px rgba(239,68,68,.12); }
+.field-err, .form-err.show { animation: fadeDown .25s var(--ease-out); }
+input[type="checkbox"] { transition: transform .2s var(--ease-spring); }
+input[type="checkbox"]:active { transform: scale(.85); }
+input[type="checkbox"]:checked { animation: popIn .3s var(--ease-spring); }
+
+/* Text links and footer */
+a.accent { background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .3s var(--ease-out), color .2s; }
+a.accent:hover { background-size: 100% 1px; }
+.social a { transition: transform .25s var(--ease-spring), background .2s, color .2s, border-color .2s; }
+.social a:hover { transform: translateY(-3px) rotate(-6deg); }
+.f-legal a { transition: color .2s, padding-left .25s var(--ease-out); }
+.f-legal a:hover { padding-left: 2px; }
+
+/* WhatsApp button: gentle attention pulse */
+.wa-fab { position: relative; }
+.wa-fab::after { content: ""; position: absolute; inset: 0; border-radius: 50%; animation: waPulse 2.8s ease-out infinite; pointer-events: none; }
+.wa-fab:hover { transform: scale(1.1) rotate(-8deg); }
+.wa-fab:active { transform: scale(.94); }
+
+/* Signup steps: the current step breathes */
+.flow-steps li.now .n { animation: stepPulse 2.4s ease-in-out infinite; }
+.flow-steps li a { transition: color .2s, transform .2s var(--ease-out); }
+.flow-steps li a:hover { color: var(--accent); transform: translateY(-1px); }
+
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+@keyframes popIn { 0% { transform: scale(.9); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes dropIn { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@keyframes shake { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
+@keyframes waPulse { 0% { box-shadow: 0 0 0 0 rgba(37,211,102,.55); } 70%, 100% { box-shadow: 0 0 0 16px rgba(37,211,102,0); } }
+@keyframes stepPulse { 50% { box-shadow: 0 0 0 6px rgba(var(--accent-rgb),.18); } }
+
+/* Touch screens: no hover lift (it sticks after a tap); the press feedback and ripple stay */
+@media (hover: none) {
+  .btn-primary:hover, .btn-outline:hover, .btn-ghost:hover, .icon-btn:hover, .lang-btn:hover, .billing button:hover:not(.active),
+  .benefit:hover, .feature-card:hover, .elevate-card:hover, .t-card:hover, .plan:hover, .plan.featured:hover, .demo-card:hover, .hex-card:hover,
+  .wa-fab:hover, .social a:hover, .brand:hover .brand-logo, .sport-card:hover, .feat-card:hover, .plan li:hover, .mobile-menu a:not(.btn-primary):hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:hover, .btn-outline:hover, .btn-ghost:hover, .icon-btn:hover, .lang-btn:hover, .benefit:hover, .feature-card:hover, .elevate-card:hover,
+  .t-card:hover, .plan:hover, .plan.featured:hover, .demo-card:hover, .hex-card:hover, .wa-fab:hover, .social a:hover, .brand:hover .brand-logo,
+  .mobile-menu a:hover, .plan li:hover, [data-theme-toggle]:hover svg, #menuToggle[aria-expanded="true"] svg { transform: none; }
+  .wa-fab::after, .ripple, .glow-card::before { display: none; }
+}
