@@ -22,6 +22,8 @@
     initPricing();
     initReferral();
     initImageFallbacks();
+    initRipple();
+    initCardGlow();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
 
@@ -246,5 +248,38 @@
       if (img.complete && img.naturalWidth === 0 && img.getAttribute('src')) fail();
     }
     $$('img[data-fallback], img[data-person]').forEach(bind);
+  }
+
+  /* ---------- Click ripple on buttons (styles: "Micro-interactions" in style.css) ---------- */
+  var RIPPLE = '.btn-primary, .btn-outline, .btn-ghost, .billing button, .mobile-menu a, .icon-btn.boxed, .lang-btn, .wa-fab, .faq-q';
+  function initRipple() {
+    if (reduceMotion) return;
+    // Delegated, so buttons added later (pricing cards, payment links) get it too
+    document.addEventListener('pointerdown', function (e) {
+      var el = e.target.closest && e.target.closest(RIPPLE);
+      if (!el || el.disabled) return;
+      var r = el.getBoundingClientRect(), size = Math.max(r.width, r.height) * 2.2;
+      var dot = document.createElement('span');
+      dot.className = 'ripple';
+      dot.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (e.clientX - r.left - size / 2) + 'px;top:' + (e.clientY - r.top - size / 2) + 'px';
+      el.classList.add('ripple-host');
+      el.appendChild(dot);
+      setTimeout(function () { dot.remove(); }, 650);
+    });
+  }
+
+  /* ---------- Soft glow that follows the mouse on cards ---------- */
+  function initCardGlow() {
+    if (reduceMotion || !window.matchMedia('(hover: hover)').matches) return;
+    var cards = '.benefit, .feature-card, .elevate-card, .t-card, .plan, .demo-card';
+    $$(cards).forEach(function (c) { c.classList.add('glow-card'); });
+    document.addEventListener('pointermove', function (e) {
+      var c = e.target.closest && e.target.closest(cards);
+      if (!c) return;
+      if (!c.classList.contains('glow-card')) c.classList.add('glow-card');
+      var r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    }, { passive: true });
   }
 })();
