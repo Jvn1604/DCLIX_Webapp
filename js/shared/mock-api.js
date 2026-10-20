@@ -71,7 +71,7 @@
   // Everything the sales team needs to set the club up in the D-Clix club system (same as api/lib/billing.php)
   function setupRows(l) {
     var addr = [l.address, l.state, l.country].filter(Boolean).join(', ');
-    return [['Club', l.clubName], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
+    return [['Club', l.clubName], ['Registration no.', l.regNo || '—'], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
       ['Sport', l.sport || ''], ['Email', l.email], ['Phone', l.phone || '—'], ['Address', addr || '—']];
   }
   // Club code + username the client uses on the club system's login page
@@ -81,10 +81,11 @@
   function signup(b) {
     var d = DB().data;
     var f = { clubCode: str(b.clubCode, 30).toUpperCase(), clubName: str(b.clubName, 120), headInstructor: str(b.headInstructor, 120), sport: str(b.sport, 40), sportName: str(b.sportName, 60),
-      address1: str(b.address1), address2: str(b.address2), state: str(b.state, 60), country: str(b.country, 60), phoneCode: str(b.phoneCode, 30), whatsapp: str(b.whatsapp, 30), email: str(b.email, 190).toLowerCase(), username: str(b.username, 60), branch: str(b.branch, 80) };
+      address1: str(b.address1), address2: str(b.address2), state: str(b.state, 60), country: str(b.country, 60), phoneCode: str(b.phoneCode, 30), whatsapp: str(b.whatsapp, 30), email: str(b.email, 190).toLowerCase(), username: str(b.username, 60), branch: str(b.branch, 80), regNo: str(b.regNo, 60) };
     var pw = typeof b.password === 'string' ? b.password : '';
     var e = {};
     if (!f.clubName) e.clubName = 'Club name is required.';
+    if (!f.regNo) e.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
     if (!/^[A-Za-z0-9._-]{3,30}$/.test(f.username)) e.username = 'Use 3–30 letters, numbers, . _ or -.';
     if (!f.clubCode) e.clubCode = 'Club code is required.'; else if (!/^[A-Z0-9][A-Z0-9_-]{1,29}$/.test(f.clubCode)) e.clubCode = 'Use 2–30 letters, numbers, - or _ (no spaces).';
     if (!validEmail(f.email)) e.email = 'Please enter a valid email address.';
@@ -106,7 +107,7 @@
     var clubId = resume ? resume.clubId : A.nextId('clubs', 'CLB');
     var club = d.clubs.filter(function (c) { return c.id === clubId; })[0];
     if (!club) { club = { id: clubId, createdAt: today(), regNo: '', type: 'Private Club', monthlyFee: 100, subStart: '', subEnd: '', source: 'Website signup' }; d.clubs.unshift(club); }
-    Object.assign(club, { name: f.clubName, clubCode: f.clubCode, owner: f.headInstructor, phone: phone, email: f.email, username: f.username, branch: f.branch, address: address, state: f.state, country: f.country, sport: sportName, plan: p.name.split(' ')[0], billing: billing, status: 'Pending Payment' });
+    Object.assign(club, { name: f.clubName, clubCode: f.clubCode, owner: f.headInstructor, phone: phone, email: f.email, username: f.username, branch: f.branch, regNo: f.regNo, address: address, state: f.state, country: f.country, sport: sportName, plan: p.name.split(' ')[0], billing: billing, status: 'Pending Payment' });
     var user = existing;
     if (!user) {
       var salt = A.newSalt();
@@ -114,7 +115,7 @@
       d.users.push(user);
     }
     var lead = resume || { id: A.nextId('leads', 'LD'), createdAt: now(), source: 'Website', notes: '', followUp: '', assignedTo: '' };
-    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, username: f.username, branch: f.branch, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
+    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, username: f.username, branch: f.branch, regNo: f.regNo, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
       plan: p.id, planName: p.name, billing: billing, amount: q.total, clubId: clubId, userId: user.id, ip: 'browser test' });
     if (!resume) d.leads.unshift(lead);
     var t = token();
