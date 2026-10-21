@@ -27,9 +27,9 @@ window.DCLIX_BANNERS = {
   seconds: 6, // how long each picture stays before the next slide
 
   slides: [
-    // Two samples so you can see how it works. They show only on your PC.
-    { src: 'sample-grading.svg', mobileSrc: 'sample-grading-phone.svg', alt: 'Sample: D-Clix grading day, 15 November 2026', link: 'pricing.html', preview: true },
-    { src: 'sample-promo.svg', mobileSrc: 'sample-promo-phone.svg', alt: 'Sample: Year-end promotion, two months free on yearly plans', link: 'pricing.html', preview: true },
+    // Deepavali offer. Add an end date (e.g. end: '2026-11-30') when the company decides how long it runs.
+    { src: 'deepavali-offer.svg', mobileSrc: 'deepavali-offer-phone.svg', alt: 'Deepavali offer: 2 months free on every yearly plan. Happy Deepavali!', link: 'pricing.html?billing=yearly' },
+    { src: 'free-demo.svg', mobileSrc: 'free-demo-phone.svg', alt: 'Free demo: see D-Clix in action with a guided demo for your club', link: '#contact' },
 
     // Examples:
     // { src: 'merdeka-promo.png', mobileSrc: 'merdeka-promo-phone.png', alt: 'Merdeka promo: 20% off yearly plans', link: 'pricing.html', start: '2026-08-20', end: '2026-09-16' },
