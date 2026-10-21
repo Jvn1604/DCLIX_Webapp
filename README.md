@@ -36,6 +36,10 @@ Pages inside `arena/` load shared files with `../` (for example `../css/style.cs
 
 Sizes: desktop 1600 × 500 px; optional phone picture 800 × 600 px (give one for every slide or for none).
 
+## Before you push: refresh visitors' saved copies
+Run `node set-version.js` before committing CSS or JS changes. It adds a new `?v=` number to every page's own
+style and script links, so browsers load the new files at once instead of a saved copy (GitHub Pages lets browsers keep files for about 10 minutes).
+
 ## Change the theme colour
 Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light` and `--accent-rgb` (the same colour as R,G,B numbers).
 

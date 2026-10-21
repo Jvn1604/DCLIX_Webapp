@@ -204,13 +204,15 @@
           '<a class="btn-primary block" href="arena/club-register.html?plan=' + p.name.split(' ')[0].toLowerCase() + '&billing=' + mode + '">Select Plan</a></div></div>';
       }).join('');
     }
+    function pick(mode) {
+      $$('.billing button').forEach(function (o) { var on = o.getAttribute('data-mode') === mode; o.classList.toggle('active', on); o.setAttribute('aria-pressed', String(on)); });
+      render(mode);
+    }
     $$('.billing button').forEach(function (b) {
-      b.addEventListener('click', function () {
-        $$('.billing button').forEach(function (o) { o.classList.toggle('active', o === b); o.setAttribute('aria-pressed', String(o === b)); });
-        render(b.getAttribute('data-mode'));
-      });
+      b.addEventListener('click', function () { pick(b.getAttribute('data-mode')); });
     });
-    render('monthly');
+    // pricing.html?billing=yearly opens on the yearly prices (used by the Deepavali banner)
+    pick(new URLSearchParams(location.search).get('billing') === 'yearly' ? 'yearly' : 'monthly');
   }
 
   /* ---------- Referral slideshow ---------- */
