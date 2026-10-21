@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a1206"/><stop offset=".55" stop-color="#1e0d07"/><stop offset="1" stop-color="#0e0e10"/></linearGradient>
+    <radialGradient id="glow" cx=".8" cy=".2" r=".55"><stop offset="0" stop-color="#f2b45a" stop-opacity=".5"/><stop offset="1" stop-color="#de9836" stop-opacity="0"/></radialGradient>
+    <radialGradient id="flame" cx=".5" cy=".7" r=".6"><stop offset="0" stop-color="#fff6d6"/><stop offset=".45" stop-color="#ffd27a"/><stop offset="1" stop-color="#f28c1e"/></radialGradient>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffcf6b" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf6b" stop-opacity="0"/></radialGradient>
+    <linearGradient id="lamp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2b45a"/><stop offset="1" stop-color="#b8661a"/></linearGradient>
+    <g id="diya">
+      <ellipse cx="0" cy="-58" rx="46" ry="56" fill="url(#halo)"/>
+      <path d="M0 -84 C 14 -62, 14 -44, 0 -34 C -14 -44, -14 -62, 0 -84 Z" fill="url(#flame)"/>
+      <path d="M-62 -24 Q 0 -6 62 -24 Q 54 22 0 26 Q -54 22 -62 -24 Z" fill="url(#lamp)"/>
+      <path d="M-62 -24 Q 0 -6 62 -24" fill="none" stroke="#ffe3a3" stroke-width="3"/>
+    </g>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <circle cx="640" cy="150" r="118" fill="none" stroke="#f2b45a" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 10" stroke-linecap="round"/>
+  <use href="#diya" transform="translate(640 200) scale(1.25)"/>
+  <g fill="#ffd27a"><circle cx="520" cy="60" r="3"/><circle cx="760" cy="90" r="2"/><circle cx="560" cy="270" r="2"/><circle cx="740" cy="250" r="3"/></g>
+  <g font-family="'Bricolage Grotesque','DM Sans','Segoe UI',Arial,sans-serif">
+    <rect x="56" y="64" width="290" height="48" rx="24" fill="#de9836"/>
+    <text x="201" y="96" font-size="22" font-weight="700" fill="#1a1208" text-anchor="middle" letter-spacing="2">DEEPAVALI OFFER</text>
+    <text x="56" y="240" font-size="40" font-weight="600" fill="#f2b45a">Happy Deepavali!</text>
+    <text x="56" y="330" font-size="84" font-weight="800" fill="#f5efe6" letter-spacing="-3">2 months</text>
+    <text x="56" y="410" font-size="84" font-weight="800" fill="#f5efe6" letter-spacing="-3">free</text>
+    <text x="56" y="460" font-size="30" font-weight="500" fill="#d8c9b5">on every yearly plan</text>
+    <rect x="56" y="494" width="300" height="66" rx="33" fill="#de9836"/>
+    <text x="206" y="537" font-size="28" font-weight="700" fill="#1a1208" text-anchor="middle">Claim the offer</text>
+  </g>
+</svg>
