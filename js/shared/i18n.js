@@ -22,6 +22,7 @@
     'Toggle theme': 'Tukar tema', 'Open menu': 'Buka menu', 'D-Clix on Facebook': 'D-Clix di Facebook',
 
     /* ---- home: hero + benefits ---- */
+    'Trusted by martial arts and sports clubs': 'Dipercayai oleh kelab seni mempertahankan diri dan sukan', 'clubs': 'kelab', 'students': 'pelajar',
     'Martial Arts Club Platform': 'Platform Kelab Seni Mempertahankan Diri', 'Grow revenue and streamline your club with': 'Tingkatkan pendapatan dan lancarkan kelab anda dengan',
     'club management system': 'sistem pengurusan kelab', 'Built for dojos and combat sports academies.': 'Dibina untuk dojo dan akademi sukan tempur.',
     'Anytime. Anywhere.': 'Bila-bila masa. Di mana sahaja.', 'Start Your Journey': 'Mulakan Perjalanan Anda', 'Watch Demo': 'Tonton Demo', 'Sports supported': 'Sukan yang disokong',
