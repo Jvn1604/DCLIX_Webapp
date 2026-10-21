@@ -41,6 +41,13 @@ Sizes: desktop 1600 × 500 px; optional phone picture 800 × 600 px (give one fo
 Run `node set-version.js` before committing CSS or JS changes. It adds a new `?v=` number to every page's own
 style and script links, so browsers load the new files at once instead of a saved copy (GitHub Pages lets browsers keep files for about 10 minutes).
 
+## Change the club logos (home page globe)
+1. Put the logo files (`.png` `.jpg` `.webp` `.svg`, square works best) in `assets/clubs/`.
+2. Open `assets/clubs/clubs.js` and set the `logo` path on each club's line. A line with `logo: ''` shows a sample logo.
+3. Add or remove lines freely (about 40 to 60 clubs looks best). Only show clubs that agreed to be shown.
+4. The "200+ clubs" and "29,000 students" numbers are in the "Trusted by" section of `index.html`.
+5. Commit and push.
+
 ## Change the theme colour
 Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light` and `--accent-rgb` (the same colour as R,G,B numbers).
 
