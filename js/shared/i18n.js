@@ -254,6 +254,13 @@
     'New students and instructors sign up online. No paper forms.': 'Pelajar dan jurulatih baharu mendaftar dalam talian. Tiada borang kertas.', 'Mark attendance by QR code scan or a manual update by the coach.': 'Tanda kehadiran dengan imbasan kod QR atau kemas kini manual oleh jurulatih.',
     'Payment': 'Bayaran', 'Pay fees online by FPX from the app, and see every invoice and receipt.': 'Bayar yuran dalam talian dengan FPX melalui aplikasi, dan lihat setiap invois dan resit.',
 
+    /* ---- home page (revamp) ---- */
+    'Registration certificate (SSM / ROS / PJS)': 'Sijil pendaftaran (SSM / ROS / PJS)', 'Upload your SSM certificate': 'Muat naik sijil SSM anda',
+    'PDF, JPG or PNG, up to 5 MB. Drag the file here or choose it.': 'PDF, JPG atau PNG, sehingga 5 MB. Seret fail ke sini atau pilih fail.', 'Choose file': 'Pilih fail',
+    'Change': 'Tukar', 'Remove file': 'Buang fail',
+    'Please upload your SSM / registration certificate.': 'Sila muat naik sijil SSM / pendaftaran anda.', 'Upload a PDF, JPG or PNG file.': 'Muat naik fail PDF, JPG atau PNG.',
+    'This file is larger than 5 MB. Please upload a smaller copy.': 'Fail ini melebihi 5 MB. Sila muat naik salinan yang lebih kecil.',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',

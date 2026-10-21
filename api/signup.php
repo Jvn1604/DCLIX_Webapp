@@ -48,6 +48,10 @@ if (!isset($errors['clubCode'])) {
     $dup = q("SELECT id FROM records WHERE coll = 'clubs' AND UPPER(JSON_UNQUOTE(JSON_EXTRACT(data, '$.clubCode'))) = ? AND id <> ?", [$f['clubCode'], $resume['clubId'] ?? ''])->fetchColumn();
     if ($dup) $errors['clubCode'] = 'This club code is already taken. Please choose another.';
 }
+// Registration certificate (SSM / ROS / PJS). Required, except when someone resumes a signup that already has one.
+$upload = upload_from_json($in['ssmFile'] ?? null);
+if (isset($upload['error'])) $errors['ssmFile'] = $upload['error'];
+elseif (!$upload && empty($resume['ssmFile'])) $errors['ssmFile'] = 'Please upload your SSM / registration certificate.';
 if ($errors) fail('Please fix the highlighted fields.', 422, ['fields' => $errors]);
 
 $sportName = $f['sportName'] !== '' ? $f['sportName'] : ucwords(str_replace('-', ' ', $f['sport']));
@@ -57,10 +61,16 @@ $address = trim($f['address1'] . ($f['address2'] !== '' ? ', ' . $f['address2'] 
 
 $pdo = db();
 $pdo->beginTransaction();
+$saved = null;
 try {
+    $leadId = $resume['id'] ?? next_id('leads', 'LD');
+    // Store the new certificate first; a re-registration with a new file replaces the old one
+    $ssm = $resume['ssmFile'] ?? null;
+    if ($upload) { $saved = upload_save($upload, 'ssm', $leadId); $ssm = $saved; }
+
     $clubId = $resume['clubId'] ?? next_id('clubs', 'CLB');
     $club = rec_get('clubs', $clubId) ?: ['id' => $clubId, 'createdAt' => today(), 'regNo' => '', 'type' => 'Private Club', 'monthlyFee' => 100, 'subStart' => '', 'subEnd' => '', 'source' => $isTest ? 'Simulated test' : 'Website signup'];
-    $club = array_merge($club, ['name' => $f['clubName'], 'clubCode' => $f['clubCode'], 'owner' => $f['headInstructor'], 'phone' => $phone, 'email' => $f['email'], 'username' => $f['username'], 'branch' => $f['branch'], 'regNo' => $f['regNo'],
+    $club = array_merge($club, ['name' => $f['clubName'], 'clubCode' => $f['clubCode'], 'owner' => $f['headInstructor'], 'phone' => $phone, 'email' => $f['email'], 'username' => $f['username'], 'branch' => $f['branch'], 'regNo' => $f['regNo'], 'ssmFile' => $ssm,
         'address' => $address, 'state' => $f['state'], 'country' => $f['country'], 'sport' => $sportName, 'plan' => explode(' ', $plan['name'])[0], 'billing' => $billing, 'status' => 'Pending Payment']);
     rec_put('clubs', $club, 'website');
 
@@ -73,9 +83,8 @@ try {
             [$userId, $f['email'], $f['headInstructor'] ?: $f['clubName'] . ' Admin', $phone, $clubId, password_hash($password, PASSWORD_DEFAULT), now()]);
     }
 
-    $leadId = $resume['id'] ?? next_id('leads', 'LD');
     $lead = array_merge($resume ?? ['id' => $leadId, 'createdAt' => date('c'), 'source' => $isTest ? 'Simulated test' : 'Website', 'notes' => '', 'followUp' => '', 'assignedTo' => ''], [
-        'status' => 'Payment Pending', 'clubName' => $f['clubName'], 'clubCode' => $f['clubCode'], 'username' => $f['username'], 'branch' => $f['branch'], 'regNo' => $f['regNo'], 'contactName' => $f['headInstructor'], 'email' => $f['email'],
+        'status' => 'Payment Pending', 'clubName' => $f['clubName'], 'clubCode' => $f['clubCode'], 'username' => $f['username'], 'branch' => $f['branch'], 'regNo' => $f['regNo'], 'ssmFile' => $ssm, 'contactName' => $f['headInstructor'], 'email' => $f['email'],
         'phone' => $phone, 'sport' => $sportName, 'address' => $address, 'state' => $f['state'], 'country' => $f['country'],
         'plan' => $plan['id'], 'planName' => $plan['name'], 'billing' => $billing, 'amount' => $quote['total'], 'clubId' => $clubId, 'userId' => $userId, 'ip' => client_ip(),
     ]);
@@ -84,7 +93,8 @@ try {
     q('INSERT INTO signup_tokens (token_hash, lead_id, created_at, expires_at) VALUES (?, ?, ?, ?)', [hash('sha256', $token), $leadId, now(), date('Y-m-d H:i:s', time() + 7 * 86400)]);
     audit(null, $resume ? 'Update' : 'Create', 'leads', $leadId, ($resume ? 'Signup resumed: ' : 'Website signup: ') . $f['clubName'] . ' (' . $f['email'] . ')');
     $pdo->commit();
-} catch (Throwable $e) { $pdo->rollBack(); throw $e; }
+} catch (Throwable $e) { $pdo->rollBack(); if ($saved) upload_delete($saved); throw $e; }
+if ($saved && !empty($resume['ssmFile'])) upload_delete($resume['ssmFile']);
 
 if (!$resume) signup_emails($lead, resume_link($leadId));
 json_out(['ok' => true, 'token' => $token, 'leadId' => $leadId, 'resumed' => (bool) $resume]);

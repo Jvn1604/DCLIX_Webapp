@@ -71,7 +71,7 @@
   // Everything the sales team needs to set the club up in the D-Clix club system (same as api/lib/billing.php)
   function setupRows(l) {
     var addr = [l.address, l.state, l.country].filter(Boolean).join(', ');
-    return [['Club', l.clubName], ['Registration no.', l.regNo || '—'], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
+    return [['Club', l.clubName], ['Registration no.', l.regNo || '—'], ['Certificate', l.ssmFile ? l.ssmFile.name + ' (attached)' : '—'], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
       ['Sport', l.sport || ''], ['Email', l.email], ['Phone', l.phone || '—'], ['Address', addr || '—']];
   }
   // Club code + username the client uses on the club system's login page
@@ -86,6 +86,16 @@
     var e = {};
     if (!f.clubName) e.clubName = 'Club name is required.';
     if (!f.regNo) e.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
+    // Registration certificate: same checks as api/lib/files.php. Test mode keeps only its details, not the file.
+    var up = b.ssmFile && typeof b.ssmFile.data === 'string' && b.ssmFile.data ? b.ssmFile : null, ssm = null;
+    if (up) {
+      var head = ''; try { head = atob(up.data.slice(0, 16)); } catch (x) { head = ''; }
+      var size = Math.floor(up.data.length * 3 / 4);
+      var ext = head.indexOf('%PDF-') === 0 ? 'pdf' : head.indexOf('\x89PNG') === 0 ? 'png' : head.indexOf('\xFF\xD8\xFF') === 0 ? 'jpg' : '';
+      if (size > 5 * 1024 * 1024) e.ssmFile = 'This file is larger than 5 MB. Please upload a smaller copy.';
+      else if (!ext) e.ssmFile = 'Upload a PDF, JPG or PNG file.';
+      else ssm = { name: str(up.name, 120) || 'certificate.' + ext, type: ext === 'pdf' ? 'application/pdf' : 'image/' + (ext === 'jpg' ? 'jpeg' : 'png'), size: size, uploadedAt: now(), stored: 'test mode: file not kept' };
+    } else e.ssmFile = 'Please upload your SSM / registration certificate.';
     if (!/^[A-Za-z0-9._-]{3,30}$/.test(f.username)) e.username = 'Use 3–30 letters, numbers, . _ or -.';
     if (!f.clubCode) e.clubCode = 'Club code is required.'; else if (!/^[A-Z0-9][A-Z0-9_-]{1,29}$/.test(f.clubCode)) e.clubCode = 'Use 2–30 letters, numbers, - or _ (no spaces).';
     if (!validEmail(f.email)) e.email = 'Please enter a valid email address.';
@@ -115,7 +125,7 @@
       d.users.push(user);
     }
     var lead = resume || { id: A.nextId('leads', 'LD'), createdAt: now(), source: 'Website', notes: '', followUp: '', assignedTo: '' };
-    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, username: f.username, branch: f.branch, regNo: f.regNo, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
+    Object.assign(lead, { status: 'Payment Pending', clubName: f.clubName, clubCode: f.clubCode, username: f.username, branch: f.branch, regNo: f.regNo, ssmFile: ssm || (resume && resume.ssmFile) || null, contactName: f.headInstructor, email: f.email, phone: phone, sport: sportName, address: address, state: f.state, country: f.country,
       plan: p.id, planName: p.name, billing: billing, amount: q.total, clubId: clubId, userId: user.id, ip: 'browser test' });
     if (!resume) d.leads.unshift(lead);
     var t = token();

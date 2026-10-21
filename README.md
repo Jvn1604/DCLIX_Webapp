@@ -28,11 +28,12 @@ assets/     logo, favicon, images
 ```
 Pages inside `arena/` load shared files with `../` (for example `../css/style.css`).
 
-## Change the event banner (home page)
+## Change the event banners (home and pricing pages)
 1. Put the picture (`.png` `.jpg` `.webp` `.svg`) or video (`.mp4`) in `assets/banners/`.
 2. Open `assets/banners/banners.js` and add one line per slide (instructions are at the top of that file). Two or more slides become a slider.
-3. Use `start` / `end` dates so an event banner switches itself on and off. `preview: true` shows a slide only on your own PC, so you can check it before it goes live.
-4. Commit and push. With no active slide, the banner disappears.
+3. Each slide has `pages: ['home', 'pricing']` to choose where it appears (the pricing page shows a smaller banner at the top).
+4. Use `start` / `end` dates so an event banner switches itself on and off. `preview: true` shows a slide only on your own PC, so you can check it before it goes live.
+5. Commit and push. With no active slide, the banner disappears.
 
 Sizes: desktop 1600 × 500 px; optional phone picture 800 × 600 px (give one for every slide or for none).
 
@@ -76,6 +77,10 @@ pricing.html → Select Plan → arena/club-register.html ──POST api/signup.
                 emails: welcome (with the Club Login link) + receipt to the client, "payment received" to sales
 home page contact form ──POST api/contact.php──▶ lead (source "Contact form") · emails to sales + the visitor
 ```
+Clubs must upload their **registration certificate** (SSM / ROS / PJS: PDF, JPG or PNG, up to 5 MB) on the registration form.
+The file is checked on the server, stored in `api/storage/uploads/ssm/` (git-ignored and blocked from the web) and attached to the
+sales "New signup" and "Payment received" emails. In browser test mode only the file name is kept.
+
 Everything is saved in the MySQL database (`records`, `bills`, `email_outbox` …) so nothing is lost; the sales team
 works from the emails. The club's account in the D-Clix club system (maclubsystem.com) is set up by the team.
 
@@ -204,5 +209,5 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] Set `site_url` (GitHub Pages address), `api_url`, `allowed_origins`, Billplz **live** keys, SMTP, `sales_to`, `login_url`.
 - [ ] Set `PRODUCTION_API` in `js/shared/config.js` and push.
 - [ ] Email sender domain set up (SPF/DKIM) so emails do not go to spam.
-- [ ] Daily database backups switched on and a restore tested once.
+- [ ] Daily database backups switched on and a restore tested once. Back up `api/storage/uploads/` too (club certificates).
 - [ ] One real end-to-end signup with a small real payment, then refund it.
