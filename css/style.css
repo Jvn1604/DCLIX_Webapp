@@ -1121,3 +1121,11 @@ a.hex-card { color: inherit; text-decoration: none; }
   .h-load, .h-bars i, .h-float, .h-track, .h-pane:not([hidden]) { animation: none !important; }
   .h-mock { transform: none; }
 }
+
+/* Home: RAP steps (Register, Attendance, Payment) */
+.h-rap { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; counter-reset: rap; }
+.h-rap li { counter-increment: rap; padding-top: 20px; border-top: 2px solid var(--accent); }
+.h-rap li::before { content: counter(rap); display: block; font-size: 34px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+.h-rap h3 { font-size: 20px; margin-bottom: 8px; }
+.h-rap p { margin: 0; color: var(--muted); line-height: 1.6; }
+@media (max-width: 767px) { .h-rap { grid-template-columns: 1fr; gap: 24px; } }
