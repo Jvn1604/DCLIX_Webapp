@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#de9836"/><stop offset=".6" stop-color="#f2b45a"/><stop offset="1" stop-color="#de9836"/></linearGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" fill="#1a1208" fill-opacity=".10"/></pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#dots)"/>
+  <g font-family="'Bricolage Grotesque','DM Sans','Segoe UI',Arial,sans-serif" text-anchor="middle">
+    <circle cx="640" cy="150" r="104" fill="#1a1208"/>
+    <text x="640" y="148" font-size="76" font-weight="800" fill="#f2b45a">12</text>
+    <text x="640" y="190" font-size="22" font-weight="600" fill="#f5efe6">for the price of 10</text>
+  </g>
+  <g font-family="'Bricolage Grotesque','DM Sans','Segoe UI',Arial,sans-serif" fill="#1a1208">
+    <rect x="56" y="70" width="230" height="48" rx="24" fill="#1a1208"/>
+    <text x="171" y="102" font-size="22" font-weight="700" fill="#f2b45a" text-anchor="middle" letter-spacing="2">SAMPLE PROMO</text>
+    <text x="56" y="330" font-size="96" font-weight="800" letter-spacing="-3">2 months</text>
+    <text x="56" y="420" font-size="96" font-weight="800" letter-spacing="-3">free</text>
+    <text x="56" y="470" font-size="30" font-weight="600" fill-opacity=".78">on every yearly plan · until 31 Dec</text>
+    <rect x="56" y="500" width="268" height="66" rx="33" fill="#1a1208"/>
+    <text x="190" y="543" font-size="28" font-weight="700" fill="#f2b45a" text-anchor="middle">See the plans</text>
+  </g>
+</svg>

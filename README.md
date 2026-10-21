@@ -28,6 +28,14 @@ assets/     logo, favicon, images
 ```
 Pages inside `arena/` load shared files with `../` (for example `../css/style.css`).
 
+## Change the event banner (home page)
+1. Put the picture (`.png` `.jpg` `.webp` `.svg`) or video (`.mp4`) in `assets/banners/`.
+2. Open `assets/banners/banners.js` and add one line per slide (instructions are at the top of that file). Two or more slides become a slider.
+3. Use `start` / `end` dates so an event banner switches itself on and off. `preview: true` shows a slide only on your own PC, so you can check it before it goes live.
+4. Commit and push. With no active slide, the banner disappears.
+
+Sizes: desktop 1600 × 500 px; optional phone picture 800 × 600 px (give one for every slide or for none).
+
 ## Change the theme colour
 Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light` and `--accent-rgb` (the same colour as R,G,B numbers).
 
