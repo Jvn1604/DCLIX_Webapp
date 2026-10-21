@@ -312,8 +312,8 @@ html.light .select option { background: #fff; color: #111; }
 .input::placeholder, .textarea::placeholder { color: var(--muted); }
 .toast { margin-top: 24px; padding: 16px; border-radius: 16px; background: rgba(var(--accent-rgb),.1); border: 1px solid rgba(var(--accent-rgb),.2); color: var(--accent); font-weight: 700; display: none; }
 .toast.show { display: block; }
-label.lbl { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; color: var(--muted); margin-bottom: 8px; }
-label.lbl .req { color: var(--accent); } label.lbl small { text-transform: none; letter-spacing: 0; font-weight: 500; }
+label.lbl, span.lbl { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; color: var(--muted); margin-bottom: 8px; }
+label.lbl .req, span.lbl .req { color: var(--accent); } label.lbl small { text-transform: none; letter-spacing: 0; font-weight: 500; }
 
 /* ---------- Pricing ---------- */
 .billing { display: flex; justify-content: center; gap: 12px; }
@@ -1182,3 +1182,36 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 .h-rap h3 { font-size: 20px; margin-bottom: 8px; }
 .h-rap p { margin: 0; color: var(--muted); line-height: 1.6; }
 @media (max-width: 767px) { .h-rap { grid-template-columns: 1fr; gap: 24px; } }
+
+/* Smaller event banner at the top of other pages (pricing) */
+.ev-top { padding: 24px 24px 0; position: relative; z-index: 10; }
+.ev-top[hidden] { display: none; }
+.ev-top + .section { padding-top: 56px; }
+.ev-small { max-width: 960px; margin-inline: auto; }
+.ev-small .ev-frame { border-radius: 18px; box-shadow: 0 18px 40px rgba(0,0,0,.3), 0 0 28px rgba(var(--accent-rgb),.1); }
+.ev-small .ev-arrow { width: 36px; height: 36px; }
+.ev-small .ev-dots { bottom: 10px; }
+@media (max-width: 640px) { .ev-top { padding: 16px 16px 0; } .ev-top + .section { padding-top: 40px; } }
+
+/* File upload (club registration: SSM / registration certificate) */
+.upload { display: grid; grid-template-columns: auto 1fr auto auto; gap: 14px; align-items: center; padding: 16px 18px; border: 1.5px dashed rgba(var(--accent-rgb),.45); border-radius: 16px;
+  background: rgba(var(--accent-rgb),.05); cursor: pointer; position: relative; transition: border-color .2s, background .2s, box-shadow .25s; }
+.upload:hover, .upload.drag { border-color: var(--accent); background: rgba(var(--accent-rgb),.10); box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.12); }
+.upload:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.18); }
+.upload-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); }
+.upload-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: rgba(var(--accent-rgb),.15); color: var(--accent); transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+.upload:hover .upload-ic, .upload.drag .upload-ic { transform: translateY(-3px); }
+.upload-t { display: grid; gap: 2px; min-width: 0; }
+.upload-t b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.upload-t small { color: var(--muted); font-size: 13px; }
+.upload-btn { padding: 9px 16px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 14px; white-space: nowrap; }
+.upload-x { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line2); background: var(--card); color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+.upload-x:hover { color: #ef4444; border-color: #ef4444; }
+.upload-x[hidden] { display: none; }
+.upload.has-file { border-style: solid; border-color: rgba(34,197,94,.55); background: rgba(34,197,94,.06); }
+.upload.has-file .upload-ic { background: rgba(34,197,94,.15); color: #22c55e; }
+.upload.has-file .upload-btn { background: transparent; color: var(--accent); border: 1px solid rgba(var(--accent-rgb),.5); }
+.upload.bad, .upload[aria-invalid="true"] { border-color: #ef4444; background: rgba(239,68,68,.06); }
+.upload.bad .upload-ic, .upload[aria-invalid="true"] .upload-ic { background: rgba(239,68,68,.15); color: #ef4444; }
+.upload.bad .upload-t small { color: #f87171; }
+@media (max-width: 520px) { .upload { grid-template-columns: auto 1fr auto; } .upload-x { grid-row: 1; grid-column: 3; } .upload-btn { grid-column: 1 / -1; text-align: center; } }

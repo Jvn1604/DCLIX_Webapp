@@ -42,7 +42,46 @@
       try { history.replaceState(null, '', '?sport=' + sportId + '&plan=' + plan + '&billing=' + billing); } catch (e) {}
     });
     // Field name in the API → input id on this page
-    var FIELD_IDS = { regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
+    var FIELD_IDS = { ssmFile: 'ssmDrop', regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
+    // Registration certificate (SSM / ROS / PJS): PDF, JPG or PNG up to 5 MB, sent with the form as base64
+    var MAX_FILE = 5 * 1024 * 1024;
+    var drop = $('#ssmDrop'), fileIn = $('#ssmFile'), clearBtn = $('#ssmClear'), ssm = null;
+    function fileProblem(f) {
+      if (!f) return 'Please upload your SSM / registration certificate.';
+      if (!/^(application\/pdf|image\/jpeg|image\/png)$/.test(f.type) && !/\.(pdf|jpe?g|png)$/i.test(f.name)) return 'Upload a PDF, JPG or PNG file.';
+      if (f.size > MAX_FILE) return 'This file is larger than 5 MB. Please upload a smaller copy.';
+      return null;
+    }
+    function fileSize(n) { return n < 1048576 ? Math.max(1, Math.round(n / 1024)) + ' KB' : (n / 1048576).toFixed(1) + ' MB'; }
+    function setFile(f) {
+      ssm = f || null;
+      var bad = ssm && fileProblem(ssm);
+      drop.classList.toggle('has-file', !!ssm); drop.classList.toggle('bad', !!bad);
+      $('#ssmName').textContent = ssm ? ssm.name : 'Upload your SSM certificate';
+      $('#ssmHint').textContent = !ssm ? 'PDF, JPG or PNG, up to 5 MB. Drag the file here or choose it.' : bad || fileSize(ssm.size);
+      $('#ssmBtn').textContent = ssm ? 'Change' : 'Choose file';
+      clearBtn.hidden = !ssm;
+      drop.removeAttribute('aria-invalid');
+      var err = drop.nextElementSibling; if (err && err.classList.contains('field-err')) err.remove();
+    }
+    fileIn.addEventListener('change', function () { setFile(fileIn.files[0]); });
+    clearBtn.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); fileIn.value = ''; setFile(null); });
+    drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.classList.add('drag'); });
+    drop.addEventListener('dragleave', function () { drop.classList.remove('drag'); });
+    drop.addEventListener('drop', function (e) {
+      e.preventDefault(); drop.classList.remove('drag');
+      var f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return;
+      try { fileIn.files = e.dataTransfer.files; } catch (err) { /* older browsers: keep the file in memory only */ }
+      setFile(f);
+    });
+    function readFile(f) {
+      return new Promise(function (resolve, reject) {
+        var r = new FileReader();
+        r.onload = function () { resolve({ name: f.name, type: f.type, size: f.size, data: String(r.result).split(',')[1] || '' }); };
+        r.onerror = function () { reject(new Error('Could not read the certificate file. Please choose it again.')); };
+        r.readAsDataURL(f);
+      });
+    }
     function clearErrors() {
       errBox.classList.remove('show'); errBox.textContent = '';
       $$('.field-err', form).forEach(function (el) { el.remove(); });
@@ -70,6 +109,7 @@
       if (!v('clubName')) errs.clubName = 'Club name is required.';
       if (!typeSel.value) errs.sport = 'Please choose your club type.';
       if (!v('regNo')) errs.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
+      var fp = fileProblem(ssm); if (fp) errs.ssmFile = fp;
       if (!/^[A-Za-z0-9._-]{3,30}$/.test(v('username'))) errs.username = 'Use 3–30 letters, numbers, . _ or -.';
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('clubEmail'))) errs.email = 'Please enter a valid email address.';
       var pw = $('#pw').value;
@@ -77,11 +117,13 @@
       if (pw !== $('#pw2').value) errs.password2 = 'Passwords do not match.';
       if (Object.keys(errs).length) return showErrors(errs);
       btn.disabled = true; btn.textContent = 'Saving…';
-      window.dclixApi('signup.php', { body: {
-        plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), regNo: v('regNo'), clubName: v('clubName'), headInstructor: v('headInstructor'),
-        sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
-        country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw
-      } }).then(function (res) {
+      readFile(ssm).then(function (file) {
+        return window.dclixApi('signup.php', { body: {
+          plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), regNo: v('regNo'), clubName: v('clubName'), headInstructor: v('headInstructor'),
+          sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
+          country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw, ssmFile: file
+        } });
+      }).then(function (res) {
         // Only the one-time signup token is kept in the browser — never the password.
         try { sessionStorage.setItem('dclixSignup', JSON.stringify({ token: res.token, clubName: v('clubName'), clubCode: v('clubCode'), email: v('clubEmail'), plan: plan, billing: billing })); } catch (err) {}
         modal.classList.add('show');

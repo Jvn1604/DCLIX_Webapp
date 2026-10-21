@@ -23,7 +23,8 @@ function email_layout(string $title, string $intro, array $rows = [], ?array $bu
 }
 
 /** Queue/send an email. Never throws: failures are recorded in email_outbox. */
-function send_mail(string $to, string $subject, string $html, string $kind, string $relatedId = ''): void
+/** $attach: list of ['path' => file on disk, 'name' => file name shown in the email, 'type' => MIME type] */
+function send_mail(string $to, string $subject, string $html, string $kind, string $relatedId = '', array $attach = []): void
 {
     $driver = cfg('mail.driver', 'log');
     q('INSERT INTO email_outbox (kind, to_email, subject, body_html, status, related_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
@@ -32,12 +33,15 @@ function send_mail(string $to, string $subject, string $html, string $kind, stri
     if ($driver !== 'smtp') {
         $dir = API_ROOT . '/storage/mail';
         if (!is_dir($dir)) @mkdir($dir, 0775, true);
-        @file_put_contents($dir . '/' . date('Ymd-His') . '-' . $id . '-' . preg_replace('/\W+/', '_', $kind) . '.html', $html);
+        $base = $dir . '/' . date('Ymd-His') . '-' . $id . '-' . preg_replace('/\W+/', '_', $kind);
+        @file_put_contents($base . '.html', $html);
+        // Keep a copy of each attachment next to the logged email
+        foreach ($attach as $a) if (is_file($a['path'])) @copy($a['path'], $base . '-attachment-' . preg_replace('/[^\w.-]+/', '_', $a['name']));
         q('UPDATE email_outbox SET status = ? WHERE id = ?', ['logged', $id]);
         return;
     }
     try {
-        smtp_send($to, $subject, $html);
+        smtp_send($to, $subject, $html, $attach);
         q('UPDATE email_outbox SET status = ?, sent_at = ? WHERE id = ?', ['sent', now(), $id]);
     } catch (Throwable $e) {
         log_line('mail', 'Email ' . $id . ' to ' . $to . ' failed: ' . $e->getMessage());
@@ -46,7 +50,7 @@ function send_mail(string $to, string $subject, string $html, string $kind, stri
 }
 
 /** Minimal SMTP client (STARTTLS or SSL, AUTH LOGIN). */
-function smtp_send(string $to, string $subject, string $html): void
+function smtp_send(string $to, string $subject, string $html, array $attach = []): void
 {
     $c = cfg('mail.smtp');
     $host = (string) $c['host']; $port = (int) $c['port']; $secure = $c['secure'] ?? 'tls';
@@ -72,8 +76,25 @@ function smtp_send(string $to, string $subject, string $html): void
     $cmd('DATA', [354]);
     $headers = 'From: ' . mb_encode_mimeheader((string) cfg('mail.from_name')) . ' <' . $from . ">\r\n" . 'To: <' . $to . ">\r\n"
         . 'Subject: ' . mb_encode_mimeheader($subject) . "\r\n" . 'Date: ' . date('r') . "\r\n" . 'Message-ID: <' . bin2hex(random_bytes(12)) . '@' . $me . ">\r\n"
-        . "MIME-Version: 1.0\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n";
-    $msg = $headers . "\r\n" . chunk_split(base64_encode($html)) . "\r\n.";
+        . "MIME-Version: 1.0\r\n";
+    $files = array_values(array_filter($attach, function ($a) { return is_file($a['path']); }));
+    if (!$files) {
+        $msg = $headers . "Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html)) . "\r\n.";
+    } else {
+        // HTML body plus attachments
+        $b = 'dclix-' . bin2hex(random_bytes(8));
+        $msg = $headers . 'Content-Type: multipart/mixed; boundary="' . $b . "\"\r\n\r\n"
+            . "--$b\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html));
+        foreach ($files as $a) {
+            $name = mb_encode_mimeheader(str_replace('"', '', $a['name']));
+            $msg .= "--$b\r\nContent-Type: " . ($a['type'] ?: 'application/octet-stream') . '; name="' . $name . "\"\r\n"
+                . 'Content-Disposition: attachment; filename="' . $name . "\"\r\nContent-Transfer-Encoding: base64\r\n\r\n"
+                . chunk_split(base64_encode((string) file_get_contents($a['path'])));
+        }
+        $msg .= "--$b--\r\n.";
+    }
+    // A line that starts with "." would end the message early (SMTP dot-stuffing)
+    $msg = preg_replace('/\r\n\.(?=[^\r\n])/', "\r\n..", $msg);
     $cmd($msg, [250]);
     $cmd('QUIT', [221]);
     fclose($fp);

@@ -189,7 +189,7 @@ function resume_link(string $leadId): string
 function club_setup_rows(array $lead): array
 {
     $address = implode(', ', array_filter([$lead['address'] ?? '', $lead['state'] ?? '', $lead['country'] ?? ''], 'strlen'));
-    return [['Club', $lead['clubName']], ['Registration no.', ($lead['regNo'] ?? '') ?: '—'], ['Club code', $lead['clubCode'] ?? ''], ['Branch', ($lead['branch'] ?? '') ?: '—'], ['Username', ($lead['username'] ?? '') ?: '—'],
+    return [['Club', $lead['clubName']], ['Registration no.', ($lead['regNo'] ?? '') ?: '—'], ['Certificate', !empty($lead['ssmFile']['name']) ? $lead['ssmFile']['name'] . ' (attached)' : '—'], ['Club code', $lead['clubCode'] ?? ''], ['Branch', ($lead['branch'] ?? '') ?: '—'], ['Username', ($lead['username'] ?? '') ?: '—'],
         ['Head instructor', ($lead['contactName'] ?? '') ?: '—'], ['Sport', $lead['sport'] ?? ''], ['Email', $lead['email']], ['Phone', ($lead['phone'] ?? '') ?: '—'], ['Address', $address ?: '—']];
 }
 
@@ -203,7 +203,7 @@ function signup_emails(array $lead, string $resumeUrl): void
 {
     $rows = array_merge(club_setup_rows($lead), [['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')'], ['Lead ID', $lead['id']]]);
     send_mail((string) cfg('mail.sales_to'), 'New signup: ' . $lead['clubName'] . ' (payment pending)',
-        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows), 'sales_signup', $lead['id']);
+        email_layout('New club signup', 'A club just registered on the website and is being sent to payment.', $rows), 'sales_signup', $lead['id'], upload_attachment($lead['ssmFile'] ?? null));
     send_mail($lead['email'], 'Complete your D-Clix registration',
         email_layout('Thanks for registering, ' . $lead['clubName'], 'We have saved your club details. Your account will be activated as soon as payment is completed.',
             array_merge([['Plan', $lead['planName'] . ' (' . $lead['billing'] . ')']], client_login_rows($lead)), ['Complete payment', $resumeUrl], 'If you have already paid, you can ignore this email.'), 'client_signup', $lead['id']);
@@ -223,5 +223,5 @@ function payment_emails(array $lead, array $club, array $sub): void
             ['Payment method', $sub['method']], ['Transaction ID', $sub['txnId']], ['Period', date('d/m/Y', strtotime($sub['periodStart'])) . ' – ' . date('d/m/Y', strtotime($sub['periodEnd']))],
         ], null, 'This is a computer-generated receipt. No signature is required.'), 'client_receipt', $sub['id']);
     send_mail((string) cfg('mail.sales_to'), 'Payment received: ' . $club['name'] . ' — ' . money_fmt($sub['total']),
-        email_layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', array_merge(club_setup_rows($lead), [['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Active until', date('d/m/Y', strtotime($sub['periodEnd']))], ['Amount paid', money_fmt($sub['total'])], ['Receipt no.', $sub['receiptNo']], ['Bill', $sub['txnId']], ['Club ID', $club['id']]])), 'sales_paid', $sub['id']);
+        email_layout('Payment received', 'A new club has registered and paid on the website. Please follow up to set up their account.', array_merge(club_setup_rows($lead), [['Plan', $sub['planName'] . ' (' . $sub['billing'] . ')'], ['Active until', date('d/m/Y', strtotime($sub['periodEnd']))], ['Amount paid', money_fmt($sub['total'])], ['Receipt no.', $sub['receiptNo']], ['Bill', $sub['txnId']], ['Club ID', $club['id']]])), 'sales_paid', $sub['id'], upload_attachment($lead['ssmFile'] ?? null));
 }
