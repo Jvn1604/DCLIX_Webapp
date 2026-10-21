@@ -39,7 +39,7 @@
     "It's more. Everything you need to elevate your club": 'Ianya Lengkap. Semua yang anda perlukan untuk memartabatkan kelab anda',
     'Discover powerful features in D-Clix. Streamline club management with online registration, automated payments, attendance tracking, member management, participate in the community and more. Accessible via web and mobile for a seamless experience.':
       'Terokai ciri-ciri hebat D-Clix. Permudahkan pengurusan kelab dengan pendaftaran dalam talian, pembayaran automatik, penjejakan kehadiran, pengurusan ahli, penyertaan komuniti dan banyak lagi. Boleh diakses melalui web dan mudah alih.',
-    'Digital Attendance': 'Kehadiran Digital', 'Digital attendance marking by scan QR code / manual update': 'Penandaan kehadiran digital dengan mengimbas kod QR / kemas kini manual',
+    'Digital Attendance': 'Kehadiran Digital', 'Digital attendance marking by scan QR code / fingerprint / manual update': 'Penandaan kehadiran digital dengan mengimbas kod QR / cap jari / kemas kini manual',
     'Continuous Updates': 'Kemas Kini Berterusan', 'WhatsApp and push notifications for parents / guardians / instructors; D-Clix Community': 'WhatsApp dan pemberitahuan tolak untuk ibu bapa / penjaga / pengajar; Komuniti D-Clix',
     'Tournament': 'Kejohanan', 'Tournament participating, player selection, and scoring details; past and upcoming tournament details': 'Penyertaan kejohanan, pemilihan pemain dan butiran pemarkahan; butiran kejohanan yang lalu dan akan datang',
     'Online Registration': 'Pendaftaran Dalam Talian', 'Smooth and seamless registration process for new club members and instructors/trainers': 'Proses pendaftaran yang lancar untuk ahli kelab dan pengajar/jurulatih baharu',
@@ -70,8 +70,8 @@
     'D-Clix is a web + mobile club management system designed to streamline registration, attendance, payments, and communications for sports and martial arts clubs.':
       'D-Clix ialah sistem pengurusan kelab web + mudah alih yang direka untuk memudahkan pendaftaran, kehadiran, pembayaran dan komunikasi bagi kelab sukan dan seni mempertahankan diri.',
     'What features are available?': 'Apakah ciri-ciri yang tersedia?',
-    'Online registration, QR code attendance, FPX payments, grading, reporting, invoicing, notifications, and tournament workflows are supported as part of the platform.':
-      'Pendaftaran dalam talian, kehadiran kod QR, pembayaran FPX, penggredan, laporan, invois, pemberitahuan dan aliran kerja kejohanan disokong dalam platform ini.',
+    'Online registration, QR/fingerprint attendance, FPX payments, grading, reporting, invoicing, notifications, and tournament workflows are supported as part of the platform.':
+      'Pendaftaran dalam talian, kehadiran QR/cap jari, pembayaran FPX, penggredan, laporan, invois, pemberitahuan dan aliran kerja kejohanan disokong dalam platform ini.',
     'How does it benefit martial arts clubs?': 'Bagaimanakah ia memanfaatkan kelab seni mempertahankan diri?',
     'It reduces admin workload, improves fee collection, tracks attendance reliably, and gives instructors a clear view of members, schedules, and performance.':
       'Ia mengurangkan beban kerja pentadbiran, meningkatkan kutipan yuran, menjejak kehadiran dengan tepat dan memberi pengajar gambaran jelas tentang ahli, jadual dan prestasi.',
@@ -181,12 +181,12 @@
     '94% paid': '94% dibayar', 'this week': 'minggu ini',
     'Fee collection · last 6 months': 'Kutipan yuran · 6 bulan lepas', 'Paid': 'Dibayar',
     'Due 25 Oct': 'Tamat 25 Okt', 'RM 120 received': 'RM 120 diterima',
-    'Nur Aina checked in': 'Nur Aina telah daftar masuk', 'Karate · 6:00 pm class': 'Karate · kelas 6:00 ptg',
+    'Aina checked in': 'Aina telah daftar masuk', 'Karate · 6:00 pm class': 'Karate · kelas 6:00 ptg',
     'Sample data': 'Data contoh', 'Made for every kind of club': 'Dibina untuk semua jenis kelab',
     'Sound familiar?': 'Biasa dengar?', 'Still running your club on paper and WhatsApp?': 'Masih urus kelab dengan kertas dan WhatsApp?',
     'These are the jobs that eat a club owner\'s evenings. D-Clix takes each one off your hands.': 'Inilah kerja yang menghabiskan masa petang pemilik kelab. D-Clix mengambil alih setiap satunya.', 'Cash fees in envelopes, receipts written by hand': 'Yuran tunai dalam sampul, resit ditulis tangan',
     'Parents pay online by FPX. Receipts are sent automatically.': 'Ibu bapa bayar dalam talian dengan FPX. Resit dihantar secara automatik.', 'Attendance marked on paper and lost by month end': 'Kehadiran ditanda atas kertas dan hilang pada hujung bulan',
-    'Students check in by scanning a QR code, or the coach marks them with one tap.': 'Pelajar daftar masuk dengan mengimbas kod QR, atau jurulatih menanda mereka dengan satu ketikan.', 'Grading lists in Excel, results sent one by one': 'Senarai gred dalam Excel, keputusan dihantar satu demi satu',
+    'Students check in by QR code, fingerprint or a tap from the coach.': 'Pelajar daftar masuk dengan kod QR, cap jari atau satu ketikan oleh jurulatih.', 'Grading lists in Excel, results sent one by one': 'Senarai gred dalam Excel, keputusan dihantar satu demi satu',
     'Grading schedule, fees and results in one place, visible to every parent.': 'Jadual gred, yuran dan keputusan di satu tempat, boleh dilihat oleh setiap ibu bapa.', 'Parents asking on WhatsApp how much they still owe': 'Ibu bapa bertanya di WhatsApp berapa yuran yang tertunggak',
     'The parent app shows what is due and sends reminders for you.': 'Aplikasi ibu bapa menunjukkan bayaran tertunggak dan menghantar peringatan untuk anda.', 'One system, three views': 'Satu sistem, tiga paparan',
     'Everyone in your club gets the screen they need': 'Setiap orang dalam kelab anda mendapat paparan yang mereka perlukan', 'Club owner': 'Pemilik kelab',
@@ -205,15 +205,15 @@
     'Pay and follow progress from the phone': 'Bayar dan ikuti kemajuan dari telefon', 'Pay fees online': 'Bayar yuran dalam talian',
     'by FPX and get the receipt instantly': 'dengan FPX dan terima resit serta-merta', 'Class schedule, attendance and grading results': 'Jadual kelas, kehadiran dan keputusan gred',
     'for each child': 'bagi setiap anak', 'Notices from the club': 'Notis daripada kelab',
-    'by push notification and WhatsApp': 'melalui pemberitahuan aplikasi dan WhatsApp', 'Hi, Puan Siti Aminah': 'Hai, Puan Siti Aminah',
-    'October fee · Nur Aina': 'Yuran Oktober · Nur Aina', 'Pay with FPX': 'Bayar dengan FPX',
+    'by push notification and WhatsApp': 'melalui pemberitahuan aplikasi dan WhatsApp', 'Hi, Puan Siti': 'Hai, Puan Siti',
+    'October fee · Aina': 'Yuran Oktober · Aina', 'Pay with FPX': 'Bayar dengan FPX',
     'Next class': 'Kelas seterusnya', 'Thu, 6:00 pm': 'Kha, 6:00 ptg',
     'Orange belt · 9 Nov': 'Tali pinggang oren · 9 Nov', 'martial arts and sports supported': 'seni mempertahankan diri dan sukan disokong',
-    'ways to take attendance: QR and manual': 'cara mengambil kehadiran: QR dan manual', 'online fee payment for parents': 'bayaran yuran dalam talian untuk ibu bapa',
+    'ways to take attendance: QR, fingerprint, manual': 'cara mengambil kehadiran: QR, cap jari, manual', 'online fee payment for parents': 'bayaran yuran dalam talian untuk ibu bapa',
     'languages: English and Bahasa Melayu': 'bahasa: Inggeris dan Bahasa Melayu', 'Everything included': 'Semua disertakan',
     'All the tools a club runs on': 'Semua alat yang diperlukan oleh kelab', 'Online registration': 'Pendaftaran dalam talian',
     'New students and instructors sign up from a link. You approve with one click.': 'Pelajar dan jurulatih baharu mendaftar melalui pautan. Anda luluskan dengan satu klik.', 'Digital attendance': 'Kehadiran digital',
-    'QR code scan or manual, recorded against every class.': 'Imbasan kod QR atau manual, direkodkan bagi setiap kelas.', 'Online payment': 'Bayaran dalam talian',
+    'QR code, fingerprint or manual, recorded against every class.': 'Kod QR, cap jari atau manual, direkodkan bagi setiap kelas.', 'Online payment': 'Bayaran dalam talian',
     'FPX fees, invoices and receipts, with automatic reminders.': 'Yuran FPX, invois dan resit, dengan peringatan automatik.', 'Schedules, grading fees and results for each belt or level.': 'Jadual, yuran gred dan keputusan bagi setiap tali pinggang atau tahap.',
     'Player selection, scoring and the history of past events.': 'Pemilihan pemain, pemarkahan dan sejarah acara lepas.', 'Notifications': 'Pemberitahuan',
     'WhatsApp and push messages to parents, students and instructors.': 'Mesej WhatsApp dan pemberitahuan aplikasi kepada ibu bapa, pelajar dan jurulatih.', 'Records and reports': 'Rekod dan laporan',
@@ -244,9 +244,6 @@
     'Book my free demo': 'Tempah demo percuma saya', 'We use your details only to contact you about D-Clix. See our': 'Kami hanya menggunakan butiran anda untuk menghubungi anda tentang D-Clix. Lihat',
     'Example of the D-Clix dashboard': 'Contoh papan pemuka D-Clix', 'Choose a role': 'Pilih peranan',
     'D-Clix in numbers': 'D-Clix dalam angka',
-
-    'Before': 'Sebelum', 'With D-Clix': 'Dengan D-Clix', 'Events and announcements': 'Acara dan pengumuman',
-    'Previous banner': 'Banner sebelumnya', 'Next banner': 'Banner seterusnya', 'Choose banner': 'Pilih banner',
 
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
