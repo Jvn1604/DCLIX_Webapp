@@ -125,6 +125,10 @@ Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = s
 - [ ] **P3** Plans and prices are written in three places (`js/shared/main.js`, `js/arena/signup.js`, database `settings.plans`). Load them from the API everywhere.
 
 ### 🔄 Update / connect
+- [ ] **P1** Home page placeholders (marked with comments in `index.html`) — replace once the company sends the material:
+  the dashboard mock-up in the hero (sample data) → a real screenshot of the club system; the "Made for every kind of club" sports strip → real club logos (with permission);
+  the numbers band (18 sports, 3 attendance methods…) → real usage figures; testimonial initials → real photos, club names and states.
+- [ ] **P1** Confirm the home page claims with the company: parents' FPX payments in the club system, support by WhatsApp, contact "within one working day", yearly plan = two months free.
 - [ ] **P1** Connect the **Billplz sandbox** (API secret key, collection ID, XSignature key in `api/config.php`, `billplz.mode = sandbox`) and test real FPX/card test payments.
 - [ ] **P1** Connect **email (SMTP)** — Brevo or company mail — set `mail.driver = smtp`, `from_email`, `sales_to`, then test every email type. The SMTP code is written but untested.
 - [x] **P1** Privacy Policy and Terms & Conditions replaced with the company's own published text (see "Match the live site" for open issues).

@@ -24,6 +24,7 @@
     initImageFallbacks();
     initRipple();
     initCardGlow();
+    initTabs();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
 
@@ -81,7 +82,7 @@
   function initLeadForm() {
     var form = $('#leadForm'); if (!form) return;
     var toast = $('#leadToast');
-    var btn = form.querySelector('button[type=submit]');
+    var btn = form.querySelector('button[type=submit]'), label = btn.textContent;
     function say(msg, ok) {
       toast.textContent = msg; toast.classList.toggle('err', !ok); toast.classList.add('show');
       clearTimeout(say.t); say.t = setTimeout(function () { toast.classList.remove('show'); }, ok ? 4500 : 7000);
@@ -101,7 +102,7 @@
         var fields = err.data && err.data.fields;
         if (fields) Object.keys(fields).forEach(function (k) { var el = form.elements[k]; if (el) el.setAttribute('aria-invalid', 'true'); });
         say(err.offline ? 'Online enquiries are not connected yet. Please call us at +603-7804 1412 or email us.' : (fields ? fields[Object.keys(fields)[0]] : err.message), false);
-      }).then(function () { btn.disabled = false; btn.textContent = 'Submit'; });
+      }).then(function () { btn.disabled = false; btn.textContent = label; });
     });
   }
 
@@ -281,5 +282,27 @@
       c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
       c.style.setProperty('--my', (e.clientY - r.top) + 'px');
     }, { passive: true });
+  }
+
+  /* ---------- Tabs (home page product tour: [data-tabs] with role=tab buttons) ---------- */
+  function initTabs() {
+    $$('[data-tabs]').forEach(function (box) {
+      var tabs = $$('[role=tab]', box);
+      function show(t, focus) {
+        tabs.forEach(function (x) {
+          var on = x === t;
+          x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
+          var pane = document.getElementById(x.getAttribute('aria-controls')); if (pane) pane.hidden = !on;
+        });
+        if (focus) t.focus();
+      }
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { show(t); });
+        t.addEventListener('keydown', function (e) {
+          var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+          e.preventDefault(); show(tabs[(i + d + tabs.length) % tabs.length], true);
+        });
+      });
+    });
   }
 })();
