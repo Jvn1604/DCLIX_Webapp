@@ -6,10 +6,10 @@
   <rect width="1600" height="500" fill="url(#bg)"/>
   <rect width="1600" height="500" fill="url(#dots)"/>
   <g font-family="'Bricolage Grotesque','DM Sans','Segoe UI',Arial,sans-serif" fill="#1a1208">
-    <rect x="96" y="92" width="196" height="40" rx="20" fill="#1a1208"/>
-    <text x="194" y="119" font-size="18" font-weight="700" fill="#f2b45a" text-anchor="middle" letter-spacing="2">SAMPLE PROMO</text>
+    <rect x="96" y="92" width="210" height="40" rx="20" fill="#1a1208"/>
+    <text x="201" y="119" font-size="18" font-weight="700" fill="#f2b45a" text-anchor="middle" letter-spacing="2">YEARLY PLANS</text>
     <text x="96" y="236" font-size="96" font-weight="800" letter-spacing="-3">2 months free</text>
-    <text x="96" y="302" font-size="36" font-weight="600" fill-opacity=".78">on every yearly plan · until 31 December</text>
+    <text x="96" y="302" font-size="36" font-weight="600" fill-opacity=".78">when you pay for D-Clix yearly</text>
     <rect x="96" y="352" width="252" height="64" rx="32" fill="#1a1208"/>
     <text x="222" y="393" font-size="24" font-weight="700" fill="#f2b45a" text-anchor="middle">See the plans</text>
   </g>
