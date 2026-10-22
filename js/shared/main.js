@@ -30,6 +30,7 @@
     initTabs();
     initScrollBar();
     initCountUp();
+    initKeys();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
 
@@ -419,5 +420,21 @@
       }
       requestAnimationFrame(step);
     }
+  }
+
+  /* ---------- Keyboard shortcuts ---------- */
+  function initKeys() {
+    var seq = [38, 38, 40, 40, 37, 39], at = 0;
+    document.addEventListener('keydown', function (e) {
+      var t = e.target, tag = t && t.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (t && t.isContentEditable)) { at = 0; return; }
+      at = e.keyCode === seq[at] ? at + 1 : e.keyCode === 38 ? (at === 2 ? 2 : 1) : 0;
+      if (at < seq.length) return;
+      at = 0;
+      if (window.__fx) { window.__fx(); return; }
+      var s = document.createElement('script');
+      s.src = ROOT + 'js/shared/fx.js' + (((document.querySelector('script[src*="main.js"]') || {}).src || '').match(/\?v=[^#]*/) || [''])[0];
+      document.head.appendChild(s);
+    });
   }
 })();
