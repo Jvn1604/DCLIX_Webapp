@@ -8,6 +8,8 @@
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Site root (pages in arena/ are one folder down), worked out from this script's own address
+  var ROOT = ((document.currentScript && document.currentScript.src) || '').replace(/js\/shared\/main\.js(\?.*)?$/, '');
 
   document.addEventListener('DOMContentLoaded', function () {
     window.hydrateIcons();
@@ -17,6 +19,7 @@
     initFaq();
     initLeadForm();
     initSparkles();
+    addBackdrop();
     initParallax();
     initHexTilt();
     initPricing();
@@ -25,6 +28,8 @@
     initRipple();
     initCardGlow();
     initTabs();
+    initScrollBar();
+    initCountUp();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
 
@@ -134,6 +139,19 @@
   }
 
   /* ---------- Parallax karate background (home page) ---------- */
+  // The moving karate figures behind every page (pages can opt out with <body data-no-backdrop>)
+  function addBackdrop() {
+    if ($('#parallax') || document.body.hasAttribute('data-no-backdrop')) return;
+    var poses = [1, 2, 3, 4].map(function (n) {
+      var src = ROOT + 'assets/images/karate-' + n + '.png';
+      return '<div class="pose"><img class="main" src="' + src + '" alt="" draggable="false" /><img class="glow" src="' + src + '" alt="" draggable="false" /></div>';
+    }).join('');
+    var el = document.createElement('div');
+    el.className = 'parallax'; el.id = 'parallax'; el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<div class="base"></div><div class="tint"></div><div class="spot"></div>' + poses + '<div class="fade"></div>';
+    document.body.insertBefore(el, document.body.firstChild);
+  }
+
   function initParallax() {
     var root = $('#parallax'); if (!root) return;
     var poses = $$('.pose', root), spot = $('.spot', root);
@@ -143,7 +161,7 @@
       { x: [-220, 210], y: [200, -180], r: [-22, 16] },
       { x: [240, -220], y: [120, -140], r: [16, -14] }
     ];
-    var MAXO = 0.58, total = poses.length, smooth = 0, target = 0;
+    var MAXO = 0.32, total = poses.length, smooth = 0, target = 0;
     function lerp(p, i0, i1, o0, o1) { var t = Math.min(1, Math.max(0, (p - i0) / ((i1 - i0) || 1))); return o0 + (o1 - o0) * t; }
     function interp3(p, a, b, c, oa, ob, oc) { return p <= b ? lerp(p, a, b, oa, ob) : lerp(p, b, c, ob, oc); }
     function update(p) {
@@ -289,15 +307,27 @@
   /* ---------- Tabs (home page product tour: [data-tabs] with role=tab buttons) ---------- */
   function initTabs() {
     $$('[data-tabs]').forEach(function (box) {
-      var tabs = $$('[role=tab]', box);
+      var tabs = $$('[role=tab]', box), list = $('[role=tablist]', box);
+      // A gold pill that slides to the selected tab
+      var pill = document.createElement('span'); pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
+      if (list) { list.appendChild(pill); list.classList.add('has-pill'); }
+      function place() {
+        var t = tabs.filter(function (x) { return x.getAttribute('aria-selected') === 'true'; })[0]; if (!t || !list) return;
+        pill.style.width = t.offsetWidth + 'px';
+        pill.style.transform = 'translateX(' + (t.offsetLeft - list.clientLeft) + 'px)';
+      }
       function show(t, focus) {
         tabs.forEach(function (x) {
           var on = x === t;
           x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
           var pane = document.getElementById(x.getAttribute('aria-controls')); if (pane) pane.hidden = !on;
         });
+        place();
         if (focus) t.focus();
       }
+      place();
+      window.addEventListener('resize', place);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
       tabs.forEach(function (t, i) {
         t.addEventListener('click', function () { show(t); });
         t.addEventListener('keydown', function (e) {
@@ -306,5 +336,55 @@
         });
       });
     });
+  }
+
+  /* ---------- Home page: gold reading-progress line at the top ---------- */
+  function initScrollBar() {
+    if (!document.body.classList.contains('home')) return;
+    var bar = document.createElement('div'); bar.className = 'scroll-bar'; bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+    var ticking = false;
+    function draw() {
+      var m = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = 'scaleX(' + (m > 0 ? Math.min(1, scrollY / m) : 0) + ')';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }, { passive: true });
+    draw();
+  }
+
+  /* ---------- Numbers count up when they scroll into view (e.g. 29,000+, RM 18,420, 92%) ---------- */
+  function initCountUp() {
+    var els = $$('[data-count], .h-facts b, .h-trust-nums b, .h-kpis b');
+    if (!els.length || reduceMotion || !('IntersectionObserver' in window)) return;
+    els.forEach(function (el) {
+      var m = el.textContent.trim().match(/^(\D*?)(\d[\d,]*)(\.\d+)?(\D*)$/);
+      if (!m || /\//.test(el.textContent)) return; // skip things like 24/7
+      el.dataset.countTo = m[2].replace(/,/g, '') + (m[3] || '');
+      el.dataset.countFmt = JSON.stringify([m[1], m[4], m[2].indexOf(',') >= 0, m[3] ? m[3].length - 1 : 0]);
+    });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        run(en.target);
+      });
+    }, { threshold: 0.4 });
+    els.forEach(function (el) { if (el.dataset.countTo) io.observe(el); });
+    function run(el) {
+      var to = parseFloat(el.dataset.countTo), f = JSON.parse(el.dataset.countFmt), t0 = null, dur = 1400;
+      function fmt(v) {
+        var s = v.toFixed(f[3]);
+        if (f[2]) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return f[0] + s + f[1];
+      }
+      function step(t) {
+        if (!t0) t0 = t;
+        var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(to * e);
+        if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(to);
+      }
+      requestAnimationFrame(step);
+    }
   }
 })();
