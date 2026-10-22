@@ -143,7 +143,7 @@
   function addBackdrop() {
     if ($('#parallax') || document.body.hasAttribute('data-no-backdrop')) return;
     var poses = [1, 2, 3, 4].map(function (n) {
-      var src = ROOT + 'assets/images/karate-' + n + '.png';
+      var src = ROOT + 'assets/images/karate-' + n + '.webp';
       return '<div class="pose"><img class="main" src="' + src + '" alt="" draggable="false" /><img class="glow" src="' + src + '" alt="" draggable="false" /></div>';
     }).join('');
     var el = document.createElement('div');

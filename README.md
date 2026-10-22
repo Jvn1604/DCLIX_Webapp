@@ -75,6 +75,7 @@ Emails are not really sent on your PC: they are saved as `.html` files in `api/s
 | Change a text | Edit the page, then change the same English line in `js/shared/i18n.js` so the Bahasa Melayu still matches |
 | Change the theme colour | The first lines of `css/style.css`: `--accent`, `--accent-light`, `--accent-rgb` |
 | Push CSS or JS changes | Run `node set-version.js` first, so visitors' browsers load the new files at once |
+| Change a page title or description, or move to d-clix.com | Edit the page (or `SITE` at the top of `set-seo.js`), then run `node set-seo.js`: it updates sharing tags, `sitemap.xml` and `robots.txt` |
 
 ## Working together (please read)
 
@@ -105,17 +106,18 @@ Tick a box (`[x]`) when it is done.
 - [x] Event banners on home and pricing (Deepavali offer, free demo)
 - [x] SSM certificate upload on registration
 - [x] Clubs globe with real numbers · App Store / Google Play links
-- [ ] Give About, Pricing, Edu-Hub and Community the same new look as the home page
+- [x] Give About, Pricing, Edu-Hub, Community, legal pages and 404 the same new look as the home page
 - [ ] New **Customers** page with club stories (before / after, with photos)
 - [ ] New **Features** page with a real screen for each module
 - [ ] Edu-Hub: video tutorials
-- [ ] Faster pages: compress images (WebP), Lighthouse score 90+ on phone
+- [x] Faster pages: images converted to WebP (798 KB → 218 KB), unused CSS removed
 
 ### 3. After launch
 - [ ] Visitor analytics with a cookie notice: visits, demo bookings, signups, payments
 - [ ] Automatic renewal invoices before a subscription ends
 - [ ] Create the club's account on maclubsystem.com automatically after payment (if that system has an API)
-- [ ] SEO: sitemap, page descriptions, social preview images, Google Business Profile
+- [x] SEO: sitemap, robots.txt, page descriptions, social preview image (`assets/og-image.jpg`)
+- [ ] Google Business Profile
 - [ ] Bahasa Melayu emails
 
 ---
