@@ -1175,13 +1175,6 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 @media (hover: none) { .ev-arrow { display: none; } }
 @media (prefers-reduced-motion: reduce) { .ev-track, .ev-slide img { transition: none; } .ev-dots button.run i { animation: none; width: 100%; } }
 
-/* Home: RAP steps (Register, Attendance, Payment) */
-.h-rap { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; counter-reset: rap; }
-.h-rap li { counter-increment: rap; padding-top: 20px; border-top: 2px solid var(--accent); }
-.h-rap li::before { content: counter(rap); display: block; font-size: 34px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
-.h-rap h3 { font-size: 20px; margin-bottom: 8px; }
-.h-rap p { margin: 0; color: var(--muted); line-height: 1.6; }
-@media (max-width: 767px) { .h-rap { grid-template-columns: 1fr; gap: 24px; } }
 
 /* Smaller event banner at the top of other pages (pricing) */
 .ev-top { padding: 24px 24px 0; position: relative; z-index: 10; }
