@@ -92,20 +92,53 @@
       toast.textContent = msg; toast.classList.toggle('err', !ok); toast.classList.add('show');
       clearTimeout(say.t); say.t = setTimeout(function () { toast.classList.remove('show'); }, ok ? 4500 : 7000);
     }
+    // Country code picker: show the chosen code (e.g. "MY +60") on the button
+    var cc = $('#leadCC'), ccShow = $('.tel-cc-show b', form), tel = $('#leadTel');
+    function showCode() { var o = cc.options[cc.selectedIndex]; ccShow.textContent = o.getAttribute('data-iso') + ' ' + o.value; }
+    if (cc) { cc.addEventListener('change', function () { showCode(); $('#leadPhone').focus(); }); showCode(); }
+    // Errors shown under each field (field name in the API → element to mark)
+    var MSG = { name: 'Enter your name.', phone: 'Enter a phone number.', phoneBad: 'Enter a valid phone number, digits only.', email: 'Enter a valid email address.', club: 'Enter your club name.', inquiries: 'Tell us how we can help.' };
+    function target(k) { return k === 'phone' ? tel : form.elements[k]; }
+    function clearErr(el) { if (!el) return; el.removeAttribute('aria-invalid'); var n = el.nextElementSibling; if (n && n.classList.contains('field-err')) n.remove(); }
+    function setErr(k, msg) {
+      var el = target(k); if (!el) return; clearErr(el);
+      el.setAttribute('aria-invalid', 'true');
+      var p = document.createElement('small'); p.className = 'field-err'; p.setAttribute('role', 'alert'); p.textContent = msg;
+      el.insertAdjacentElement('afterend', p);
+    }
+    $$('input, textarea', form).forEach(function (el) { el.addEventListener('input', function () { clearErr(el.name === 'phoneNumber' ? tel : el); }); });
+    function check() {
+      var v = function (n) { return (form.elements[n].value || '').trim(); }, errs = {};
+      if (!v('name')) errs.name = MSG.name;
+      var num = v('phoneNumber');
+      if (!num) errs.phone = MSG.phone; else if (!/^[0-9 \-]{6,15}$/.test(num)) errs.phone = MSG.phoneBad;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('email'))) errs.email = MSG.email;
+      if (!v('club')) errs.club = MSG.club;
+      if (!v('inquiries')) errs.inquiries = MSG.inquiries;
+      return errs;
+    }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      $$('[aria-invalid]', form).forEach(function (el) { el.removeAttribute('aria-invalid'); });
-      if (!form.checkValidity()) { form.reportValidity(); return; }
+      ['name', 'phone', 'email', 'club', 'inquiries'].forEach(function (k) { clearErr(target(k)); });
+      var errs = check(), keys = Object.keys(errs);
+      if (keys.length) {
+        keys.forEach(function (k) { setErr(k, errs[k]); });
+        var first = target(keys[0]); (first === tel ? $('#leadPhone') : first).focus();
+        return;
+      }
       var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
+      // One phone number for the API: country code + number without its leading 0, e.g. "+60 12-345 6789"
+      data.phone = data.phoneCode + ' ' + String(data.phoneNumber).trim().replace(/^0+/, '');
+      delete data.phoneCode; delete data.phoneNumber;
       if (!window.dclixApi) { say('Sorry, the form is not available right now. Please call us at +603-7804 1412.', false); return; }
       btn.disabled = true; btn.textContent = 'Sending…';
       // Saved as a lead in Admin → Leads; sales is alerted and the visitor gets a confirmation email.
       window.dclixApi('contact.php', { body: data }).then(function () {
-        form.reset();
+        form.reset(); if (cc) showCode();
         say('Thanks! We have received your details. A D-Clix expert will contact you soon.', true);
       }, function (err) {
         var fields = err.data && err.data.fields;
-        if (fields) Object.keys(fields).forEach(function (k) { var el = form.elements[k]; if (el) el.setAttribute('aria-invalid', 'true'); });
+        if (fields) Object.keys(fields).forEach(function (k) { setErr(k, fields[k]); });
         say(err.offline ? 'Online enquiries are not connected yet. Please call us at +603-7804 1412 or email us.' : (fields ? fields[Object.keys(fields)[0]] : err.message), false);
       }).then(function () { btn.disabled = false; btn.textContent = label; });
     });

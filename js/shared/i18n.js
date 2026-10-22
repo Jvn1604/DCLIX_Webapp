@@ -585,6 +585,19 @@
     'Clubs and students using D-Clix': 'Kelab dan pelajar yang menggunakan D-Clix', 'Globe showing clubs that use D-Clix': 'Glob menunjukkan kelab yang menggunakan D-Clix',
     'Download on the App Store': 'Muat turun di App Store', 'Get it on Google Play': 'Dapatkannya di Google Play',
 
+    /* ---- home page (revamp) ---- */
+    'Singapore (+65)': 'Singapura (+65)', 'Philippines (+63)': 'Filipina (+63)',
+    'Cambodia (+855)': 'Kemboja (+855)', 'Japan (+81)': 'Jepun (+81)',
+    'South Korea (+82)': 'Korea Selatan (+82)', 'United Arab Emirates (+971)': 'Emiriah Arab Bersatu (+971)',
+    'Saudi Arabia (+966)': 'Arab Saudi (+966)', 'United States (+1)': 'Amerika Syarikat (+1)',
+    'Canada (+1)': 'Kanada (+1)', 'Country code': 'Kod negara',
+    'Enter your name.': 'Masukkan nama anda.', 'Enter a phone number.': 'Masukkan nombor telefon.',
+    'Enter a valid phone number, digits only.': 'Masukkan nombor telefon yang sah, digit sahaja.', 'Enter a valid email address.': 'Masukkan alamat e-mel yang sah.',
+    'Enter your club name.': 'Masukkan nama kelab anda.', 'Tell us how we can help.': 'Beritahu kami bagaimana kami boleh membantu.',
+
+    /* ---- home page (revamp) ---- */
+    'Popular': 'Pilihan popular', 'All countries': 'Semua negara',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
@@ -594,7 +607,7 @@
   var lang = 'en';
   try { lang = localStorage.getItem(KEY) || ((navigator.language || '').toLowerCase().indexOf('ms') === 0 ? 'ms' : 'en'); } catch (e) {}
   var original = new WeakMap(); // text node → its English text
-  var ATTRS = ['placeholder', 'aria-label', 'title'];
+  var ATTRS = ['placeholder', 'aria-label', 'title', 'label'];
   var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1, CODE: 1, PRE: 1 };
   function norm(t) { return t.replace(/\s+/g, ' ').trim(); }
 
