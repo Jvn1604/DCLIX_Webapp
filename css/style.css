@@ -1316,6 +1316,28 @@ html.light .p-404 { background-image: linear-gradient(180deg, #b56d12, #8a4f08);
 .p-hero-c .hero-cta { justify-content: center; }
 @media (max-width: 600px) { .p-legal { padding: 26px 20px; border-radius: 18px; } .p-legal-help { align-items: flex-start; text-align: left; } }
 
+/* ---------- Phone number with country code (home demo form) ---------- */
+.tel { display: flex; align-items: stretch; background: var(--field); border: 1px solid var(--line2); border-radius: 16px; transition: border-color .2s, box-shadow .25s; }
+.tel:hover { border-color: rgba(var(--accent-rgb),.3); }
+.tel:focus-within { border-color: rgba(var(--accent-rgb),.5); box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.15); }
+.tel[aria-invalid="true"] { border-color: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.12); animation: shake .4s ease both; }
+.tel-cc { position: relative; display: flex; align-items: center; flex: none; border-right: 1px solid var(--line2); cursor: pointer; }
+.tel-cc-show { display: inline-flex; align-items: center; gap: 8px; padding: 0 14px 0 18px; color: var(--fg); font-weight: 600; font-size: 15px; white-space: nowrap; pointer-events: none; }
+.tel-cc-show svg { color: var(--muted); } .tel-cc-show svg:first-child { color: var(--accent-ink, var(--accent)); }
+.tel-cc select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
+.tel-cc:focus-within .tel-cc-show b { text-decoration: underline; text-underline-offset: 4px; }
+.tel-num.input { border: 0; background: transparent; border-radius: 0 16px 16px 0; min-width: 0; flex: 1; }
+.tel-num.input:focus, .tel-num.input:hover { box-shadow: none; border: 0; }
+#leadForm .field-err { display: flex; align-items: center; gap: 6px; margin-top: -4px; font-size: 13.5px; }
+#leadForm .field-err::before { content: "!"; flex: none; width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid currentColor; display: grid; place-items: center; font-size: 11px; font-weight: 800; line-height: 1; }
+/* The list that opens is drawn by the system: give it its own colours (cream text on a white list was unreadable in dark mode) */
+.tel-cc select { color-scheme: dark; color: #f5efe6; background: #19191b; }
+.tel-cc select option { background: #19191b; color: #f5efe6; }
+.tel-cc select optgroup { background: #0e0e10; color: #f2b45a; font-style: normal; font-weight: 700; }
+html.light .tel-cc select { color-scheme: light; color: #111; background: #fff; }
+html.light .tel-cc select option { background: #fff; color: #111; }
+html.light .tel-cc select optgroup { background: #f4efe6; color: #8a4f08; }
+
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
 :root { --accent-ink: var(--accent); }
