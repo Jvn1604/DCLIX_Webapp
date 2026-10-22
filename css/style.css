@@ -1235,7 +1235,6 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 .f-stores .store b { font-size: 16px; }
 .f-stores .store small { font-size: 9px; }
 .f-brand .social + .t { margin-top: 28px; }
-<<<<<<< HEAD
 
 /* Home: fees, grading and attendance modules */
 .h-module { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px solid var(--line); }
@@ -1281,7 +1280,6 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 @media (max-width: 560px) { .h-steps { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .h-module { grid-template-columns: 1fr; gap: 28px; padding: 40px 0; } .h-module.rev .h-vis { order: 0; } }
 @media (max-width: 560px) { .h-tiles { grid-template-columns: 1fr; } }
-=======
 /* ---------- Background figures on every page + home page polish ---------- */
 /* Page content sits above the moving figures on pages without .page-layer (arena/) */
 body > main { position: relative; z-index: 10; }
@@ -1374,4 +1372,3 @@ html.light .eyebrow, html.light .h-strip-t { font-weight: 800; }
 html.light .notice .ms { opacity: 1; }
 html.light .pose .main { opacity: .07; }
 html.light .pose .glow { opacity: .1; }
->>>>>>> origin/main
