@@ -4,6 +4,22 @@
 </FilesMatch>
 RedirectMatch 404 ^/(.*/)?api/(lib|storage|seed)(/|$)
 Options -Indexes
+
+# API answers are data only: never cached, never framed, never run as a page
+<IfModule mod_headers.c>
+  Header always set Cache-Control "no-store"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Content-Security-Policy "default-src 'none'; frame-ancestors 'none'"
+  Header always set Referrer-Policy "no-referrer"
+  Header always unset X-Powered-By
+</IfModule>
+# The test payment page is a real page (only works while billplz.mode is "mock")
+<Files "mock-gateway.php">
+  <IfModule mod_headers.c>
+    Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
+  </IfModule>
+</Files>
 # Pass the Authorization header through to PHP
 RewriteEngine On
 RewriteCond %{HTTP:Authorization} .

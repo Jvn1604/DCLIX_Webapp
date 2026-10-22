@@ -77,6 +77,10 @@ Emails are not really sent on your PC: they are saved as `.html` files in `api/s
 | Push CSS or JS changes | Run `node set-version.js` first, so visitors' browsers load the new files at once |
 | Change a page title or description, or move to d-clix.com | Edit the page (or `SITE` at the top of `set-seo.js`), then run `node set-seo.js`: it updates sharing tags, `sitemap.xml` and `robots.txt` |
 
+## Security
+The repo is public. Read **[SECURITY.md](SECURITY.md)**: what protects the site, rules for both of us, and the checklist before real data goes live.
+Run `node set-security.js` after adding a `<script>` to a page or a new outside service.
+
 ## Working together (please read)
 
 1. **Pull before you start:** `git pull origin main`. Most of our merge problems came from editing an old copy.
