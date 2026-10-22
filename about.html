@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>About | D-Clix Club Management</title>
 <meta name="description" content="About D-Clix, the club management solution for sports and martial arts clubs." />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261022-1249" />
-<script src="js/shared/theme.js?v=20261022-1249"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=20261022-1316" />
+<script src="js/shared/theme.js?v=20261022-1316"></script>
 </head>
-<body >
+<body class="home sub">
 
 <div class="page-layer">
 <nav class="nav" aria-label="Main">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span>
+    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="D-CLIX" /></span>
       <span><span class="brand-name" style="display:block">D-Clix</span><span class="brand-sub">Club Management</span></span></a>
     <div class="nav-links"><a href="index.html">Home</a><a href="about.html" class="active" aria-current="page">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
     <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
@@ -26,33 +27,69 @@
 </nav>
 <main class="pt-nav">
 
-<section class="section" style="overflow:hidden"><div class="mw-7xl about-grid">
-  <div class="copy stack-8">
-    <div class="reveal "><h1>About Us</h1></div>
-    <div class="reveal " data-delay="0.1"><p class="p">Welcome to D-Clix, your ultimate club management solution. Designed for sports and martial arts clubs, we streamline operations with a focus on efficiency, convenience, and innovation. Our platform simplifies key processes, including seamless member registration, secure online payments, and real-time attendance tracking.</p></div>
-    <div class="reveal " data-delay="0.2"><p class="p">What sets D-Clix apart is our tailored features specifically designed for martial arts clubs, addressing unique requirements to support your growth and success. Accessible via both web and mobile applications, D-Clix empowers administrators and members with a modern, user-friendly experience that adapts to your needs.</p></div>
-    <div class="reveal " data-delay="0.3"><p class="p quote">At D-Clix, we're committed to helping clubs thrive by providing the tools you need to focus on what truly matters&mdash;your passion and your members.</p></div>
+<!-- Hero -->
+<section class="hero h-hero p-hero">
+  <div class="blob a"></div><div class="blob b"></div>
+  <canvas class="sparkles" aria-hidden="true"></canvas>
+  <div class="h-hero-grid">
+    <div class="h-hero-copy">
+      <span class="badge h-load" style="--d:0s"><i data-icon="building" class="w-4"></i> About D-Clix</span>
+      <h1 class="h-load" style="--d:.08s">Built for the people who <span class="grad-text">run clubs</span></h1>
+      <p class="lead h-load" style="--d:.16s">D-Clix is a club management system for sports and martial arts clubs. Registration, online payments and attendance in one place, on the web and in the mobile app.</p>
+      <div class="hero-cta h-load" style="--d:.24s"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><a class="btn-outline" href="pricing.html">See pricing</a></div>
+    </div>
+    <div class="p-vis h-load" style="--d:.2s">
+      <div class="glowbg"></div>
+      <div class="phone"><div class="notch"></div><div class="screen">
+        <div class="ring"><img src="assets/dclix-logo.png" alt="D-CLIX" /></div>
+        <h3>Welcome to Martial Arts<br />Club App</h3>
+        <p>Let's join our community<br />to track your training and grading!</p>
+        <div class="url">Web portal : <a href="https://maclubsystem.com" target="_blank" rel="noopener">https://maclubsystem.com</a></div>
+        <button type="button" tabindex="-1">Get Started</button></div></div>
+    </div>
   </div>
-  <div class="vis reveal" style="display:flex;justify-content:center;position:relative" data-delay=".2">
-    <div class="glowbg"></div>
-    <div class="phone"><div class="notch"></div><div class="screen">
-      <div class="ring"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></div>
-      <h3>Welcome to Martial Arts<br />Club App</h3>
-      <p>Let's join our community<br />to track your training and grading!</p>
-      <div class="url">Web portal : <a href="https://maclubsystem.com" target="_blank" rel="noopener">https://maclubsystem.com</a></div>
-      <button type="button">Get Started</button></div></div>
+</section>
+
+<!-- Numbers -->
+<section class="h-facts" aria-label="D-Clix in numbers"><div class="mw-7xl h-facts-grid">
+  <div class="reveal"><b>200+</b><span>clubs use D-Clix</span></div>
+  <div class="reveal" data-delay="0.06"><b>29,000+</b><span>students managed</span></div>
+  <div class="reveal" data-delay="0.12"><b>18</b><span>martial arts and sports supported</span></div>
+  <div class="reveal" data-delay="0.18"><b>2</b><span>languages: English and Bahasa Melayu</span></div>
+</div></section>
+
+<!-- Story and values -->
+<section class="section bordered"><div class="mw-7xl p-split">
+  <div class="reveal h-head left">
+    <span class="eyebrow">Our story</span>
+    <h2>Made for martial arts, not adapted from something else</h2>
+    <p class="lead">What sets D-Clix apart is that its features are designed for martial arts clubs: belts and grading, classes, tournaments and fees, the way clubs really run them. On the web and in the mobile app, owners, coaches and members all get a modern, simple experience.</p>
+    <figure class="h-quote feature p-quote"><blockquote>At D-Clix, we're committed to helping clubs thrive by providing the tools you need to focus on what truly matters: your passion and your members.</blockquote><figcaption><span class="av"><img src="assets/dclix-logo.png" alt="" /></span><span><b>The D-Clix team</b><small>Raig Technologies (M) Sdn Bhd</small></span></figcaption></figure>
+  </div>
+  <div class="h-trust-grid">
+    <div class="reveal"><div class="h-tcard"><i data-icon="award" class="w-6"></i><h3>Built for martial arts</h3><p>Belts, grading, tournaments and class schedules work the way your sport does.</p></div></div>
+    <div class="reveal" data-delay="0.06"><div class="h-tcard"><i data-icon="monitor" class="w-6"></i><h3>Web and mobile</h3><p>Admins work on the web dashboard; members and parents use the app.</p></div></div>
+    <div class="reveal" data-delay="0.12"><div class="h-tcard"><i data-icon="zap" class="w-6"></i><h3>Less admin</h3><p>Registration, online payments and attendance tracking without paperwork.</p></div></div>
+    <div class="reveal" data-delay="0.18"><div class="h-tcard"><i data-icon="users" class="w-6"></i><h3>A local team</h3><p>A Malaysian company with a support team in Petaling Jaya.</p></div></div>
   </div>
 </div></section>
-<div class="mw-7xl container"><div class="divider"></div></div>
-<section class="section" style="overflow:hidden"><div class="mw-7xl laptop-grid">
-  <div class="stack-8">
-    <div class="reveal "><div class="accent" style="font-weight:600;font-size:20px;margin-bottom:16px">In Depth</div><h2>Management<br />Tools To Manage<br />Your Club To Full<br />Potential</h2></div>
-    <div class="reveal " data-delay="0.1"><p class="lead" style="font-weight:400">Monitor real time update of your club performance and and manage registration, approval, attendance and payment (RAP)</p></div>
+
+<!-- In depth -->
+<section class="section bordered" style="overflow:hidden"><div class="mw-7xl laptop-grid">
+  <div class="reveal h-head left">
+    <span class="eyebrow">In depth</span>
+    <h2>Management tools to run your club to its full potential</h2>
+    <p class="lead">See real-time updates on your club's performance, and manage registration, approval, attendance and payment from one dashboard.</p>
+    <ul class="h-ticks">
+      <li><b>Registration and approval</b> of new members and instructors</li>
+      <li><b>Attendance</b> by QR code scan or a manual update</li>
+      <li><b>Payments</b> online by FPX, with invoices and receipts</li>
+    </ul>
   </div>
   <div class="reveal laptop" data-delay=".2">
     <div class="glowbg" style="width:100%;height:100%;background:rgba(249,115,22,.1)"></div>
     <div class="frame"><div class="scr">
-      <div class="bar"><b><span class="icon-box" style="width:20px;height:20px;border-radius:4px"><img src="assets/dclix-logo.svg" alt="" /></span>Wing Chun Malaysia</b><div class="search">Search...</div></div>
+      <div class="bar"><b><span class="icon-box" style="width:20px;height:20px;border-radius:4px"><img src="assets/dclix-logo.png" alt="" /></span>Wing Chun Malaysia</b><div class="search">Search...</div></div>
       <div class="app">
         <div class="side"><small>Apps</small><div class="on"><i data-icon="chart" class="w-3"></i><span>Home</span></div><div class=""><i data-icon="hotel" class="w-3"></i><span>Ecommerce</span></div><div class=""><i data-icon="layout" class="w-3"></i><span>Projects</span></div><div class=""><i data-icon="users" class="w-3"></i><span>CRM</span></div><div class=""><i data-icon="mail" class="w-3"></i><span>Email</span></div><div class=""><i data-icon="star" class="w-3"></i><span>Gallery</span></div></div>
         <div class="main">
@@ -65,11 +102,21 @@
   </div>
 </div></section>
 
+<!-- Company + call to action -->
+<section class="section bordered h-final"><div class="mw-6xl p-cta reveal">
+  <div class="p-cta-copy">
+    <span class="eyebrow">Talk to us</span>
+    <h2>See D-Clix with your own club's setup</h2>
+    <p class="lead">Raig Technologies (M) Sdn Bhd · Suite 3A42 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, 47301 Petaling Jaya, Selangor</p>
+  </div>
+  <div class="p-cta-btns"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><a class="btn-outline" href="tel:+60378041412"><i data-icon="phone" class="w-5"></i> +603-7804 1412</a></div>
+</div></section>
+
 </main>
 <footer class="footer">
   <div class="footer-grid">
     <div class="f-brand">
-      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="" /></span><span class="name">D-Clix</span></a>
+      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="" /></span><span class="name">D-Clix</span></a>
       <p class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</p>
       <h4 class="t">Follow us</h4>
       <div class="social">
@@ -95,9 +142,9 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/icons.js?v=20261022-1249"></script>
-<script src="js/shared/main.js?v=20261022-1249"></script>
-<script src="js/shared/i18n.js?v=20261022-1249"></script>
-<script src="js/shared/whatsapp.js?v=20261022-1249"></script>
+<script src="js/shared/icons.js?v=20261022-1316"></script>
+<script src="js/shared/main.js?v=20261022-1316"></script>
+<script src="js/shared/i18n.js?v=20261022-1316"></script>
+<script src="js/shared/whatsapp.js?v=20261022-1316"></script>
 </body>
 </html>

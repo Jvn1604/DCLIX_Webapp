@@ -55,7 +55,7 @@
         }).join('') + '</div>' : '');
     // Phone shape (4:3) only when every slide has a phone picture; otherwise phones show the whole wide banner
     if (slides.every(function (s) { return s.mobileSrc; })) box.querySelector('.ev-frame').classList.add('phone-art');
-    var holder = box.closest('section'); if (holder) holder.hidden = false;
+    var holder = box.closest('.ev-top, .h-events, section'); if (holder) holder.hidden = false;
     if (window.hydrateIcons) window.hydrateIcons(box);
 
     var track = box.querySelector('.ev-track'), items = [].slice.call(box.querySelectorAll('.ev-slide'));

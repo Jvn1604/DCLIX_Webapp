@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Pricing | D-Clix Club Management</title>
 <meta name="description" content="D-Clix subscription plans: Basic, Standard and Premium." />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261022-1249" />
-<script src="js/shared/theme.js?v=20261022-1249"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=20261022-1316" />
+<script src="js/shared/theme.js?v=20261022-1316"></script>
 </head>
-<body >
+<body class="home sub">
 
 <div class="page-layer">
 <nav class="nav" aria-label="Main">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span>
+    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="D-CLIX" /></span>
       <span><span class="brand-name" style="display:block">D-Clix</span><span class="brand-sub">Club Management</span></span></a>
     <div class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html" class="active" aria-current="page">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
     <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
@@ -26,22 +27,63 @@
 </nav>
 <main class="pt-nav">
 
-<!-- Event banner (smaller than on the home page): slides with pages: ['pricing'] in assets/banners/banners.js -->
-<section class="ev-top" aria-label="Events and announcements" hidden><div class="ev ev-small" data-banner="pricing"></div></section>
+<!-- Hero: event banner, title and billing switch -->
+<section class="hero h-hero p-hero p-hero-c">
+  <div class="blob a"></div><div class="blob b"></div>
+  <canvas class="sparkles" aria-hidden="true"></canvas>
+  <div class="p-hero-in">
+    <!-- Event banner (smaller than on the home page): slides with pages: ['pricing'] in assets/banners/banners.js -->
+    <div class="ev-top" aria-label="Events and announcements" hidden><div class="ev ev-small" data-banner="pricing"></div></div>
+    <span class="badge h-load" style="--d:0s"><i data-icon="card" class="w-4"></i> D-Clix subscription plans</span>
+    <h1 class="h-load" style="--d:.08s">Plans that grow <span class="grad-text">with your club</span></h1>
+    <p class="lead h-load" style="--d:.16s">Choose monthly, or pay yearly and get two months free. Every plan includes the web dashboard and the mobile app.</p>
+    <div class="billing h-load" style="--d:.24s" role="group" aria-label="Billing period"><button type="button" class="active" data-mode="monthly" aria-pressed="true">Monthly</button><button type="button" data-mode="yearly" aria-pressed="false">Yearly</button></div>
+  </div>
+</section>
 
-<section class="section"><div class="mw-6xl stack-10">
-  <div class="reveal text-center stack-4"><div class="eyebrow">D-CLIX Subscription Plan</div><h1 style="font-size:clamp(32px,5vw,48px);font-weight:600">Tailored for Your Needs: Optimal Value with Every Plan</h1></div>
-  <div class="billing" role="group" aria-label="Billing period"><button type="button" class="active" data-mode="monthly" aria-pressed="true">Monthly</button><button type="button" data-mode="yearly" aria-pressed="false">Yearly</button></div>
+<!-- Plans (cards come from js/shared/main.js initPricing) -->
+<section class="section p-plans"><div class="mw-6xl stack-10">
   <div class="plan-grid" id="planGrid"></div>
-  <div class="fee">* Gateway payment fee per online payment: <span class="accent">RM 1.20</span></div>
-  <p class="refund-note">All purchases are subject to our <a href="refund.html">No Refund Policy</a>.</p>
+  <div class="p-notes">
+    <p class="fee">* Gateway payment fee per online payment: <span class="accent">RM 1.20</span></p>
+    <p class="refund-note">All purchases are subject to our <a href="refund.html">No Refund Policy</a>.</p>
+  </div>
+</div></section>
+
+<!-- Included in every plan -->
+<section class="section bordered"><div class="mw-7xl h-stack">
+  <div class="reveal h-head"><span class="eyebrow">In every plan</span><h2>The essentials, whichever plan you choose</h2></div>
+  <div class="h-feats">
+    <div class="reveal"><div class="h-feat"><i data-icon="monitor" class="w-6"></i><h3>Web and mobile app</h3><p>A web dashboard for admins and an app for members and parents.</p></div></div>
+    <div class="reveal" data-delay="0.04"><div class="h-feat"><i data-icon="userplus" class="w-6"></i><h3>Online registration</h3><p>New students sign up online. No paper forms.</p></div></div>
+    <div class="reveal" data-delay="0.08"><div class="h-feat"><i data-icon="qr" class="w-6"></i><h3>QR attendance</h3><p>Scan a QR code or mark attendance manually.</p></div></div>
+    <div class="reveal" data-delay="0.12"><div class="h-feat"><i data-icon="phone" class="w-6"></i><h3>WhatsApp support</h3><p>A dedicated WhatsApp group with the D-Clix team.</p></div></div>
+  </div>
+</div></section>
+
+<!-- Pricing questions -->
+<section class="section bordered"><div class="mw-5xl stack-10">
+  <div class="reveal h-head"><span class="eyebrow">Questions</span><h2>Pricing questions</h2></div>
+  <div class="faq-list">
+    <div class="card faq-item open"><button class="faq-q" type="button" aria-expanded="true"><span>How does yearly billing work?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>A yearly plan costs ten times the monthly price, so you get 12 months for the price of 10.</p></div></div></div>
+    <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>Are there any other charges?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>Each online payment has a gateway fee of RM 1.20. It is shown in the total before you pay.</p></div></div></div>
+    <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>How do I pay?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>After you register your club you pay online by FPX online banking or card through Billplz. D-Clix never sees your card or bank details.</p></div></div></div>
+    <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>Can I get a refund?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>All purchases are subject to our <a class="accent" href="refund.html">No Refund Policy</a>. Book a free demo first if you would like to see D-Clix before you buy.</p></div></div></div>
+    <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>Which plan should I choose?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>Basic covers registration, fees and attendance. Standard adds grading, activities and stock. Premium adds payroll, branch requests and tournament records. Our team can help you choose.</p></div></div></div>
+  </div>
+</div></section>
+
+<!-- Call to action -->
+<section class="section bordered h-final"><div class="mw-6xl p-cta reveal">
+  <div class="p-cta-copy"><span class="eyebrow">Not sure yet?</span><h2>Try D-Clix with our team first</h2><p class="lead">Book a free demo and we'll help you pick the right plan for your club.</p></div>
+  <div class="p-cta-btns"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><button class="btn-outline" type="button" data-whatsapp-open><i data-icon="phone" class="w-5"></i> Chat on WhatsApp</button></div>
 </div></section>
 
 </main>
 <footer class="footer">
   <div class="footer-grid">
     <div class="f-brand">
-      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="" /></span><span class="name">D-Clix</span></a>
+      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="" /></span><span class="name">D-Clix</span></a>
       <p class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</p>
       <h4 class="t">Follow us</h4>
       <div class="social">
@@ -67,11 +109,11 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/icons.js?v=20261022-1249"></script>
-<script src="assets/banners/banners.js?v=20261022-1249"></script>
-<script src="js/shared/banner.js?v=20261022-1249"></script>
-<script src="js/shared/main.js?v=20261022-1249"></script>
-<script src="js/shared/i18n.js?v=20261022-1249"></script>
-<script src="js/shared/whatsapp.js?v=20261022-1249"></script>
+<script src="js/shared/icons.js?v=20261022-1316"></script>
+<script src="assets/banners/banners.js?v=20261022-1316"></script>
+<script src="js/shared/banner.js?v=20261022-1316"></script>
+<script src="js/shared/main.js?v=20261022-1316"></script>
+<script src="js/shared/i18n.js?v=20261022-1316"></script>
+<script src="js/shared/whatsapp.js?v=20261022-1316"></script>
 </body>
 </html>
