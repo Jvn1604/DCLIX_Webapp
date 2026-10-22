@@ -87,7 +87,7 @@ Emails are not really sent on your PC: they are saved as `.html` files in `api/s
 
 ## Future plan
 
-Tick a box (`[x]`) when it is done. Add your GitHub name after a task you take, e.g. `(@Jvn1604)`.
+Tick a box (`[x]`) when it is done. 
 
 ### 1. Before launch (must do)
 - [ ] Get from the company: real dashboard screenshots, club logos (with permission), testimonials with photos, real figures

@@ -1284,6 +1284,80 @@ body > main { position: relative; z-index: 10; }
   .h-head.left .eyebrow::after { transform: scaleX(1); }
 }
 
+/* ==========================================================
+   Inner pages with the home page look (About, Pricing, Edu-Hub, Community)
+   <body class="home sub">; classes start with p-
+   ========================================================== */
+.p-hero { padding-bottom: 88px; }
+.p-hero h1 { font-size: clamp(40px, 5.6vw, 68px); }
+/* centred hero (Pricing, Edu-Hub) */
+.p-hero-c .p-hero-in { position: relative; z-index: 10; max-width: 860px; margin: 0 auto; display: grid; gap: 22px; justify-items: center; text-align: center; }
+.p-hero-c .lead { max-width: 640px; margin-inline: auto; }
+.p-hero-c .ev-top { width: 100%; padding: 0 0 24px; }
+.p-hero-c .ev-small { max-width: 900px; }
+/* hero visuals */
+.p-vis { position: relative; display: flex; justify-content: center; }
+.p-vis .phone { transform: scale(.86); transform-origin: top center; margin-bottom: -90px; }
+.p-photo { position: relative; padding: 18px 0 30px; }
+.p-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 24px; border: 1px solid var(--line2); box-shadow: 0 40px 80px rgba(0,0,0,.45), 0 0 40px rgba(var(--accent-rgb),.12); }
+html.light .p-photo img { box-shadow: 0 30px 60px rgba(17,12,4,.14); }
+html:not(.light) .p-photo img { filter: invert(1) sepia(.35) saturate(1.4) hue-rotate(-12deg); background: #fff; box-shadow: 0 40px 80px rgba(0,0,0,.45), 0 0 50px rgba(var(--accent-rgb),.22); }
+.p-photo .h-float.f1 { left: -14px; bottom: 50px; } .p-photo .h-float.f2 { right: -12px; top: 0; }
+/* quick links under a centred hero */
+.p-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.p-chips a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--line2); background: var(--card); font-weight: 600; font-size: 14px;
+  transition: border-color .2s, transform .25s cubic-bezier(.22,1,.36,1), color .2s; }
+.p-chips a:hover { border-color: rgba(var(--accent-rgb),.6); color: var(--accent-ink, var(--accent)); transform: translateY(-2px); }
+.p-chips svg { color: var(--accent-ink, var(--accent)); }
+/* two columns: text + cards */
+.p-split { display: grid; gap: 40px; align-items: start; }
+.p-quote { margin-top: 8px; text-align: left; }
+.av img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.p-three { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+/* closing call-to-action band */
+.p-cta { display: grid; gap: 28px; align-items: center; padding: 44px; border-radius: 28px; border: 1px solid rgba(var(--accent-rgb),.35);
+  background: radial-gradient(600px 240px at 0% 0%, rgba(var(--accent-rgb),.16), transparent 70%), var(--card); box-shadow: 0 30px 60px rgba(0,0,0,.25); }
+html.light .p-cta { box-shadow: 0 20px 44px rgba(17,12,4,.08); }
+.p-cta-copy { display: grid; gap: 12px; }
+.p-cta-copy .lead { margin: 0; }
+.p-cta-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+/* pricing */
+.p-plans { padding-top: 24px; }
+.p-notes { display: grid; gap: 6px; text-align: center; color: var(--muted); }
+.p-notes p { margin: 0; }
+/* Edu-Hub */
+.p-tour { padding: 16px; }
+.p-guide { display: grid; gap: 48px; align-items: center; }
+.p-cover { display: flex; justify-content: center; }
+.p-book { width: min(300px, 80vw); aspect-ratio: 3 / 4; border-radius: 10px 20px 20px 10px; padding: 32px 28px; display: grid; align-content: center; justify-items: start; gap: 10px; position: relative;
+  background: linear-gradient(160deg, #2d1f12, #0e0e10 70%); color: #f5efe6; border: 1px solid rgba(var(--accent-rgb),.35);
+  box-shadow: inset 10px 0 0 rgba(0,0,0,.35), 0 40px 70px rgba(0,0,0,.45), 0 0 50px rgba(var(--accent-rgb),.15); transform: rotate(-4deg); transition: transform .5s cubic-bezier(.22,1,.36,1); }
+.p-book:hover, .p-cover:hover .p-book { transform: rotate(0) translateY(-6px); }
+.p-book img { width: 72px; height: 72px; }
+.p-book b { font-family: var(--display); font-size: 30px; line-height: 1.05; letter-spacing: -.02em; color: #f2b45a; }
+.p-book small { font-size: 15px; color: #d8c9b5; }
+.p-book span { position: absolute; bottom: 24px; left: 28px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #a39d94; }
+/* Community: social cards */
+.p-social { display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; padding: 22px 24px; border-radius: 20px; border: 1px solid var(--card-border); background: var(--card); color: inherit; text-decoration: none;
+  transition: transform .35s cubic-bezier(.22,1,.36,1), border-color .3s, box-shadow .35s; }
+.p-social:hover { transform: translateY(-4px); border-color: rgba(var(--accent-rgb),.5); box-shadow: 0 20px 40px rgba(0,0,0,.25); }
+.p-social > svg:first-child { width: 44px; height: 44px; padding: 10px; border-radius: 12px; background: rgba(var(--accent-rgb),.12); color: var(--accent-ink, var(--accent)); }
+.p-social > svg:last-child { color: var(--muted); transition: transform .25s, color .2s; }
+.p-social:hover > svg:last-child { transform: translate(3px, -3px); color: var(--accent-ink, var(--accent)); }
+.p-social span { display: grid; gap: 2px; } .p-social small { color: var(--muted); }
+@media (min-width: 900px) {
+  .p-split { grid-template-columns: 1fr 1fr; gap: 56px; }
+  .p-cta { grid-template-columns: 1.4fr auto; padding: 52px 56px; }
+  .p-guide { grid-template-columns: .8fr 1.2fr; gap: 64px; }
+}
+@media (max-width: 600px) {
+  .p-hero { padding-bottom: 64px; }
+  .p-vis .phone { transform: scale(.78); margin-bottom: -140px; }
+  .p-cta { padding: 28px 22px; border-radius: 22px; }
+  .p-photo .h-float.f1 { display: none; } .p-photo .h-float.f2 { right: 4px; }
+}
+@media (prefers-reduced-motion: reduce) { .p-book { transform: none; transition: none; } }
+
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
 :root { --accent-ink: var(--accent); }
@@ -1327,3 +1401,11 @@ html.light .eyebrow, html.light .h-strip-t { font-weight: 800; }
 html.light .notice .ms { opacity: 1; }
 html.light .pose .main { opacity: .07; }
 html.light .pose .glow { opacity: .1; }
+
+/* New round D-Clix badge logo (assets/dclix-logo.png): no frame, soft gold glow */
+.brand-logo { width: 60px; height: 60px; border-radius: 50%; background: none; border: 0; }
+.brand-logo img { width: 60px; height: 60px; border-radius: 50%; filter: drop-shadow(0 4px 14px rgba(var(--accent-rgb),.35)); }
+.brand:hover .brand-logo { box-shadow: none; transform: rotate(-8deg) scale(1.08); }
+.f-logo .brand-logo { width: 56px; height: 56px; border-radius: 50%; } .f-logo .brand-logo img { width: 56px; height: 56px; }
+html.light .brand-logo img { filter: drop-shadow(0 4px 12px rgba(17,12,4,.18)); }
+@media (max-width: 420px) { .brand-logo, .brand-logo img { width: 46px; height: 46px; border-radius: 50%; } }

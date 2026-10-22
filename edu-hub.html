@@ -5,19 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Edu-Hub | D-Clix</title>
 <meta name="description" content="Guides, training and best practices for running your club digitally." />
-<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261022-1249" />
-<script src="js/shared/theme.js?v=20261022-1249"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=20261022-1316" />
+<script src="js/shared/theme.js?v=20261022-1316"></script>
 </head>
-<body >
+<body class="home sub">
 
 <div class="page-layer">
 <nav class="nav" aria-label="Main">
   <div class="nav-inner">
-    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="D-CLIX" /></span>
+    <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="D-CLIX" /></span>
       <span><span class="brand-name" style="display:block">D-Clix</span><span class="brand-sub">Club Management</span></span></a>
     <div class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html" class="active" aria-current="page">D-Clix Edu-Hub</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
     <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
@@ -26,21 +27,69 @@
 </nav>
 <main class="pt-nav">
 
-<section class="section"><div class="mw-6xl stack-12">
-  <div class="reveal "><div class="text-center stack-4"><div class="eyebrow">D-Clix Edu-Hub</div><h1 style="font-size:clamp(32px,5vw,48px);font-weight:600">Learn and More</h1><p class="lead" style="max-width:52rem;margin-inline:auto">D-Clix Edu-Hub is a self-learning portal designed to empower users with flexible, on-demand access to educational resources. Whether it's mastering D-Clix or deepening subject knowledge, the platform offers engaging content tailored for independent learning. Complementing this is the User Experience Center, a dynamic space where users can explore features, and enjoy hands-on interaction with the D-Clix system as part of the journey.</p></div></div>
+<!-- Hero -->
+<section class="hero h-hero p-hero p-hero-c">
+  <div class="blob a"></div><div class="blob b"></div>
+  <canvas class="sparkles" aria-hidden="true"></canvas>
+  <div class="p-hero-in">
+    <span class="badge h-load" style="--d:0s"><i data-icon="book" class="w-4"></i> D-Clix Edu-Hub</span>
+    <h1 class="h-load" style="--d:.08s">Learn D-Clix <span class="grad-text">at your own pace</span></h1>
+    <p class="lead h-load" style="--d:.16s">Edu-Hub is our self-learning portal: try the real D-Clix screens in an interactive tour, then keep the full user guide for when you need it.</p>
+    <div class="p-chips h-load" style="--d:.24s">
+      <a href="#tour"><i data-icon="monitor" class="w-4"></i> Interactive tour</a>
+      <a href="#guide"><i data-icon="book" class="w-4"></i> User guide (PDF)</a>
+      <a href="index.html#contact"><i data-icon="users" class="w-4"></i> Book a guided demo</a>
+    </div>
+  </div>
+</section>
 
-  <div class="reveal " data-delay="0.04"><div class="card demo-card"><div class="demo-head"><div class="icon-box sm"><i data-icon="monitor" class="w-6"></i></div><div><h2>Introduction to D-Clix (Basic)</h2><p class="muted">Learn how you can digitalise your registration and payment process with D-Clix</p></div></div>
+<!-- Interactive tour -->
+<section class="section" id="tour"><div class="mw-6xl h-stack">
+  <div class="reveal h-head"><span class="eyebrow">Interactive tour</span><h2>Introduction to D-Clix (Basic)</h2><p class="lead">Learn how you can digitalise your registration and payment process with D-Clix.</p></div>
+  <div class="reveal"><div class="card demo-card p-tour">
     <div class="demo-frame"><iframe src="https://app.supademo.com/embed/cm9v0n7f005xdwbbi4weyhmxe?embed_v=2" title="Learn &amp; Experience D-Clix — interactive tour" loading="lazy" allow="clipboard-write; fullscreen" allowfullscreen></iframe></div>
-    <p class="demo-note">Interactive tour — click through the real D-Clix screens. <a class="accent" href="https://app.supademo.com/embed/cm9v0n7f005xdwbbi4weyhmxe?embed_v=2" target="_blank" rel="noopener">Open full screen</a></p></div></div>
+    <p class="demo-note">Interactive tour — click through the real D-Clix screens. <a class="accent" href="https://app.supademo.com/embed/cm9v0n7f005xdwbbi4weyhmxe?embed_v=2" target="_blank" rel="noopener">Open full screen</a></p>
+  </div></div>
+</div></section>
 
-  <div class="reveal " data-delay="0.06"><div class="card cta-card" style="border-left-width:8px;padding:48px"><div class="stack-4"><div class="eyebrow">Elevate Your Club</div><h2 style="font-size:30px">A Comprehensive Guide to D-Clix</h2><p class="lead" style="font-size:16px">Elevate Your Club: A Comprehensive Guide to D-Clix is your essential user manual for mastering the D-Clix platform. Whether you're managing registrations, tracking attendance, handling payments, or communicating with members, this guide walks you through every feature step by step. Designed to help club administrators and coaches make the most of D-Clix's web and mobile tools, it ensures a smooth, efficient, and professional experience for running your club.</p></div><a class="btn-primary" href="https://www.d-clix.com/_files/ugd/fe9412_03cfed6f39fd44cdaa8849911db2472b.pdf" target="_blank" rel="noopener"><i data-icon="download" class="w-5"></i> Download PDF</a></div></div>
+<!-- What you'll learn -->
+<section class="section bordered"><div class="mw-7xl h-stack">
+  <div class="reveal h-head"><span class="eyebrow">What you'll learn</span><h2>Everything a club admin does every day</h2></div>
+  <div class="h-feats">
+    <div class="reveal"><div class="h-feat"><i data-icon="userplus" class="w-6"></i><h3>Registrations</h3><p>Add and approve new members and instructors.</p></div></div>
+    <div class="reveal" data-delay="0.04"><div class="h-feat"><i data-icon="qr" class="w-6"></i><h3>Attendance</h3><p>Track attendance for every class.</p></div></div>
+    <div class="reveal" data-delay="0.08"><div class="h-feat"><i data-icon="card" class="w-6"></i><h3>Payments</h3><p>Fees, invoices and receipts, collected online.</p></div></div>
+    <div class="reveal" data-delay="0.12"><div class="h-feat"><i data-icon="bell" class="w-6"></i><h3>Communication</h3><p>Keep members and parents updated.</p></div></div>
+  </div>
+</div></section>
+
+<!-- User guide -->
+<section class="section bordered" id="guide"><div class="mw-6xl p-guide">
+  <div class="reveal p-cover" aria-hidden="true"><div class="p-book"><img src="assets/dclix-logo.png" alt="" /><b>Elevate Your Club</b><small>A Comprehensive Guide to D-Clix</small><span>User manual · PDF</span></div></div>
+  <div class="reveal h-head left" data-delay="0.08">
+    <span class="eyebrow">User guide</span>
+    <h2>A Comprehensive Guide to D-Clix</h2>
+    <p class="lead">Your essential user manual for the D-Clix platform. It walks club administrators and coaches through every feature, step by step, on the web and in the mobile app.</p>
+    <ul class="h-ticks">
+      <li><b>Managing registrations</b> and member records</li>
+      <li><b>Tracking attendance</b> and handling payments</li>
+      <li><b>Communicating</b> with members and parents</li>
+    </ul>
+    <a class="btn-primary" href="https://www.d-clix.com/_files/ugd/fe9412_03cfed6f39fd44cdaa8849911db2472b.pdf" target="_blank" rel="noopener"><i data-icon="download" class="w-5"></i> Download PDF</a>
+  </div>
+</div></section>
+
+<!-- Call to action -->
+<section class="section bordered h-final"><div class="mw-6xl p-cta reveal">
+  <div class="p-cta-copy"><span class="eyebrow">Prefer a person?</span><h2>Get a guided walkthrough</h2><p class="lead">Book a free demo and a D-Clix specialist will show you around with your own club's setup.</p></div>
+  <div class="p-cta-btns"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><a class="btn-outline" href="pricing.html">See pricing</a></div>
 </div></section>
 
 </main>
 <footer class="footer">
   <div class="footer-grid">
     <div class="f-brand">
-      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.svg" alt="" /></span><span class="name">D-Clix</span></a>
+      <a class="f-logo" href="index.html" aria-label="D-Clix home"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="" /></span><span class="name">D-Clix</span></a>
       <p class="desc">Grow revenue and streamline your club with a modern, reliable club management system.</p>
       <h4 class="t">Follow us</h4>
       <div class="social">
@@ -66,9 +115,9 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/icons.js?v=20261022-1249"></script>
-<script src="js/shared/main.js?v=20261022-1249"></script>
-<script src="js/shared/i18n.js?v=20261022-1249"></script>
-<script src="js/shared/whatsapp.js?v=20261022-1249"></script>
+<script src="js/shared/icons.js?v=20261022-1316"></script>
+<script src="js/shared/main.js?v=20261022-1316"></script>
+<script src="js/shared/i18n.js?v=20261022-1316"></script>
+<script src="js/shared/whatsapp.js?v=20261022-1316"></script>
 </body>
 </html>
