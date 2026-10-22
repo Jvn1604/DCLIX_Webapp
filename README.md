@@ -1,220 +1,193 @@
-# D-Clix Club Management (static site)
+# D-Clix Website
 
-## Run it
-- Website only: double-click `index.html`.
-- Website + database (signup, payments, emails): see **Backend** below, then double-click `start-local.bat`.
+The public website for **D-Clix**, a club management system for martial arts and sports clubs in Malaysia
+(by Raig Technologies (M) Sdn Bhd). Clubs learn about D-Clix here, choose a plan, register, pay online and then
+log in to the D-Clix club system at [maclubsystem.com](https://www.maclubsystem.com/index.php?/login/proceed).
 
-## Deploy anywhere
-Upload the whole folder to any static host: your company web server / cPanel (`public_html`), Netlify, GitHub Pages,
-Cloudflare Pages, Nginx/Apache, AWS S3. All links are relative, so no rewrite rules are needed.
+- **Live (test) site:** https://jvn1604.github.io/DCLIX_Webapp/
+- **Built with:** plain HTML, CSS and JavaScript (no build step) + a small PHP / MySQL API for signup, payment and emails
+- **Languages:** English and Bahasa Melayu (switch at the top of every page) · dark and light theme
+- **Team:** @Jvn1604 · @thurghathaarani0103
+
+---
 
 ## Site flow
-- **Visitor → client:** Home / Pricing → Select Plan → Club details → Payment → Done (a 4-step progress bar on each step; the plan can also be chosen on the registration page).
-- **After payment:** the client and the sales team both get an email. The client's welcome email has a "Log in to D-Clix" button.
-- **Login:** every "Club Login" / "Log in" button opens the D-Clix club system at
-  `https://www.maclubsystem.com/index.php?/login/proceed`. This website has no admin portal or login of its own.
-  The address used in emails is `login_url` in `api/config.php`.
 
-## Folder layout
 ```
-index.html, about.html, pricing.html, edu-hub.html, community.html   Marketing site (root)
-privacy.html, terms.html, refund.html, 404.html                     Legal pages + "page not found"
-arena/      club-register, payment, payment-status, mock-gateway (signup + payment flow)
-api/        PHP + MySQL backend (see "Backend" below; api/config.php is never committed)
-css/        style.css (shared + theme colour)
-js/shared/      theme.js, icons.js, main.js, config.js (where the API is), mock-api.js (browser test API), i18n.js (English / Bahasa Melayu), whatsapp.js (chat button)
-js/arena/       sports.js (club types), signup.js (club registration), payment.js
-assets/     logo, favicon, images
+Visitor                     Website                                   Behind the scenes
+───────                     ───────                                   ─────────────────
+Home / Pricing  ──▶  Choose a plan (monthly or yearly)
+                ──▶  1. Club details  (+ SSM certificate upload)  ──▶  club + lead saved · emails to client and sales
+                ──▶  2. Payment       (billing details, "I agree")  ──▶  invoice + bill · Billplz (FPX / card)
+                ──▶  3. Payment result (paid / failed / pending)   ──▶  welcome + receipt to client · "payment received" to sales
+                ──▶  4. Club Login    ──▶  maclubsystem.com (the sales team sets up the club's account there)
+
+Home page "Book a free demo" form  ──▶  lead saved · emails to sales and the visitor
 ```
-Pages inside `arena/` load shared files with `../` (for example `../css/style.css`).
 
-## Change the event banners (home and pricing pages)
-1. Put the picture (`.png` `.jpg` `.webp` `.svg`) or video (`.mp4`) in `assets/banners/`.
-2. Open `assets/banners/banners.js` and add one line per slide (instructions are at the top of that file). Two or more slides become a slider.
-3. Each slide has `pages: ['home', 'pricing']` to choose where it appears (the pricing page shows a smaller banner at the top).
-4. Use `start` / `end` dates so an event banner switches itself on and off. `preview: true` shows a slide only on your own PC, so you can check it before it goes live.
-5. Commit and push. With no active slide, the banner disappears.
-
-Sizes: desktop 1600 × 500 px; optional phone picture 800 × 600 px (give one for every slide or for none).
-
-## Before you push: refresh visitors' saved copies
-Run `node set-version.js` before committing CSS or JS changes. It adds a new `?v=` number to every page's own
-style and script links, so browsers load the new files at once instead of a saved copy (GitHub Pages lets browsers keep files for about 10 minutes).
-
-## Change the club logos (home page globe)
-1. Put the logo files (`.png` `.jpg` `.webp` `.svg`, square works best) in `assets/clubs/`.
-2. Open `assets/clubs/clubs.js` and set the `logo` path on each club's line. A line with `logo: ''` shows a sample logo.
-3. Add or remove lines freely (about 40 to 60 clubs looks best). Only show clubs that agreed to be shown.
-4. The "200+ clubs" and "29,000 students" numbers are in the "Trusted by" section of `index.html`.
-5. Commit and push.
-
-## Change the theme colour
-Edit the three lines at the top of `css/style.css`: `--accent`, `--accent-light` and `--accent-rgb` (the same colour as R,G,B numbers).
+- Every **Club Login** button opens maclubsystem.com. This website has no login of its own.
+- Without a server (for example on GitHub Pages), signup and payment run in **test mode** in the browser: no real money, nothing sent.
 
 ## Pages
-| File | Page |
+
+| Page | What it is |
 |---|---|
-| index.html | Home |
-| about.html | About D-Clix |
-| pricing.html | Plans (monthly / yearly) |
-| edu-hub.html | Edu-Hub + PDF guide download |
-| community.html | Join Our Community (WhatsApp + Facebook) |
-| arena/club-register.html?sport=karate | Club registration |
-| arena/payment.html | Signup step 2: plan + billing details, then Billplz |
-| arena/payment-status.html | Where clients land after paying (paid / failed / pending) |
-| arena/mock-gateway.html | Test payment page used by the browser test API (no real money) |
-| privacy.html · terms.html · refund.html | Privacy Policy, Terms & Conditions (company text) and No Refund Policy (draft) |
-| 404.html | "Page not found" page (GitHub Pages shows it for any missing address) |
+| `index.html` | Home: hero, event banner, sports, clubs globe, problems we solve, product tour, features, testimonials, pricing preview, FAQ, demo form |
+| `about.html` · `pricing.html` · `edu-hub.html` · `community.html` | About D-Clix · plans (monthly / yearly) · guides and videos · community |
+| `arena/club-register.html` → `payment.html` → `payment-status.html` | The signup flow (steps 1 to 3) |
+| `privacy.html` · `terms.html` · `refund.html` · `404.html` | Legal pages and "page not found" |
 
-## Files
-css/style.css · js/shared/theme.js (saved theme) · js/shared/icons.js · js/arena/sports.js (18 sports) · js/shared/main.js (shared behaviour)
-· js/arena/signup.js (club signup) · assets/ (logo + images)
+## Folder layout
 
-| File | Purpose |
-|---|---|
-| js/shared/config.js | Where the API lives (`PRODUCTION_API`) + the `dclixApi()` helper |
-| js/shared/mock-api.js | Browser TEST API used when there is no server (see below) |
-
-## Backend (PHP + MySQL) — the automated signup
 ```
-pricing.html → Select Plan → arena/club-register.html ──POST api/signup.php──▶ club + lead (Pending Payment) · emails to client + sales
-            → arena/payment.html ──POST api/checkout.php──▶ invoice + Billplz bill ──▶ Billplz payment page
-            ◀── api/billplz-return.php (+ api/billplz-callback.php) re-checks the bill with Billplz, then automatically:
-                club marked Paid/Active + plan dates · receipt number
-                emails: welcome (with the Club Login link) + receipt to the client, "payment received" to sales
-home page contact form ──POST api/contact.php──▶ lead (source "Contact form") · emails to sales + the visitor
+DCLIX_Webapp/
+├── index.html, about.html, pricing.html, edu-hub.html, community.html     website pages
+├── privacy.html, terms.html, refund.html, 404.html                        legal pages, page not found
+├── arena/          club-register, payment, payment-status, mock-gateway    signup and payment flow
+├── css/style.css   all styles (theme colours are the first lines)
+├── js/shared/      main.js (shared behaviour and animations) · i18n.js (Bahasa Melayu) · banner.js (event banners)
+│                   globe.js (clubs globe) · config.js (where the API is) · mock-api.js (test mode) · icons.js
+│                   theme.js · whatsapp.js (chat button)
+├── js/arena/       signup.js (registration) · payment.js · sports.js (the 18 sports)
+├── assets/         logo, favicon, images
+│   ├── banners/    event banner pictures + banners.js (what to show, where and when)
+│   └── clubs/      club logos + clubs.js (the clubs on the home page globe)
+├── api/            PHP + MySQL: signup, checkout, contact form, Billplz, emails, file uploads
+│                   (api/config.php and api/storage/ are never committed)
+├── set-version.js  run before pushing CSS/JS changes (see below)
+└── start-local.bat starts the site on your PC
 ```
-Clubs must upload their **registration certificate** (SSM / ROS / PJS: PDF, JPG or PNG, up to 5 MB) on the registration form.
-The file is checked on the server, stored in `api/storage/uploads/ssm/` (git-ignored and blocked from the web) and attached to the
-sales "New signup" and "Payment received" emails. In browser test mode only the file name is kept.
 
-Everything is saved in the MySQL database (`records`, `bills`, `email_outbox` …) so nothing is lost; the sales team
-works from the emails. The club's account in the D-Clix club system (maclubsystem.com) is set up by the team.
+## Run it on your PC
 
-### Browser test API (GitHub Pages without a server)
-When `PRODUCTION_API` in `js/shared/config.js` is empty and the site is not on `localhost` / `127.0.0.1`,
-signup, payment and the contact form use `js/shared/mock-api.js` instead of the PHP API. Payments go to
-`arena/mock-gateway.html` (Pay / Cancel, no money) and everything — including the emails that would be sent — is
-saved only in that browser (localStorage key `dclix_test_api`). To look at it, open the browser console and run
-`DCLIX_MOCK.data()`; `DCLIX_MOCK.reset()` clears it.
-
-### Run it on your PC (XAMPP)
-1. Start **MySQL** in the XAMPP Control Panel.
-2. First time only, in this folder: `C:\xampp\php\php.exe api/install.php`
-   (creates database `dclix`, a MySQL user, `api/config.php`, the tables and the plan prices).
+1. Install XAMPP and start **MySQL** in the XAMPP Control Panel.
+2. First time only, in this folder: `C:\xampp\php\php.exe api/install.php` (creates the database, tables and `api/config.php`).
 3. Double-click `start-local.bat` and open http://127.0.0.1:8000.
-4. With `mail.driver = log`, emails are not sent; they are saved in `api/storage/mail/` (open the `.html` files) and in the `email_outbox` table.
 
-### Configuration — `api/config.php` (git-ignored, never commit it)
+Emails are not really sent on your PC: they are saved as `.html` files in `api/storage/mail/` (with any attachments).
+
+## Everyday changes
+
+| I want to… | Do this |
+|---|---|
+| Show an event or promo banner | Put the picture in `assets/banners/`, add a line in `assets/banners/banners.js` (`pages`, `start`, `end`; instructions at the top of the file). Desktop 1600 × 500, phone 800 × 600 |
+| Change the clubs on the globe | Put logos in `assets/clubs/` and edit `assets/clubs/clubs.js` (only clubs that agreed to be shown) |
+| Change a text | Edit the page, then change the same English line in `js/shared/i18n.js` so the Bahasa Melayu still matches |
+| Change the theme colour | The first lines of `css/style.css`: `--accent`, `--accent-light`, `--accent-rgb` |
+| Push CSS or JS changes | Run `node set-version.js` first, so visitors' browsers load the new files at once |
+
+## Working together (please read)
+
+1. **Pull before you start:** `git pull origin main`. Most of our merge problems came from editing an old copy.
+2. Commit small, clear changes and push soon.
+3. If `git pull` shows a **conflict**, stop and ask before committing. Never fix it by keeping your old copy of a whole file.
+4. Write what you are working on in the **Team board** below, so we don't edit the same thing at the same time.
+
+---
+
+## Future plan
+
+Tick a box (`[x]`) when it is done. Add your GitHub name after a task you take, e.g. `(@Jvn1604)`.
+
+### 1. Before launch (must do)
+- [ ] Get from the company: real dashboard screenshots, club logos (with permission), testimonials with photos, real figures
+- [ ] Company confirms: office address, plan names and prices, monthly/yearly vs. the 12-month auto-renewal in the Terms, the No Refund Policy text
+- [ ] Replace the home page samples (dashboard mock-up, testimonial initials) with the real material
+- [ ] Connect Billplz **sandbox**, test real FPX/card test payments, then switch to **live** keys
+- [ ] Connect email (SMTP) and test every email, including the certificate attachment
+- [ ] Put the `api/` folder on the company's PHP hosting (HTTPS) and set `PRODUCTION_API` in `js/shared/config.js`
+- [ ] Point **d-clix.com** to the new site
+- [ ] Full test on Chrome, Edge, Safari (iPhone) and Chrome (Android), in English and BM, dark and light
+- [ ] One real signup with a small real payment, then refund it
+
+### 2. Website revamp (keep improving)
+- [x] New home page: product hero, problems we solve, product tour, trust section, pricing preview, FAQ, demo form
+- [x] Event banners on home and pricing (Deepavali offer, free demo)
+- [x] SSM certificate upload on registration
+- [x] Clubs globe with real numbers · App Store / Google Play links
+- [ ] Give About, Pricing, Edu-Hub and Community the same new look as the home page
+- [ ] New **Customers** page with club stories (before / after, with photos)
+- [ ] New **Features** page with a real screen for each module
+- [ ] Edu-Hub: video tutorials
+- [ ] Faster pages: compress images (WebP), Lighthouse score 90+ on phone
+
+### 3. After launch
+- [ ] Visitor analytics with a cookie notice: visits, demo bookings, signups, payments
+- [ ] Automatic renewal invoices before a subscription ends
+- [ ] Create the club's account on maclubsystem.com automatically after payment (if that system has an API)
+- [ ] SEO: sitemap, page descriptions, social preview images, Google Business Profile
+- [ ] Bahasa Melayu emails
+
+---
+
+## Team board
+
+Add a row when you start something and update it when you finish. Newest at the top.
+
+### Working on now
+
+| Task | Who | Started | Status / notes |
+|---|---|---|---|
+| _(example)_ New look for the About page | @Jvn1604 | 2026-10-22 | In progress |
+|  | @thurghathaarani0103 |  |  |
+
+### Done log
+
+| Date | Who | What changed |
+|---|---|---|
+| 2026-10-22 | @Jvn1604 | README rewritten: summary, site flow, folder layout, future plan, team board |
+| 2026-10-22 | @thurghathaarani0103 | Removed the "How it works" (RAP) section from the home page |
+| 2026-10-21 | @Jvn1604 | More space between form fields on registration and payment |
+| 2026-10-21 | @thurghathaarani0103 | App Store / Google Play links in every footer |
+| 2026-10-21 | @thurghathaarani0103 | Clubs globe with 200+ clubs and 29,000+ students |
+| 2026-10-21 | @Jvn1604 | Event banners (home + pricing), SSM upload, home page animations, background figures on all pages |
+| 2026-10-21 | @Jvn1604 | New home page design |
+
+---
+
+## Technical reference
+
+<details>
+<summary>Backend, settings and going live (click to open)</summary>
+
+**How signup works**
+
+```
+club-register.html ──POST api/signup.php──▶ club + lead (Pending Payment) + certificate file · emails to client + sales
+payment.html       ──POST api/checkout.php──▶ invoice + Billplz bill ──▶ Billplz payment page
+                   ◀── api/billplz-return.php (+ billplz-callback.php) re-checks the bill, then marks it paid and sends the emails
+index.html form    ──POST api/contact.php──▶ lead (source "Contact form") · emails to sales + visitor
+```
+
+- The registration certificate (PDF / JPG / PNG, up to 5 MB) is checked on the server, stored in
+  `api/storage/uploads/ssm/` (never committed, blocked from the web) and attached to the sales emails.
+- **Test mode:** when `PRODUCTION_API` in `js/shared/config.js` is empty and the site is not on your PC, everything runs
+  in the browser (`js/shared/mock-api.js`); payments go to `arena/mock-gateway.html`. In the browser console,
+  `DCLIX_MOCK.data()` shows what was saved and `DCLIX_MOCK.reset()` clears it.
+
+**Settings in `api/config.php`** (never commit this file)
+
 | Setting | What it does |
 |---|---|
-| `billplz.mode` | `mock` = built-in test payment page · `sandbox` = Billplz sandbox · `live` = real money |
-| `billplz.api_key`, `collection_id`, `x_signature_key` | From your Billplz account (Settings / Billing) |
-| `mail.driver` | `log` = save emails in `api/storage/mail/` only · `smtp` = really send (fill in `mail.smtp`) |
-| `mail.sales_to` | Inbox that receives new-signup, payment and enquiry alerts |
-| `login_url` | Club Login address used in the welcome email (default: maclubsystem.com login) |
-| `site_url`, `api_url` | Public addresses used in emails and for Billplz redirects/callbacks |
-| `allowed_origins` | Websites allowed to call the API (add your GitHub Pages address) |
-| `debug` | `true` only on your PC: shows error details on screen |
+| `billplz.mode` | `mock` = test page · `sandbox` = Billplz sandbox · `live` = real money |
+| `billplz.api_key`, `collection_id`, `x_signature_key` | From the Billplz account |
+| `mail.driver` | `log` = save emails to `api/storage/mail/` · `smtp` = really send (fill in `mail.smtp`) |
+| `mail.sales_to` | Inbox for new-signup, payment and enquiry emails |
+| `login_url` | Club Login address in the welcome email |
+| `site_url`, `api_url`, `allowed_origins` | Public addresses and the websites allowed to call the API |
+| `debug` | `true` only on your PC |
 
-### Going live (GitHub Pages website + API on PHP hosting)
-1. Upload the `api` folder to PHP hosting with HTTPS (e.g. company cPanel), create a MySQL database and a `config.php`
-   there, then run `php api/install.php` (or import `schema.sql`).
-2. In `api/config.php`: `debug => false`, real `site_url` (the GitHub Pages address), `api_url`, Billplz keys, SMTP.
-3. In `js/shared/config.js` set `PRODUCTION_API` to the HTTPS address of the api folder and push to GitHub.
-4. Billplz callbacks cannot reach a home PC, so locally payments are confirmed only by the redirect back to the site.
-   Once hosted, the callback (`api_url` + `/billplz-callback.php`, sent with each bill) confirms them even if the client closes the browser.
+**Going live**
 
-### Security notes
-- Card and bank details are entered only on Billplz. A signup is marked paid only after the bill is re-checked with Billplz.
-- Secrets live in `api/config.php`, which is git-ignored. `api/.htaccess` blocks web access to config, lib and logs on Apache.
+1. Upload `api/` to PHP hosting with HTTPS, create the MySQL database and `config.php`, run `php api/install.php`.
+2. In `config.php`: `debug => false`, real addresses, Billplz keys, SMTP, `sales_to`.
+3. Set `PRODUCTION_API` in `js/shared/config.js`, run `node set-version.js`, push.
+4. Back up the database **and** `api/storage/uploads/` (club certificates) every day.
+
+**Security**
+
+- Card and bank details are entered only on Billplz; a signup is marked paid only after the bill is re-checked.
+- Secrets stay in `api/config.php` (git-ignored). `api/.htaccess` blocks web access to config, code and storage on Apache.
 - Signup and the contact form are rate-limited per IP address.
 
-### Not automated yet
-- Creating the club's account in the D-Clix club system (maclubsystem.com) — the sales team does this after the "payment received" email.
-- Renewal invoices when a subscription is about to end, and suspending clubs whose subscription has ended.
-
-## Things to connect (marked `TODO` in the JS)
-1. Club registration and the home page contact form
-   (saved as a lead, source "Contact form", with emails to sales and the visitor) are connected to the API.
-2. Boxing/MMA hero tiles, testimonial avatars, dashboard photos, news and referral slides load from the same remote
-   image URLs the prototype used. Download them (or your own photos) into assets/images and update the src values.
-3. Live scores, rankings, fixtures and tournaments are sample data.
-
-## To-do task list
-Tick a box (`[x]`) when a task is done. **P1** = before going live · **P2** = soon after · **P3** = nice to have.
-
-### 🔧 Fix
-- [ ] **P1** Make all database tables use the same collation (`utf8mb4_unicode_ci`). Some tables use the default `utf8mb4_general_ci`, which breaks queries that join them.
-- [ ] **P3** Plans and prices are written in three places (`js/shared/main.js`, `js/arena/signup.js`, database `settings.plans`). Load them from the API everywhere.
-
-### 🔄 Update / connect
-- [ ] **P1** Home page placeholders (marked with comments in `index.html`) — replace once the company sends the material:
-  the dashboard mock-up in the hero (sample data) → a real screenshot of the club system; the "Made for every kind of club" sports strip → real club logos (with permission);
-  the numbers band (18 sports, 3 attendance methods…) → real usage figures; testimonial initials → real photos, club names and states.
-- [ ] **P1** Confirm the home page claims with the company: parents' FPX payments in the club system, support by WhatsApp, contact "within one working day", yearly plan = two months free.
-- [ ] **P1** Connect the **Billplz sandbox** (API secret key, collection ID, XSignature key in `api/config.php`, `billplz.mode = sandbox`) and test real FPX/card test payments.
-- [ ] **P1** Connect **email (SMTP)** — Brevo or company mail — set `mail.driver = smtp`, `from_email`, `sales_to`, then test every email type. The SMTP code is written but untested.
-- [x] **P1** Privacy Policy and Terms & Conditions replaced with the company's own published text (see "Match the live site" for open issues).
-- [ ] **P1** Confirm contact details, FAQ wording and the copyright year in every footer.
-- [ ] **P2** The registration form still asks the client to choose a password, but login now happens on maclubsystem.com. Decide whether to remove the password fields or pass them to the club system.
-- [ ] **P2** Download the remote images (Boxing/MMA tiles, testimonials, news, referral slides) into `assets/images/` and update the `src` values.
-- [ ] **P2** Replace sample data (live scores, rankings, fixtures, tournaments) with real data.
-
-### 🆚 Match the live site (d-clix.com)
-- [ ] **P1** Confirm the **office address**: live English site says Suite **3A42** Level 4, live Malay site says Suite **650** Level 6, this site says Suite **442** Level 4.
-- [ ] **P1** Plan names and prices: live site uses **Basic / Advance / Premium**, monthly only, with promo prices (~~RM199.90~~ RM100, ~~RM269.90~~ RM150, ~~RM309.90~~ RM200) and different feature lists; this site uses Basic / Standard / Premium, monthly + yearly.
-- [x] **P1** Privacy Policy and Terms now use the company's exact text from the live site; clients must tick "I agree" on the payment page (time + IP saved on the lead).
-- [ ] **P1** Signup sells **monthly or yearly** plans, but the Terms say subscriptions **auto-renew every 12 months** with an early-termination penalty — the company must decide which is correct, then update either the plans or the Terms.
-- [ ] **P1** **No Refund Policy** (`refund.html`) is a draft written from the company's Terms because the live page does not exist — the company must approve or replace it, then remove the yellow "Draft for company approval" box. It is linked from every footer, the pricing page and the payment "I agree" box.
-- [ ] **P2** Ask the company to fix their legal text: the Privacy Policy contains a drafting note ("This revised section aligns with the Software Subscription Agreement…"), refers to Sections 9.1, 10, 11.4 and 12.1 that do not exist, and one Terms list item is missing "iii.". The Privacy Policy is also mostly contract terms — PDPA 2010 normally needs a notice saying what personal data is collected, why, and how to request access or correction.
-- [x] **P2** Testimonials now match the live English site (Coach Ashraff, Master Uthaya Kumar, Cikgu Akmal Hamdi).
-- [ ] **P2** Hero wording: live site says "Your club details at your fingertips manage it anytime anywhere".
-- [x] **P2** "Club Login" opens maclubsystem.com, the same as the live site (the admin portal was removed).
-- [ ] **P3** Report to the live site owner: the "No Refund Policy" link on the pricing page is broken, and the Malay home page still shows template text ("Ini adalah ruang untuk mengalu-alukan pengunjung…").
-- [ ] **P3** The user manual PDF links to the live site's copy; save it into `assets/` if it should not depend on d-clix.com.
-- [ ] **P3** Bahasa Melayu covers the main website pages; the signup forms and legal pages are English only.
-
-### ✨ Improve
-- [ ] **P2** Automatic **renewal invoices** before a subscription ends.
-- [ ] **P2** Create the club's account in maclubsystem.com automatically after payment, if that system offers an API.
-- [ ] **P3** Scheduled clean-up of old rate-limit records and logs.
-- [ ] **P3** SEO: `sitemap.xml`, `robots.txt`, social preview images, page descriptions.
-- [ ] **P3** Bahasa Melayu version of the emails.
-- [ ] **P3** Accessibility check (keyboard use, screen readers, colour contrast) on every page.
-
-### 🗑️ Delete / clean up
-- [ ] **P1** Remove test records (e.g. Phoenix Martial Arts Academy) from the database before launch, or reinstall it.
-- [ ] **P1** On the live server: `debug => false`, `billplz.mode` ≠ `mock` (this also disables `api/mock-gateway.php`).
-- [ ] **P2** The database still has tables left from the removed admin portal (`users`, `sessions`, `auth_codes`, `login_log`). They are harmless; drop the unused ones when convenient.
-- [ ] **P2** Delete the git backup tags `backup/my-work-before-merge` and `backup/github-before-merge` once everyone confirms nothing is missing.
-- [ ] **P3** Remove CSS and images left over from the original prototype that no page uses.
-- [ ] **P3** `start-local.bat` is for local testing only — do not upload it to the live server.
-
-### ✅ UAT (user acceptance testing)
-**Website**
-- [ ] Every page opens from the menu and footer on desktop and phone, in dark and light theme.
-- [ ] Every "Club Login" / "Log in" button opens the maclubsystem.com login page.
-- [ ] Contact form: valid enquiry saved (lead with source "Contact form", emails to sales and the visitor); missing/invalid fields show messages.
-- [ ] Unknown address shows the 404 page (on GitHub Pages too).
-
-**Signup and payment**
-- [ ] Pricing → Select Plan (each plan, monthly and yearly) → registration shows the right plan; plan can be changed there.
-- [ ] Validation: empty fields, invalid email, weak password, passwords not matching, duplicate club code, existing email.
-- [ ] Signup → client gets "Complete your registration" email, sales gets "New signup" email.
-- [ ] Payment success → client gets welcome (with Club Login link) + receipt emails, sales gets "Payment received" email.
-- [ ] Payment cancelled → "Try again" works with saved details.
-- [ ] "Complete payment" link from the email works; registering again with the same email + password continues the same signup.
-- [ ] Amounts on invoice, receipt and Billplz bill match (price + RM 1.20 fee).
-
-**Browsers and devices**
-- [ ] Chrome, Edge, Firefox on Windows; Safari on iPhone; Chrome on Android.
-
-### 🚀 Go-live checklist
-- [x] PHP hosting with HTTPS (e.g. company cPanel) and a MySQL database.
-- [ ] Upload `api/`, create `api/config.php` on the server, run `php api/install.php`.
-- [ ] Set `site_url` (GitHub Pages address), `api_url`, `allowed_origins`, Billplz **live** keys, SMTP, `sales_to`, `login_url`.
-- [ ] Set `PRODUCTION_API` in `js/shared/config.js` and push.
-- [ ] Email sender domain set up (SPF/DKIM) so emails do not go to spam.
-- [ ] Daily database backups switched on and a restore tested once. Back up `api/storage/uploads/` too (club certificates).
-- [ ] One real end-to-end signup with a small real payment, then refund it.
+</details>

@@ -460,6 +460,9 @@
     'Please upload your SSM / registration certificate.': 'Sila muat naik sijil SSM / pendaftaran anda.', 'Upload a PDF, JPG or PNG file.': 'Muat naik fail PDF, JPG atau PNG.',
     'This file is larger than 5 MB. Please upload a smaller copy.': 'Fail ini melebihi 5 MB. Sila muat naik salinan yang lebih kecil.',
 
+    /* ---- home page (revamp) ---- */
+    'Live': 'Langsung',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',

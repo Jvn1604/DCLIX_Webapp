@@ -976,13 +976,13 @@ html.light .h-float { box-shadow: 0 14px 30px rgba(17,12,4,.12); }
 .h-marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
 .h-track { display: flex; width: max-content; gap: 44px; animation: hMarquee 48s linear infinite; }
 .h-marquee:hover .h-track { animation-play-state: paused; }
-.h-track a { position: relative; font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--muted); opacity: .75; white-space: nowrap; letter-spacing: -.01em; text-decoration: none; padding: 6px 4px; border-radius: 10px;
+.h-track span { position: relative; cursor: default; font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--muted); opacity: .75; white-space: nowrap; letter-spacing: -.01em; text-decoration: none; padding: 6px 4px; border-radius: 10px;
   transition: color .25s, opacity .25s, text-shadow .3s, transform .3s cubic-bezier(.34,1.56,.64,1); }
-.h-track a::after { content: "·"; position: absolute; right: -26px; color: var(--accent); opacity: .7; pointer-events: none; }
-.h-track a:hover, .h-track a:focus-visible { color: var(--accent-light); opacity: 1; transform: translateY(-2px) scale(1.08);
+.h-track span::after { content: "·"; position: absolute; right: -26px; color: var(--accent); opacity: .7; pointer-events: none; }
+.h-track span:hover, .h-track span:focus-visible { color: var(--accent-light); opacity: 1; transform: translateY(-2px) scale(1.08);
   text-shadow: 0 0 12px rgba(var(--accent-rgb),.85), 0 0 28px rgba(var(--accent-rgb),.5), 0 0 48px rgba(var(--accent-rgb),.3); }
-html.light .h-track a:hover, html.light .h-track a:focus-visible { color: var(--accent); text-shadow: 0 0 18px rgba(var(--accent-rgb),.45); }
-.h-marquee:hover .h-track a:not(:hover) { opacity: .45; }
+html.light .h-track span:hover, html.light .h-track span:focus-visible { color: var(--accent); text-shadow: 0 0 18px rgba(var(--accent-rgb),.45); }
+.h-marquee:hover .h-track span:not(:hover) { opacity: .45; }
 @keyframes hMarquee { to { transform: translateX(-50%); } }
 
 /* 4. Problems */
@@ -1235,6 +1235,7 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 .f-stores .store b { font-size: 16px; }
 .f-stores .store small { font-size: 9px; }
 .f-brand .social + .t { margin-top: 28px; }
+<<<<<<< HEAD
 
 /* Home: fees, grading and attendance modules */
 .h-module { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding: 56px 0; border-top: 1px solid var(--line); }
@@ -1280,3 +1281,97 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 @media (max-width: 560px) { .h-steps { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .h-module { grid-template-columns: 1fr; gap: 28px; padding: 40px 0; } .h-module.rev .h-vis { order: 0; } }
 @media (max-width: 560px) { .h-tiles { grid-template-columns: 1fr; } }
+=======
+/* ---------- Background figures on every page + home page polish ---------- */
+/* Page content sits above the moving figures on pages without .page-layer (arena/) */
+body > main { position: relative; z-index: 10; }
+
+/* Gold reading-progress line (home) */
+.scroll-bar { position: fixed; left: 0; right: 0; top: 0; height: 3px; z-index: 60; transform-origin: 0 50%; transform: scaleX(0);
+  background: linear-gradient(90deg, var(--accent), var(--accent-light)); box-shadow: 0 0 12px rgba(var(--accent-rgb),.7); pointer-events: none; }
+
+/* Hero: slow shimmer across "not the paperwork" */
+.h-hero .grad-text { background-image: linear-gradient(90deg, var(--accent) 0%, var(--accent-light) 25%, #fff1cf 50%, var(--accent-light) 75%, var(--accent) 100%);
+  background-size: 200% auto; animation: hShimmer 7s linear infinite; }
+@keyframes hShimmer { to { background-position: -200% center; } }
+
+/* Dashboard mock: pulsing "Live" */
+.h-live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #22c55e; }
+.h-live i { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.6); animation: hLive 1.8s ease-out infinite; }
+@keyframes hLive { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,.6); } 80%, 100% { box-shadow: 0 0 0 7px rgba(34,197,94,0); } }
+
+/* Problem cards: the line through the old way is drawn when the card scrolls in */
+.h-pain .was span:not(.mk) { text-decoration: none; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  background: linear-gradient(rgba(248,113,113,.95), rgba(248,113,113,.95)) no-repeat 0 58% / 0% 2px; transition: background-size .9s cubic-bezier(.65,0,.35,1) .35s; }
+.reveal.in .h-pain .was span:not(.mk) { background-size: 100% 2px; }
+.h-pain .was .mk { transform: scale(0); transition: transform .45s cubic-bezier(.34,1.56,.64,1) .15s; }
+.h-pain .now .mk { transform: scale(0); transition: transform .45s cubic-bezier(.34,1.56,.64,1) .9s; }
+.reveal.in .h-pain .mk { transform: scale(1); }
+
+/* Product tour: the gold pill slides between tabs */
+.h-tabs.has-pill { position: relative; }
+.h-tabs.has-pill button { position: relative; z-index: 1; }
+.h-tabs.has-pill button[aria-selected="true"] { background: transparent; box-shadow: none; }
+.tab-pill { position: absolute; left: 0; top: 6px; bottom: 6px; border-radius: 13px; background: var(--accent); box-shadow: 0 8px 20px rgba(var(--accent-rgb),.3);
+  transition: transform .45s cubic-bezier(.22,1,.36,1), width .45s cubic-bezier(.22,1,.36,1); }
+
+/* Section headings: a short gold line grows under each eyebrow as it scrolls in */
+.h-head .eyebrow { position: relative; padding-bottom: 10px; }
+.h-head .eyebrow::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 36px; height: 2px; border-radius: 2px; background: var(--accent); transform: translateX(-50%) scaleX(0); transition: transform .6s cubic-bezier(.22,1,.36,1) .2s; }
+.h-head.left .eyebrow::after { left: 0; transform: scaleX(0); transform-origin: 0 50%; }
+.reveal.in.h-head .eyebrow::after, .reveal.in .h-head .eyebrow::after { transform: translateX(-50%) scaleX(1); }
+.reveal.in.h-head.left .eyebrow::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .h-hero .grad-text, .h-live i { animation: none; }
+  .h-pain .was span:not(.mk) { background-size: 100% 2px; transition: none; }
+  .h-pain .mk { transform: none; transition: none; }
+  .tab-pill { transition: none; }
+  .h-head .eyebrow::after { transform: translateX(-50%) scaleX(1); transition: none; }
+  .h-head.left .eyebrow::after { transform: scaleX(1); }
+}
+
+/* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
+/* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
+:root { --accent-ink: var(--accent); }
+html.light { --muted: #5f6672; --accent-ink: #9a5a0b; }
+/* Gold used as a text colour (generated from every rule that sets color: var(--accent)) */
+html.light .accent, html.light .eyebrow, html.light .btn-outline:hover, html.light .badge,
+html.light .icon-box, html.light .nav-links a:hover, html.light .nav-links .linkbtn:hover, html.light .nav-links a.active,
+html.light .icon-btn:hover, html.light .hero-copy .lead b, html.light .faq-item.open .faq-q .i, html.light .toast,
+html.light label.lbl .req, html.light span.lbl .req, html.light .plan .pn, html.light .plan .save,
+html.light .phone .url a, html.light .laptop .side div.on, html.light .laptop .kpi small em, html.light .sport-card .ic,
+html.light .sport-card:hover span, html.light .portal-head .big-ic, html.light .portal-head h2 em, html.light .back-link:hover,
+html.light .opt:hover h3, html.light .opt:hover .chev, html.light .stats .v, html.light .link-accent,
+html.light .feat-card .ic, html.light .news-card:hover h3, html.light .news-card .more, html.light .rank .r > :first-child,
+html.light .kv .v, html.light .arena-footer .lk a:hover, html.light .ticker .sc, html.light .sp-head h1 em,
+html.light .tabs button:hover, html.light .match .top .court, html.light .match .score span:first-child, html.light .match .score span:last-child,
+html.light .pill-live, html.light .sched-head .d, html.light .bout .time, html.light .bout h4 span,
+html.light .bracket .final .i, html.light .reg-head h1 em, html.light .btn-ghost:hover, html.light .notice .h,
+html.light .t-card2 .row .i, html.light .t-card2 .go, html.light .banner p, html.light .stepper .nm.on,
+html.light .summary .tot span:last-child, html.light .dash-head h1 em, html.light .hl .i, html.light .li .ib,
+html.light button.li:hover .arr, html.light .logout:hover, html.light .pay-secure svg, html.light .ps-icon.pending,
+html.light .flow-steps li.now, html.light .lang-btn:hover, html.light .lang-menu button[aria-checked="true"], html.light .agree a,
+html.light .draft-note a, html.light .legal-body a, html.light .refund-note a, html.light .mobile-menu a:not(.btn-primary):hover,
+html.light .faq-q:hover, html.light .flow-steps li a:hover, html.light .h-go, html.light .h-assure svg,
+html.light .h-mock-side > i.on, html.light .av, html.light .h-list b.due, html.light .h-float .dot,
+html.light .h-track span::after, html.light .h-track span:hover, html.light .h-track span:focus-visible, html.light .h-pain .now small,
+html.light .h-mini svg, html.light .h-feat > svg, html.light .h-tcard > svg, html.light .h-plan .n,
+html.light .h-plan .go, html.light .h-reach svg, html.light .h-form-note a, html.light .upload-ic,
+html.light .upload.has-file .upload-btn
+  { color: var(--accent-ink); }
+/* Gold gradient text: deeper gold so it reads on white */
+html.light .grad-text, html.light .h-facts b, html.light .h-trust-nums b { background-image: linear-gradient(90deg, #8a4f08, #b56d12); }
+html.light .h-hero .grad-text { background-image: linear-gradient(90deg, #8a4f08 0%, #b56d12 25%, #d9922f 50%, #b56d12 75%, #8a4f08 100%); }
+/* Sport names under the hexagons: darker version of each sport colour */
+html.light .hex-title { color: color-mix(in srgb, var(--sc) 55%, #000); text-shadow: none; }
+/* Red and amber text */
+html.light .h-pain .was small, html.light .field-err, html.light .form-err { color: #b42318; }
+html.light .draft-note b { color: #9a5a0b; }
+html.light .h-pain .was span:not(.mk) { opacity: .85; }
+html.light .h-mock-note { opacity: 1; }
+html.light .eyebrow, html.light .h-strip-t { font-weight: 800; }
+html.light .notice .ms { opacity: 1; }
+html.light .pose .main { opacity: .07; }
+html.light .pose .glow { opacity: .1; }
+>>>>>>> origin/main
