@@ -43,9 +43,13 @@
         if (lead.address) $('#bAddr').value = lead.address;
         if (lead.country && [].some.call($('#bCountry').options, function (o) { return o.value === lead.country; })) $('#bCountry').value = lead.country;
       }
-      sel.innerHTML = PLANS.map(function (p) {
-        return ['monthly', 'yearly'].map(function (m) { return '<option value="' + p.id + '-' + m + '">' + p.name.replace(' Plan', '') + ' — RM' + p[m] + (m === 'monthly' ? ' / month' : ' / year') + '</option>'; }).join('');
-      }).join('');
+      // Built as plain text options (never as HTML), because plan names come from the server
+      sel.textContent = '';
+      PLANS.forEach(function (p) {
+        ['monthly', 'yearly'].forEach(function (m) {
+          sel.add(new Option(String(p.name).replace(' Plan', '') + ' — RM' + Number(p[m]) + (m === 'monthly' ? ' / month' : ' / year'), String(p.id) + '-' + m));
+        });
+      });
       sel.value = lead.plan + '-' + lead.billing;
       if (!sel.value) sel.selectedIndex = 0;
       // Going back re-opens the form with the same plan; re-saving with the same email + password updates this registration.

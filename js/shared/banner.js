@@ -20,6 +20,13 @@
 
   function url(f) { return /^(https?:)?\/\//.test(f) || f.indexOf('/') === 0 ? f : FOLDER + f; }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  // Banner links may only be web addresses or pages on this site (never javascript: or data:)
+  function safeLink(l) {
+    l = String(l || '').trim();
+    if (/^https?:\/\//i.test(l)) return l;              // full web address
+    if (/^[\w.\/#?=&%-]+$/.test(l) && l.indexOf(':') < 0 && l.indexOf('//') !== 0) return l; // page on this site, e.g. pricing.html?billing=yearly
+    return '';                                            // anything else (javascript:, data:, …) is ignored
+  }
   function isVideo(f) { return /\.(mp4|webm)(\?|$)/i.test(f); }
 
   [].forEach.call(document.querySelectorAll('[data-banner]'), setup);
@@ -42,8 +49,8 @@
         ? '<video src="' + esc(url(s.src)) + '" muted playsinline preload="metadata"' + (many ? '' : ' loop autoplay') + ' aria-label="' + esc(s.alt) + '"></video>'
         : '<picture>' + (s.mobileSrc ? '<source media="(max-width: 640px)" srcset="' + esc(url(s.mobileSrc)) + '">' : '') +
           '<img src="' + esc(url(s.src)) + '" alt="' + esc(s.alt) + '"' + (i ? ' loading="lazy"' : '') + ' draggable="false"></picture>';
-      var ext = /^https?:/.test(s.link || '');
-      var inner = s.link ? '<a href="' + esc(s.link) + '"' + (ext ? ' target="_blank" rel="noopener"' : '') + ' tabindex="' + (i ? -1 : 0) + '">' + media + '</a>' : media;
+      var link = safeLink(s.link), ext = /^https?:/.test(link);
+      var inner = link ? '<a href="' + esc(link) + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : '') + ' tabindex="' + (i ? -1 : 0) + '">' + media + '</a>' : media;
       return '<div class="ev-slide' + (s.mobileSrc ? ' has-mobile' : '') + '" role="group" aria-roledescription="slide" aria-label="' + (i + 1) + ' of ' + slides.length + '"' + (i ? ' aria-hidden="true"' : '') + '>' + inner + '</div>';
     }).join('');
 

@@ -31,7 +31,7 @@
     var steps = document.querySelector('.flow-steps');
     if (!steps) return;
     var n = document.createElement('p'); n.className = 'test-mode-note';
-    n.innerHTML = '<b>UAT test mode:</b> no real payment is taken and your registration is saved only in this browser.';
+    n.innerHTML = '<b>UAT test mode:</b> no real payment is taken and your registration is saved only in this browser. Please use sample details, not real personal or payment information.';
     steps.insertAdjacentElement('afterend', n);
   });
   var mockReady = null;

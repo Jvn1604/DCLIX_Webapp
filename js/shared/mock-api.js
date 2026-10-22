@@ -38,9 +38,6 @@
     iso: function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); },
     addDays: function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; },
     addMonths: function (d, n) { var x = new Date(d); x.setMonth(x.getMonth() + n); return x; },
-    newSalt: function () { return Math.random().toString(36).slice(2, 10) + Date.now().toString(36); },
-    // Test mode only: a simple checksum so a returning signup can resume payment. The real API uses password_hash().
-    hashPassword: function (pw, salt) { var h = 2166136261, t = salt + ':' + pw; for (var i = 0; i < t.length; i++) { h ^= t.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16); }
   };
   function DB() { if (!A.data) A.load(); return A; }
   function now() { return new Date().toISOString(); }
@@ -105,7 +102,7 @@
     var existing = d.users.filter(function (u) { return u.email.toLowerCase() === f.email; })[0], resume = null;
     if (existing) {
       var lead0 = d.leads.filter(function (l) { return l.userId === existing.id; })[0];
-      if (existing.status === 'Pending Payment' && lead0 && A.hashPassword(pw, existing.salt) === existing.pwHash) resume = lead0;
+      if (existing.status === 'Pending Payment' && lead0) resume = lead0; // test mode keeps no password, so a pending signup simply continues
       else e.email = 'An account with this email already exists. Please log in, or use a different email.';
     }
     if (!e.clubCode && d.clubs.some(function (c) { return String(c.clubCode || '').toUpperCase() === f.clubCode && c.id !== (resume && resume.clubId); })) e.clubCode = 'This club code is already taken. Please choose another.';
@@ -120,8 +117,7 @@
     Object.assign(club, { name: f.clubName, clubCode: f.clubCode, owner: f.headInstructor, phone: phone, email: f.email, username: f.username, branch: f.branch, regNo: f.regNo, address: address, state: f.state, country: f.country, sport: sportName, plan: p.name.split(' ')[0], billing: billing, status: 'Pending Payment' });
     var user = existing;
     if (!user) {
-      var salt = A.newSalt();
-      user = { id: A.nextId('users', 'USR'), name: f.headInstructor || f.clubName + ' Admin', email: f.email, phone: phone, role: 'clubadmin', clubId: clubId, centreId: '', status: 'Pending Payment', lastLogin: '', salt: salt, pwHash: A.hashPassword(pw, salt), twoFactor: false, createdAt: today() };
+      user = { id: A.nextId('users', 'USR'), name: f.headInstructor || f.clubName + ' Admin', email: f.email, phone: phone, role: 'clubadmin', clubId: clubId, centreId: '', status: 'Pending Payment', lastLogin: '', twoFactor: false, createdAt: today() };
       d.users.push(user);
     }
     var lead = resume || { id: A.nextId('leads', 'LD'), createdAt: now(), source: 'Website', notes: '', followUp: '', assignedTo: '' };
