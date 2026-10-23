@@ -650,6 +650,15 @@ window.DCLIX_BM = {
     'Tier 1 of 3': 'Peringkat 1 daripada 3', 'Tier 2 of 3': 'Peringkat 2 daripada 3',
     'Tier 3 of 3': 'Peringkat 3 daripada 3',
 
+    /* ---- added ---- */
+    'D-Clix Sales Team': 'Pasukan Jualan D-Clix', 'Harith · We typically reply within a few minutes': 'Harith · Kami biasanya membalas dalam beberapa minit',
+    'Today': 'Hari ini', 'Hey there 👋 I\'m Harith from the D-Clix sales team.': 'Hai 👋 Saya Harith dari pasukan jualan D-Clix.',
+    'Ask me anything about running your club with D-Clix, or pick a topic below.': 'Tanya apa sahaja tentang menguruskan kelab anda dengan D-Clix, atau pilih topik di bawah.', 'Which plan suits my club?': 'Pelan mana sesuai untuk kelab saya?',
+    'How do online fee payments work?': 'Bagaimana bayaran yuran dalam talian berfungsi?', 'Something else': 'Perkara lain',
+    'Opens WhatsApp on your phone or computer': 'Membuka WhatsApp di telefon atau komputer anda', 'We will get back to you soon': 'Kami akan menghubungi anda tidak lama lagi',
+    'Questions?': 'Ada soalan?', 'Chat with us': 'Sembang dengan kami',
+    'Hide': 'Sembunyi',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
