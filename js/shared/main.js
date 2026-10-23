@@ -446,7 +446,7 @@
         mod.classList.toggle('open', open);
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.setAttribute('aria-label', (open ? 'Hide ' : 'Show ') + name);
-        if (label) label.textContent = open ? 'Show less' : 'What it does';
+        if (label) label.textContent = open ? 'Show less' : 'See what it does';
       });
     });
   }

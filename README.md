@@ -32,7 +32,7 @@ Home page "Book a free demo" form  ──▶  lead saved · emails to sales and 
 
 | Page | What it is |
 |---|---|
-| `index.html` | Home: hero, event banner, sports, clubs globe, problems we solve, product tour, features, testimonials, pricing preview, FAQ, demo form |
+| `index.html` | Home: hero, event banner, sports, Malaysia club map, problems we solve, product tour, features, testimonials, pricing preview, FAQ, demo form |
 | `about.html` · `pricing.html` · `edu-hub.html` · `community.html` | About D-Clix · plans (monthly / yearly) · guides and videos · community |
 | `arena/club-register.html` → `payment.html` → `payment-status.html` | The signup flow (steps 1 to 3) |
 | `privacy.html` · `terms.html` · `refund.html` · `404.html` | Legal pages and "page not found" |
@@ -46,12 +46,12 @@ DCLIX_Webapp/
 ├── arena/          club-register, payment, payment-status, mock-gateway    signup and payment flow
 ├── css/style.css   all styles (theme colours are the first lines)
 ├── js/shared/      main.js (shared behaviour and animations) · i18n.js (language switch) · i18n-bm.js (Bahasa Melayu words) · banner.js (event banners)
-│                   globe.js (clubs globe) · config.js (where the API is) · mock-api.js (test mode) · icons.js
+│                   map.js (Malaysia club map) · config.js (where the API is) · mock-api.js (test mode) · icons.js
 │                   theme.js · whatsapp.js (chat button)
 ├── js/arena/       signup.js (registration) · payment.js · sports.js (the 18 sports)
 ├── assets/         logo, favicon, images
 │   ├── banners/    event banner pictures + banners.js (what to show, where and when)
-│   └── clubs/      club logos + clubs.js (the clubs on the home page globe)
+│   └── clubs/      club logos + clubs.js (the clubs on the home page map) + malaysia-map.js (state outlines)
 ├── api/            PHP + MySQL: signup, checkout, contact form, Billplz, emails, file uploads
 │                   (api/config.php and api/storage/ are never committed)
 ├── set-version.js  run before pushing CSS/JS changes (see below)
@@ -71,7 +71,7 @@ Emails are not really sent on your PC: they are saved as `.html` files in `api/s
 | I want to… | Do this |
 |---|---|
 | Show an event or promo banner | Put the picture in `assets/banners/`, add a line in `assets/banners/banners.js` (`pages`, `start`, `end`; instructions at the top of the file). Desktop 1600 × 500, phone 800 × 600 |
-| Change the clubs on the globe | Put logos in `assets/clubs/` and edit `assets/clubs/clubs.js` (only clubs that agreed to be shown) |
+| Change the clubs on the map | Put logos in `assets/clubs/` and edit `assets/clubs/clubs.js`: name, logo and state (only clubs that agreed to be shown) |
 | Change a text | Edit the page, then change the same English line in `js/shared/i18n-bm.js` so the Bahasa Melayu still matches |
 | Change the theme colour | The first lines of `css/style.css`: `--accent`, `--accent-light`, `--accent-rgb` |
 | Push CSS or JS changes | Run `node set-version.js` first, so visitors' browsers load the new files at once |
