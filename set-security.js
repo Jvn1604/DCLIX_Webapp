@@ -9,11 +9,11 @@
    What the policy allows:
      scripts  only files from this site, plus the exact inline scripts that are on each page now
      styles   this site + Google Fonts        fonts   Google Fonts
-     images   this site (and data: icons)     frames  the Supademo tour on Edu-Hub
+     images   this site (and data: icons)     frames  Supademo tour, Google Maps (contact)
      data     this site's API + API_ORIGINS   forms   this site only
    Everything else (injected scripts, unknown trackers, other sites receiving data) is blocked. */
 const API_ORIGINS = [];            // e.g. ['https://api.d-clix.com'] once PRODUCTION_API is set in js/shared/config.js
-const FRAMES = ['https://app.supademo.com'];
+const FRAMES = ['https://app.supademo.com', 'https://www.google.com'];
 
 const fs = require('fs');
 const crypto = require('crypto');

@@ -25,7 +25,7 @@
     var w = document.createElement('div'); w.className = 'wa-widget';
     var startBtn = NUMBER
       ? '<a class="wa-start" href="https://wa.me/' + NUMBER + '?text=' + encodeURIComponent(GREETING) + '" target="_blank" rel="noopener noreferrer">Start chat</a>'
-      : '<a class="wa-start" href="' + root + 'index.html#contact">Leave your details</a>';
+      : '<a class="wa-start" href="' + root + 'contact.html">Leave your details</a>';
     w.innerHTML =
       '<div class="wa-pop" role="dialog" aria-label="Chat with us on WhatsApp" hidden>' +
         '<div class="wa-view" data-v="1">' +

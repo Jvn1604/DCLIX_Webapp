@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/about.html</loc><lastmod>2026-10-22</lastmod><priority>0.7</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/community.html</loc><lastmod>2026-10-22</lastmod><priority>0.7</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/edu-hub.html</loc><lastmod>2026-10-22</lastmod><priority>0.7</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/</loc><lastmod>2026-10-22</lastmod><priority>1.0</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/pricing.html</loc><lastmod>2026-10-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/privacy.html</loc><lastmod>2026-10-22</lastmod><priority>0.3</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/refund.html</loc><lastmod>2026-10-22</lastmod><priority>0.3</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/terms.html</loc><lastmod>2026-10-22</lastmod><priority>0.3</priority></url>
-  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/arena/club-register.html</loc><lastmod>2026-10-22</lastmod><priority>0.9</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/about.html</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/community.html</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/contact.html</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/edu-hub.html</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/</loc><lastmod>2026-10-23</lastmod><priority>1.0</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/pricing.html</loc><lastmod>2026-10-23</lastmod><priority>0.9</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/privacy.html</loc><lastmod>2026-10-23</lastmod><priority>0.3</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/refund.html</loc><lastmod>2026-10-23</lastmod><priority>0.3</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/terms.html</loc><lastmod>2026-10-23</lastmod><priority>0.3</priority></url>
+  <url><loc>https://jvn1604.github.io/DCLIX_Webapp/arena/club-register.html</loc><lastmod>2026-10-23</lastmod><priority>0.9</priority></url>
 </urlset>
