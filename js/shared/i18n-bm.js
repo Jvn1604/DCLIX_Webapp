@@ -610,6 +610,11 @@ window.DCLIX_BM = {
     'Show Attendance Module details': 'Tunjuk butiran Modul Kehadiran', 'Hide Attendance Module details': 'Sembunyi butiran Modul Kehadiran',
     'Show less': 'Tunjuk kurang',
 
+    /* ---- added ---- */
+    'Fewer clubs': 'Kurang kelab', 'More clubs': 'Lebih kelab',
+    'More clubs using D-Clix': 'Lebih banyak kelab menggunakan D-Clix', 'See what it does': 'Lihat fungsinya',
+    'Map of Malaysia showing clubs that use D-Clix, by state': 'Peta Malaysia menunjukkan kelab yang menggunakan D-Clix mengikut negeri',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
