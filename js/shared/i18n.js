@@ -598,6 +598,14 @@
     /* ---- home page (revamp) ---- */
     'Popular': 'Pilihan popular', 'All countries': 'Semua negara',
 
+    /* ---- home page (revamp) ---- */
+    'Contact us': 'Hubungi kami', 'Let\'s talk about': 'Mari bincang tentang',
+    'your club': 'kelab anda', 'Book a free demo, ask a question or drop by our office. A D-Clix specialist will get back to you within one working day.': 'Tempah demo percuma, tanya soalan atau singgah ke pejabat kami. Pakar D-Clix akan menghubungi anda dalam satu hari bekerja.',
+    'Open in Google Maps': 'Buka di Google Maps', 'Drive there with Waze': 'Pandu ke sana dengan Waze',
+    'Chat with our team': 'Sembang dengan pasukan kami', 'Find us': 'Cari kami',
+    'Our office in Petaling Jaya': 'Pejabat kami di Petaling Jaya', 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Click a button to get directions.': 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Klik butang untuk mendapatkan arah.',
+    'Book a free demo and a D-Clix specialist will contact you within one working day.': 'Tempah demo percuma dan pakar D-Clix akan menghubungi anda dalam satu hari bekerja.', 'Contact D-Clix | Book a Free Demo': 'Hubungi D-Clix | Tempah Demo Percuma',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',

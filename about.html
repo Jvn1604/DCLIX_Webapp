@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://app.supademo.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://app.supademo.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>About | D-Clix Club Management</title>
 <meta name="description" content="About D-Clix, the club management solution for sports and martial arts clubs." />
@@ -22,8 +22,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261022-1634" />
-<script src="js/shared/theme.js?v=20261022-1634"></script>
+<link rel="stylesheet" href="css/style.css?v=20261023-1000" />
+<script src="js/shared/theme.js?v=20261023-1000"></script>
 </head>
 <body class="home sub">
 
@@ -32,10 +32,10 @@
   <div class="nav-inner">
     <a class="brand" href="index.html"><span class="brand-logo"><img src="assets/dclix-logo.png" alt="D-CLIX" /></span>
       <span><span class="brand-name" style="display:block">D-Clix</span><span class="brand-sub">Club Management</span></span></a>
-    <div class="nav-links"><a href="index.html">Home</a><a href="about.html" class="active" aria-current="page">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
+    <div class="nav-links"><a href="index.html">Home</a><a href="about.html" class="active" aria-current="page">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><a href="contact.html">Contact</a><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><a class="btn-primary sm" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
     <div class="nav-mobile-actions"><button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><span class="theme-sun"><i data-icon="sun" class="w-5"></i></span><span class="theme-moon"><i data-icon="moon" class="w-5"></i></span></button><button class="icon-btn boxed" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i data-icon="menu" class="w-6"></i></button></div>
   </div>
-  <div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><a class="btn-primary" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
+  <div class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">D-Clix Edu-Hub</a><a href="contact.html">Contact</a><a class="btn-primary" href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
 </nav>
 <main class="pt-nav">
 
@@ -48,7 +48,7 @@
       <span class="badge h-load" style="--d:0s"><i data-icon="building" class="w-4"></i> About D-Clix</span>
       <h1 class="h-load" style="--d:.08s">Built for the people who <span class="grad-text">run clubs</span></h1>
       <p class="lead h-load" style="--d:.16s">D-Clix is a club management system for sports and martial arts clubs. Registration, online payments and attendance in one place, on the web and in the mobile app.</p>
-      <div class="hero-cta h-load" style="--d:.24s"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><a class="btn-outline" href="pricing.html">See pricing</a></div>
+      <div class="hero-cta h-load" style="--d:.24s"><a class="btn-primary lg shine" href="contact.html">Book a free demo</a><a class="btn-outline" href="pricing.html">See pricing</a></div>
     </div>
     <div class="p-vis h-load" style="--d:.2s">
       <div class="glowbg"></div>
@@ -121,7 +121,7 @@
     <h2>See D-Clix with your own club's setup</h2>
     <p class="lead">Raig Technologies (M) Sdn Bhd · Suite 3A42 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, 47301 Petaling Jaya, Selangor</p>
   </div>
-  <div class="p-cta-btns"><a class="btn-primary lg shine" href="index.html#contact">Book a free demo</a><a class="btn-outline" href="tel:+60378041412"><i data-icon="phone" class="w-5"></i> +603-7804 1412</a></div>
+  <div class="p-cta-btns"><a class="btn-primary lg shine" href="contact.html">Book a free demo</a><a class="btn-outline" href="tel:+60378041412"><i data-icon="phone" class="w-5"></i> +603-7804 1412</a></div>
 </div></section>
 
 </main>
@@ -143,20 +143,20 @@
       <h4 class="t">Contact</h4>
       <ul class="f-contact">
         <li><span class="ic"><i data-icon="phone" class="w-5"></i></span><span><small>Call us</small><a href="tel:+60378041412">+603-7804 1412</a></span></li>
-        <li><span class="ic"><i data-icon="pin" class="w-5"></i></span><span><small>Visit us</small><span class="addr">Suite 3A42 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, SS7, 47301 Petaling Jaya, Selangor</span></span></li>
+        <li><span class="ic"><i data-icon="pin" class="w-5"></i></span><span><small>Visit us</small><a class="addr" href="contact.html#find-us">Suite 3A42 Level 4 Block A, Kelana Centre Point, Jalan SS 7/19, SS7, 47301 Petaling Jaya, Selangor</a></span></li>
       </ul>
     </div>
     <div>
       <h4 class="t">Links</h4>
-      <div class="f-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">Edu-Hub</a><a href="community.html">Community</a><a href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
+      <div class="f-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="pricing.html">Pricing</a><a href="edu-hub.html">Edu-Hub</a><a href="community.html">Community</a><a href="contact.html">Contact</a><a href="https://www.maclubsystem.com/index.php?/login/proceed">Club Login</a></div>
     </div>
   </div>
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/icons.js?v=20261022-1634"></script>
-<script src="js/shared/main.js?v=20261022-1634"></script>
-<script src="js/shared/i18n.js?v=20261022-1634"></script>
-<script src="js/shared/whatsapp.js?v=20261022-1634"></script>
+<script src="js/shared/icons.js?v=20261023-1000"></script>
+<script src="js/shared/main.js?v=20261023-1000"></script>
+<script src="js/shared/i18n.js?v=20261023-1000"></script>
+<script src="js/shared/whatsapp.js?v=20261023-1000"></script>
 </body>
 </html>
