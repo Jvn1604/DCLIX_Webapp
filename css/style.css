@@ -1369,6 +1369,37 @@ html.light .tel-cc select optgroup { background: #f4efe6; color: #8a4f08; }
 }
 a.addr:hover { color: var(--accent-light); }
 
+/* ---------- About: future plan timeline (earliest at the bottom, like a growth chart) ---------- */
+.fp-line { list-style: none; margin: 12px auto 0; padding: 0; max-width: 940px; display: flex; flex-direction: column-reverse; }
+.fp-step { display: grid; grid-template-columns: 1fr 52px 1fr; align-items: center; min-height: 128px; margin-bottom: -10px; }
+.fp-step:last-child { margin-bottom: 0; }
+.fp-seg { grid-column: 2; grid-row: 1; align-self: stretch; background: linear-gradient(90deg, var(--c) 50%, var(--c2) 50%);
+  clip-path: polygon(0 14px, 50% 0, 100% 14px, 100% 100%, 50% calc(100% - 14px), 0 100%); }
+.fp-mark { grid-column: 1; grid-row: 1; justify-self: end; position: relative; width: 200px; height: 120px; margin-right: -2px; }
+.fp-pin { display: block; width: 100%; height: 100%; fill: var(--c); filter: drop-shadow(10px 14px 12px rgba(0,0,0,.22)); }
+.fp-year { position: absolute; left: 14px; top: 14px; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
+  background: #fff; color: #23201b; font: 800 24px/1 'Bricolage Grotesque', 'DM Sans', sans-serif; box-shadow: inset 0 3px 8px rgba(0,0,0,.12); }
+.fp-info { grid-column: 3; grid-row: 1; display: flex; gap: 14px; align-items: flex-start; padding-left: 28px; }
+.fp-info h3 { margin: 0 0 6px; font-size: 20px; }
+.fp-info p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; font-size: 15px; max-width: 340px; }
+.fp-ic { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--c); color: #1a1206; box-shadow: 0 8px 18px rgba(0,0,0,.18); }
+.fp-tag { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; letter-spacing: .04em; border: 1px solid var(--c); color: var(--fg); }
+.fp-tag.on { background: var(--c2); border-color: var(--c2); color: #fff; }
+.fp-y-sm { display: none; font-size: 13px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+.fp-step:nth-child(even) .fp-mark { grid-column: 3; justify-self: start; margin: 0 0 0 -2px; }
+.fp-step:nth-child(even) .fp-pin { transform: scaleX(-1); filter: drop-shadow(-10px 14px 12px rgba(0,0,0,.22)); }
+.fp-step:nth-child(even) .fp-year { left: auto; right: 14px; }
+.fp-step:nth-child(even) .fp-info { grid-column: 1; flex-direction: row-reverse; text-align: right; padding: 0 28px 0 0; }
+.fp-step:nth-child(even) .fp-info p { margin-left: auto; }
+@media (max-width: 720px) {
+  .fp-step, .fp-step:nth-child(even) { grid-template-columns: 36px 1fr; min-height: 0; }
+  .fp-seg { grid-column: 1; }
+  .fp-mark, .fp-step:nth-child(even) .fp-mark { display: none; }
+  .fp-info, .fp-step:nth-child(even) .fp-info { grid-column: 2; flex-direction: row; text-align: left; padding: 26px 0 26px 16px; }
+  .fp-step:nth-child(even) .fp-info p { margin-left: 0; }
+  .fp-y-sm { display: inline; }
+}
+
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
 :root { --accent-ink: var(--accent); }
