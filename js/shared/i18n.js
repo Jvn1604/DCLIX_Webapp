@@ -614,6 +614,12 @@
     'Planned': 'Dirancang', 'Tournament hub': 'Hab kejohanan',
     'Parent app 2.0': 'Aplikasi ibu bapa 2.0', 'Regional expansion': 'Pengembangan serantau',
 
+    /* ---- home page (revamp) ---- */
+    'Show Fee Module details': 'Tunjuk butiran Modul Yuran', 'Hide Fee Module details': 'Sembunyi butiran Modul Yuran',
+    'Show Grading Module details': 'Tunjuk butiran Modul Gred', 'Hide Grading Module details': 'Sembunyi butiran Modul Gred',
+    'Show Attendance Module details': 'Tunjuk butiran Modul Kehadiran', 'Hide Attendance Module details': 'Sembunyi butiran Modul Kehadiran',
+    'Show less': 'Tunjuk kurang',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',

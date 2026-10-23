@@ -1400,6 +1400,54 @@ a.addr:hover { color: var(--accent-light); }
   .fp-y-sm { display: inline; }
 }
 
+/* ---------- Core modules: one line snaking left, right, left; the node at the end of each line opens the details ---------- */
+.h-module.snake-l, .h-module.snake-r { --ln: rgba(var(--accent-rgb),.65); position: relative; border-top: 0; }
+.h-module.snake-l { padding: 44px 0 72px 56px; }
+.h-module.snake-r { padding: 44px 56px 72px 0; }
+.h-module.snake-l::before, .h-module.snake-r::before { content: ""; position: absolute; top: 0; bottom: 0; width: 3px; background: var(--ln);
+  transform: scaleY(0); transform-origin: top; transition: transform .7s cubic-bezier(.21,.47,.32,.98) .15s; }
+.h-module.snake-l::before { left: 0; }
+.h-module.snake-r::before { right: 0; }
+.h-module.snake-l::after, .h-module.snake-r::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--ln);
+  transform: scaleX(0); transform-origin: left; transition: transform .7s cubic-bezier(.21,.47,.32,.98) .75s; }
+.h-module.snake-r::after { transform-origin: right; }
+.h-module.end { padding-bottom: 56px; }
+.h-module.snake-l + .h-module.snake-r, .h-module.snake-r + .h-module.snake-l { margin-top: -48px; }
+.h-module.end::after { display: none; }
+.h-module.reveal.in::before { transform: scaleY(1); }
+.h-module.reveal.in::after { transform: scaleX(1); }
+
+.h-mod-toggle { position: absolute; bottom: -21px; z-index: 3; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--accent); color: var(--on-accent); box-shadow: 0 0 0 6px var(--bg), 0 10px 24px rgba(var(--accent-rgb),.35); transition: transform .25s var(--ease-spring), background .2s; }
+.snake-l > .h-mod-toggle { left: -20px; }
+.snake-r > .h-mod-toggle { right: -20px; }
+.h-mod-toggle:hover { transform: scale(1.1); }
+.h-mod-toggle:focus-visible { outline: 3px solid var(--accent-light); outline-offset: 8px; }
+.h-mod-toggle i { position: absolute; inset: 0; transition: transform .3s var(--ease-spring); }
+.h-mod-toggle i::before, .h-mod-toggle i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 16px; height: 3px; margin: -1.5px 0 0 -8px; border-radius: 2px; background: currentColor; }
+.h-mod-toggle i::after { transform: rotate(90deg); }
+.h-mod-toggle[aria-expanded="true"] i { transform: rotate(135deg); }
+.h-mod-toggle span { position: absolute; top: 50%; transform: translateY(calc(-50% - 18px)); white-space: nowrap; font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--accent-ink, var(--accent)); pointer-events: none; }
+.snake-l > .h-mod-toggle span { left: 58px; }
+.snake-r > .h-mod-toggle span { right: 58px; }
+.h-mod-toggle[aria-expanded="false"]::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--accent); animation: modPulse 2s ease-out infinite; }
+@keyframes modPulse { from { transform: scale(1); opacity: .8; } to { transform: scale(1.7); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .h-mod-toggle[aria-expanded="false"]::before { animation: none; } }
+
+.h-mod-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .5s cubic-bezier(.21,.47,.32,.98); }
+.h-mod-more > div { min-height: 0; overflow: hidden; display: grid; gap: 18px; visibility: hidden; transition: visibility 0s .5s; }
+.h-module.open .h-mod-more { grid-template-rows: 1fr; }
+.h-module.open .h-mod-more > div { visibility: visible; transition-delay: 0s; }
+.h-module.open .h-mod-more > div > :first-child { margin-top: 4px; }
+
+@media (max-width: 900px) {
+  .h-module.snake-l, .h-module.snake-r { padding: 36px 0 64px 32px; }
+  .h-module.snake-r::before { left: 0; right: auto; }
+  .h-module.snake-l::after, .h-module.snake-r::after { display: none; }
+  .snake-r > .h-mod-toggle { left: -20px; right: auto; }
+  .snake-r > .h-mod-toggle span { left: 58px; right: auto; }
+}
+
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
 :root { --accent-ink: var(--accent); }
