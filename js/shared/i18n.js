@@ -606,6 +606,14 @@
     'Our office in Petaling Jaya': 'Pejabat kami di Petaling Jaya', 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Click a button to get directions.': 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Klik butang untuk mendapatkan arah.',
     'Book a free demo and a D-Clix specialist will contact you within one working day.': 'Tempah demo percuma dan pakar D-Clix akan menghubungi anda dalam satu hari bekerja.', 'Contact D-Clix | Book a Free Demo': 'Hubungi D-Clix | Tempah Demo Percuma',
 
+    /* ---- home page (revamp) ---- */
+    'Future plan': 'Pelan masa depan', 'What\'s next for D-Clix': 'Apa seterusnya untuk D-Clix',
+    'The features we\'re building next to make running a club even easier.': 'Ciri yang sedang kami bina seterusnya untuk memudahkan lagi pengurusan kelab.', 'NFC attendance': 'Kehadiran NFC',
+    'Students tap an NFC card or tag at the dojo door and their attendance is recorded instantly. No QR scanning, no paper lists.': 'Pelajar hanya ketik kad atau tag NFC di pintu dojo dan kehadiran direkodkan serta-merta. Tiada imbasan QR, tiada senarai kertas.', 'Next up': 'Seterusnya',
+    'Smart reports': 'Laporan pintar', 'Details coming soon.': 'Butiran akan datang.',
+    'Planned': 'Dirancang', 'Tournament hub': 'Hab kejohanan',
+    'Parent app 2.0': 'Aplikasi ibu bapa 2.0', 'Regional expansion': 'Pengembangan serantau',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
