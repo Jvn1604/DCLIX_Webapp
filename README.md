@@ -45,7 +45,7 @@ DCLIX_Webapp/
 ├── privacy.html, terms.html, refund.html, 404.html                        legal pages, page not found
 ├── arena/          club-register, payment, payment-status, mock-gateway    signup and payment flow
 ├── css/style.css   all styles (theme colours are the first lines)
-├── js/shared/      main.js (shared behaviour and animations) · i18n.js (Bahasa Melayu) · banner.js (event banners)
+├── js/shared/      main.js (shared behaviour and animations) · i18n.js (language switch) · i18n-bm.js (Bahasa Melayu words) · banner.js (event banners)
 │                   globe.js (clubs globe) · config.js (where the API is) · mock-api.js (test mode) · icons.js
 │                   theme.js · whatsapp.js (chat button)
 ├── js/arena/       signup.js (registration) · payment.js · sports.js (the 18 sports)
@@ -72,7 +72,7 @@ Emails are not really sent on your PC: they are saved as `.html` files in `api/s
 |---|---|
 | Show an event or promo banner | Put the picture in `assets/banners/`, add a line in `assets/banners/banners.js` (`pages`, `start`, `end`; instructions at the top of the file). Desktop 1600 × 500, phone 800 × 600 |
 | Change the clubs on the globe | Put logos in `assets/clubs/` and edit `assets/clubs/clubs.js` (only clubs that agreed to be shown) |
-| Change a text | Edit the page, then change the same English line in `js/shared/i18n.js` so the Bahasa Melayu still matches |
+| Change a text | Edit the page, then change the same English line in `js/shared/i18n-bm.js` so the Bahasa Melayu still matches |
 | Change the theme colour | The first lines of `css/style.css`: `--accent`, `--accent-light`, `--accent-rgb` |
 | Push CSS or JS changes | Run `node set-version.js` first, so visitors' browsers load the new files at once |
 | Change a page title or description, or move to d-clix.com | Edit the page (or `SITE` at the top of `set-seo.js`), then run `node set-seo.js`: it updates sharing tags, `sitemap.xml` and `robots.txt` |

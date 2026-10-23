@@ -166,20 +166,26 @@
       });
       raf = requestAnimationFrame(tick);
     }
-    size(); raf = requestAnimationFrame(tick);
+    var onScreen = true;
+    function run() {
+      cancelAnimationFrame(raf); raf = 0;
+      if (onScreen && !document.hidden) raf = requestAnimationFrame(tick);
+    }
+    size(); run();
     window.addEventListener('resize', size);
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) cancelAnimationFrame(raf); else raf = requestAnimationFrame(tick);
-    });
+    document.addEventListener('visibilitychange', run);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; run(); }).observe(c);
   }
 
   /* ---------- Parallax karate background (home page) ---------- */
   // The moving karate figures behind every page (pages can opt out with <body data-no-backdrop>)
   function addBackdrop() {
     if ($('#parallax') || document.body.hasAttribute('data-no-backdrop')) return;
+    // phones get half-size images (the figures are faint background art)
+    var sm = window.matchMedia('(max-width: 760px)').matches ? '-sm' : '';
     var poses = [1, 2, 3, 4].map(function (n) {
-      var src = ROOT + 'assets/images/karate-' + n + '.webp';
-      return '<div class="pose"><img class="main" src="' + src + '" alt="" draggable="false" /><img class="glow" src="' + src + '" alt="" draggable="false" /></div>';
+      var src = ROOT + 'assets/images/karate-' + n + sm + '.webp';
+      return '<div class="pose"><img class="main" src="' + src + '" alt="" draggable="false" decoding="async" fetchpriority="low" /></div>';
     }).join('');
     var el = document.createElement('div');
     el.className = 'parallax'; el.id = 'parallax'; el.setAttribute('aria-hidden', 'true');
@@ -215,10 +221,17 @@
       });
     }
     function progress() { var m = document.documentElement.scrollHeight - innerHeight; return m > 0 ? scrollY / m : 0; }
-    function loop() { smooth += (target - smooth) * .08; update(smooth); requestAnimationFrame(loop); }
-    window.addEventListener('scroll', function () { target = progress(); }, { passive: true });
+    var running = false;
+    function loop() {
+      smooth += (target - smooth) * .08;
+      if (Math.abs(target - smooth) < .0005) { smooth = target; running = false; }
+      update(smooth);
+      if (running) requestAnimationFrame(loop);
+    }
+    function kick() { if (!running && !reduceMotion) { running = true; requestAnimationFrame(loop); } }
+    window.addEventListener('scroll', function () { target = progress(); kick(); }, { passive: true });
+    window.addEventListener('resize', function () { target = progress(); kick(); });
     target = smooth = progress(); update(smooth);
-    if (!reduceMotion) requestAnimationFrame(loop);
     $$('img', root).forEach(function (img) { img.addEventListener('error', function () { var pose = img.closest('.pose'); if (pose) pose.remove(); }); });
   }
 
