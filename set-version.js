@@ -15,8 +15,8 @@ const pages = fs.readdirSync('.').filter(f => f.endsWith('.html'))
 let changed = 0;
 for (const f of pages) {
   const s = fs.readFileSync(f, 'utf8');
-  // only local files under css/, js/ and assets/ (not Google Fonts or other sites)
-  const t = s.replace(/((?:href|src)="(?:\.\.\/)?(?:css|js|assets\/banners)\/[^"?#]+\.(?:css|js))(?:\?v=[^"]*)?"/g, '$1?v=' + v + '"');
+  // only local files under css/, js/, assets/banners and assets/clubs (not Google Fonts or other sites)
+  const t = s.replace(/((?:href|src)="(?:\.\.\/)?(?:css|js|assets\/banners|assets\/clubs)\/[^"?#]+\.(?:css|js))(?:\?v=[^"]*)?"/g, '$1?v=' + v + '"');
   if (t !== s) { fs.writeFileSync(f, t); changed++; }
 }
 console.log('Version ' + v + ' set on ' + changed + ' page(s).');
