@@ -615,6 +615,41 @@ window.DCLIX_BM = {
     'More clubs using D-Clix': 'Lebih banyak kelab menggunakan D-Clix', 'See what it does': 'Lihat fungsinya',
     'Map of Malaysia showing clubs that use D-Clix, by state': 'Peta Malaysia menunjukkan kelab yang menggunakan D-Clix mengikut negeri',
 
+    /* ---- added ---- */
+    'For a club that wants registration, fees and attendance in one place': 'Untuk kelab yang mahukan pendaftaran, yuran dan kehadiran di satu tempat', 'For growing clubs that run gradings, activities and stock': 'Untuk kelab yang berkembang dengan penggredan, aktiviti dan stok',
+    'For an HQ with branches, tournaments and payroll': 'Untuk HQ dengan cawangan, kejohanan dan gaji', 'features included': 'ciri disertakan',
+    'Everything in Basic': 'Semua dalam Asas', 'Everything in Basic + Standard': 'Semua dalam Asas + Standard',
+    'All 12 features of Basic': 'Kesemua 12 ciri Asas', 'All 16 features of Standard': 'Kesemua 16 ciri Standard',
+    'Plus': 'Tambahan', '2 months free': '2 bulan percuma',
+    'Save RM200': 'Jimat RM200', 'Save RM300': 'Jimat RM300',
+    'Save RM400': 'Jimat RM400', 'About RM3 a day': 'Kira-kira RM3 sehari',
+    'About RM5 a day': 'Kira-kira RM5 sehari', 'About RM7 a day': 'Kira-kira RM7 sehari',
+    'Pay securely by FPX or card through Billplz': 'Bayar dengan selamat melalui FPX atau kad menerusi Billplz', 'Web dashboard and mobile app in every plan': 'Papan pemuka web dan aplikasi mudah alih dalam setiap pelan',
+    'WhatsApp support group in every plan': 'Kumpulan sokongan WhatsApp dalam setiap pelan', 'Not sure?': 'Belum pasti?',
+    'Feature': 'Ciri', 'Classes a week': 'Kelas seminggu',
+    '3 Basic classes, 1 advanced class': '3 kelas asas, 1 kelas lanjutan', '5 Basic classes, 2 advanced classes': '5 kelas asas, 2 kelas lanjutan',
+    'Not included': 'Tidak disertakan',
+
+    /* ---- added ---- */
+    'a day': 'sehari', 'Save': 'Jimat',
+    'Includes all': 'Termasuk kesemua', 'features': 'ciri',
+
+    /* ---- added ---- */
+    'Billed yearly': 'Dibayar setahun', 'Billed monthly': 'Dibayar bulanan',
+    'Save up to RM400': 'Jimat sehingga RM400', 'Classes': 'Kelas',
+    'Included in every plan': 'Disertakan dalam setiap pelan', 'Added in Standard': 'Ditambah dalam Standard',
+    'Added in Premium': 'Ditambah dalam Premium', 'Features': 'Ciri',
+    'Included': 'Disertakan', 'Pay securely by FPX or card': 'Bayar dengan selamat melalui FPX atau kad',
+    'Choose monthly, or pay yearly and save up to RM400 a year. Every plan includes the web dashboard and the mobile app.': 'Pilih bulanan, atau bayar tahunan dan jimat sehingga RM400 setahun. Setiap pelan termasuk papan pemuka web dan aplikasi mudah alih.', 'Pay monthly, or pay yearly and save up to RM400.': 'Bayar bulanan, atau bayar tahunan dan jimat sehingga RM400.',
+    'You pay once for the whole year and save compared with paying monthly: RM200 on Basic, RM300 on Standard and RM400 on Premium.': 'Anda bayar sekali untuk setahun dan jimat berbanding bayaran bulanan: RM200 untuk Asas, RM300 untuk Standard dan RM400 untuk Premium.',
+
+    /* ---- added ---- */
+    'Top tier': 'Peringkat tertinggi', 'Parent updates': 'Makluman ibu bapa',
+    'Paper sign-up forms that someone has to type in again': 'Borang pendaftaran kertas yang perlu ditaip semula', 'New students register online and you approve them from one list.': 'Pelajar baru mendaftar dalam talian dan anda luluskan mereka dari satu senarai.',
+    'Adding up fees and attendance by hand at month end': 'Mengira yuran dan kehadiran secara manual pada hujung bulan', 'Collection, outstanding and attendance reports, ready to export to Excel or PDF.': 'Laporan kutipan, tunggakan dan kehadiran, sedia dieksport ke Excel atau PDF.',
+    'Tier 1 of 3': 'Peringkat 1 daripada 3', 'Tier 2 of 3': 'Peringkat 2 daripada 3',
+    'Tier 3 of 3': 'Peringkat 3 daripada 3',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
