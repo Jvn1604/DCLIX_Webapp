@@ -251,24 +251,78 @@
   /* ---------- Pricing (monthly / yearly) ---------- */
   function initPricing() {
     var grid = $('#planGrid'); if (!grid) return;
+    // Each plan lists only what it adds; the cards show what it includes from the plans below it
     var plans = [
-      { name: 'Basic Plan', m: 'RM100', y: 'RM1000', save: '(Save RM200)', desc: 'Essential Features',
-        items: ['User management tools', 'Online student registrations', 'Fee management', 'Manual attendance (Portal)', 'QR Code+ Scan attendance', 'Discount module', 'Shared workspace', 'Push notification', 'Reimbursement', 'Web and mobile app', '3 Basic classes, 1 advanced class a week', 'Dedicated WhatsApp group support'] },
-      { name: 'Standard Plan', m: 'RM150', y: 'RM1500', save: '(Save RM300)', desc: 'Essential Features +', featured: true,
-        items: ['Grading management', 'Activities management', 'Inventory stock management', '5 Basic classes, 2 advanced classes a week', 'Prepaid account management', 'Dedicated WhatsApp group support'] },
-      { name: 'Premium Plan', m: 'RM200', y: 'RM2000', save: '(Save RM400)', desc: 'BASIC + STANDARD +',
+      { key: 'basic', name: 'Basic', tier: 1, who: 'For a club that wants registration, fees and attendance in one place', m: 100, desc: 'Essential Features',
+        classes: '3 Basic classes, 1 advanced class a week',
+        items: ['User management tools', 'Online student registrations', 'Fee management', 'Manual attendance (Portal)', 'QR Code+ Scan attendance', 'Discount module', 'Shared workspace', 'Push notification', 'Reimbursement', 'Web and mobile app', 'Dedicated WhatsApp group support'] },
+      { key: 'standard', name: 'Standard', tier: 2, who: 'For growing clubs that run gradings, activities and stock', m: 150, desc: 'Essential Features +', featured: true,
+        classes: '5 Basic classes, 2 advanced classes a week', inherit: 'Everything in Basic',
+        items: ['Grading management', 'Activities management', 'Inventory stock management', 'Prepaid account management', 'Dedicated WhatsApp group support'] },
+      { key: 'premium', name: 'Premium', tier: 3, top: true, who: 'For an HQ with branches, tournaments and payroll', m: 200, desc: 'BASIC + STANDARD +',
+        classes: '5 Basic classes, 2 advanced classes a week', inherit: 'Everything in Basic + Standard',
         items: ['Contribution', 'Purchase request by branch to HQ', 'Purchase request by students to branch', 'Tournament participations, scores, results & history', 'Financial reports customizations', 'Payroll module', 'HQ approval on manual payment', 'Student class booking via app', 'Dedicated WhatsApp group support'] }
     ];
+    var SHARED = 'Dedicated WhatsApp group support';
+    // features counted once across plans (+1 for the classes allowance)
+    var seen = {};
+    plans.forEach(function (p) {
+      p.added = p.items.filter(function (t) { if (seen[t]) return false; seen[t] = 1; return true; });
+      p.total = Object.keys(seen).length + 1;
+      p.own = p.inherit ? p.added : p.items;
+    });
+    var rm = function (n) { return 'RM' + n.toLocaleString('en-MY'); };
+    // tier meter: one bar per level, Premium fills all three
+    var tier = function (n) {
+      var bars = ''; for (var i = 1; i <= plans.length; i++) bars += '<i' + (i <= n ? ' class="on"' : '') + '></i>';
+      return '<span class="pc-level" role="img" aria-label="Tier ' + n + ' of ' + plans.length + '">' + bars + '</span>';
+    };
+    var tick = function () { return '<span class="tick">' + window.icon('check') + '</span>'; };
+
+    function card(p, mode) {
+      var y = mode === 'yearly', inheritFrom = plans[plans.indexOf(p) - 1];
+      return '<div class="reveal in"><article class="card pc pc-' + p.key + (p.featured ? ' featured' : '') + '">' +
+        (p.featured ? '<span class="pc-ribbon">Most popular</span>' : '') +
+        (p.top ? '<span class="pc-crown">' + window.icon('crown') + 'Top tier</span>' : '') +
+        '<header class="pc-head">' +
+          '<div class="pc-tier"><h3 class="pc-name">' + p.name + ' Plan</h3>' + tier(p.tier) + '</div>' +
+          '<p class="pc-who">' + p.who + '</p>' +
+          '<div class="pc-price">' + (y ? '<s>' + rm(p.m * 12) + '</s>' : '') + '<b>' + rm(y ? p.m * 10 : p.m) + '</b><small>/' + (y ? 'year' : 'month') + '</small></div>' +
+          '<p class="pc-sub">' + (y ? '<span class="pc-save">Save <b>' + rm(p.m * 2) + '</b></span><span>Billed yearly</span>' : '<span>Billed monthly</span>') + '</p>' +
+          '<a class="' + (p.featured ? 'btn-primary shine' : 'btn-outline') + ' block pc-cta" href="arena/club-register.html?plan=' + p.key + '&billing=' + mode + '">Choose ' + p.name + '</a>' +
+          '<p class="pc-count"><b>' + p.total + '</b> features included</p>' +
+        '</header>' +
+        '<div class="pc-body">' +
+          '<p class="pc-classes"><i data-icon="calendardays" class="w-4"></i>' + p.classes + '</p>' +
+          (p.inherit ? '<p class="pc-inherit"><i data-icon="checkcircle" class="w-5"></i><span><b>' + p.inherit + '</b><small>Includes all <b>' + inheritFrom.total + '</b> features</small></span></p><p class="pc-plus">Plus</p>' : '<p class="pc-plus">' + p.desc + '</p>') +
+          '<ul>' + p.own.map(function (t) { return '<li>' + tick() + '<span>' + t + '</span></li>'; }).join('') + '</ul>' +
+        '</div></article></div>';
+    }
+
+    // full comparison table: grouped by the plan that adds each feature
+    function table() {
+      var cols = plans.length + 1;
+      var cell = function (on) { return on ? '<td><span class="yes" aria-label="Included">' + window.icon('check') + '</span></td>' : '<td><span class="no" aria-label="Not included"></span></td>'; };
+      // section rows keep one cell per column so the highlighted column runs unbroken
+      var group = function (label) { return '<tr class="grp"><th scope="rowgroup">' + label + '</th>' + new Array(cols).join('<td></td>') + '</tr>'; };
+      var rows = ['<tr><th scope="row">Classes a week</th>' + plans.map(function (p) { return '<td class="txt">' + p.classes.replace(/ a week$/, '') + '</td>'; }).join('') + '</tr>'];
+      plans.forEach(function (q, qi) {
+        rows.push(group(qi ? 'Added in ' + q.name : 'Included in every plan'));
+        (qi ? q.added : q.items).forEach(function (t) {
+          rows.push('<tr><th scope="row">' + t + '</th>' + plans.map(function (p, pi) { return cell(pi >= qi); }).join('') + '</tr>');
+        });
+      });
+      var head = '<tr><th scope="col" class="feat">Features</th>' + plans.map(function (p) {
+        return '<th scope="col"' + (p.featured ? ' class="pop"' : '') + '>' + (p.featured ? '<em>Most popular</em>' : p.top ? '<em class="top">Top tier</em>' : '') + '<b>' + p.name + '</b>' + tier(p.tier) + '<small>' + rm(p.m) + '/month</small></th>';
+      }).join('') + '</tr>';
+      var foot = '<tr><td></td>' + plans.map(function (p) { return '<td><a class="' + (p.featured ? 'btn-primary' : 'btn-outline') + ' sm" href="arena/club-register.html?plan=' + p.key + '&billing=monthly">Choose ' + p.name + '</a></td>'; }).join('') + '</tr>';
+      return '<table><thead>' + head + '</thead><tbody>' + rows.join('') + '</tbody><tfoot>' + foot + '</tfoot></table>';
+    }
+    var cmp = $('#planCompare'); if (cmp) { cmp.innerHTML = table(); window.hydrateIcons(); }
+
     function render(mode) {
-      grid.innerHTML = plans.map(function (p, i) {
-        return '<div class="reveal in" style="transition-delay:' + (i * .08) + 's"><div class="card plan' + (p.featured ? ' featured' : '') + '">' +
-          '<div class="pn">' + p.name + '</div>' +
-          '<div class="price">' + (mode === 'monthly' ? p.m : p.y) + '<small>/' + (mode === 'monthly' ? 'month' : 'year') + '</small></div>' +
-          '<div class="save">' + (mode === 'yearly' ? p.save : '') + '</div>' +
-          '<div class="desc">' + p.desc + '</div>' +
-          '<ul>' + p.items.map(function (t) { return '<li><span class="tick">' + window.icon('check') + '</span><span>' + t + '</span></li>'; }).join('') + '</ul>' +
-          '<a class="btn-primary block" href="arena/club-register.html?plan=' + p.name.split(' ')[0].toLowerCase() + '&billing=' + mode + '">Select Plan</a></div></div>';
-      }).join('');
+      grid.innerHTML = plans.map(function (p) { return card(p, mode); }).join('');
+      window.hydrateIcons();
     }
     function pick(mode) {
       $$('.billing button').forEach(function (o) { var on = o.getAttribute('data-mode') === mode; o.classList.toggle('active', on); o.setAttribute('aria-pressed', String(on)); });

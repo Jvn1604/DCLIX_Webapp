@@ -6,12 +6,12 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://app.supademo.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Pricing | D-Clix Club Management</title>
-<meta name="description" content="D-Clix plans from RM100 a month: Basic, Standard and Premium. Pay yearly and get two months free. Web dashboard and mobile app included." />
+<meta name="description" content="D-Clix plans from RM100 a month: Basic, Standard and Premium. Pay yearly and save up to RM400. Web dashboard and mobile app included." />
 <link rel="canonical" href="https://jvn1604.github.io/DCLIX_Webapp/pricing.html" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="D-Clix" />
 <meta property="og:title" content="Pricing | D-Clix Club Management" />
-<meta property="og:description" content="D-Clix plans from RM100 a month: Basic, Standard and Premium. Pay yearly and get two months free. Web dashboard and mobile app included." />
+<meta property="og:description" content="D-Clix plans from RM100 a month: Basic, Standard and Premium. Pay yearly and save up to RM400. Web dashboard and mobile app included." />
 <meta property="og:url" content="https://jvn1604.github.io/DCLIX_Webapp/pricing.html" />
 <meta property="og:image" content="https://jvn1604.github.io/DCLIX_Webapp/assets/og-image.jpg" />
 <meta property="og:image:width" content="1200" />
@@ -22,8 +22,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261023-1515" />
-<script src="js/shared/theme.js?v=20261023-1515"></script>
+<link rel="stylesheet" href="css/style.css?v=20261023-1557" />
+<script src="js/shared/theme.js?v=20261023-1557"></script>
 </head>
 <body class="home sub">
 
@@ -48,14 +48,24 @@
     <div class="ev-top" aria-label="Events and announcements" hidden><div class="ev ev-small" data-banner="pricing"></div></div>
     <span class="badge h-load" style="--d:0s"><i data-icon="card" class="w-4"></i> D-Clix subscription plans</span>
     <h1 class="h-load" style="--d:.08s">Plans that grow <span class="grad-text">with your club</span></h1>
-    <p class="lead h-load" style="--d:.16s">Choose monthly, or pay yearly and get two months free. Every plan includes the web dashboard and the mobile app.</p>
-    <div class="billing h-load" style="--d:.24s" role="group" aria-label="Billing period"><button type="button" class="active" data-mode="monthly" aria-pressed="true">Monthly</button><button type="button" data-mode="yearly" aria-pressed="false">Yearly</button></div>
+    <p class="lead h-load" style="--d:.16s">Choose monthly, or pay yearly and save up to RM400 a year. Every plan includes the web dashboard and the mobile app.</p>
+    <div class="billing h-load" style="--d:.24s" role="group" aria-label="Billing period"><button type="button" class="active" data-mode="monthly" aria-pressed="true">Monthly</button><button type="button" data-mode="yearly" aria-pressed="false">Yearly <em class="bill-tag">Save up to RM400</em></button></div>
   </div>
 </section>
 
-<!-- Plans (cards come from js/shared/main.js initPricing) -->
+<!-- Plans, trust row and comparison table (cards and table come from js/shared/main.js initPricing) -->
 <section class="section p-plans"><div class="mw-6xl stack-10">
-  <div class="plan-grid" id="planGrid"></div>
+  <div class="plan-grid pc-grid" id="planGrid"></div>
+  <ul class="pc-trust">
+    <li><i data-icon="shieldcheck" class="w-5"></i>Pay securely by FPX or card</li>
+    <li><i data-icon="monitor" class="w-5"></i>Web dashboard and mobile app in every plan</li>
+    <li><i data-icon="phone" class="w-5"></i>WhatsApp support group in every plan</li>
+    <li><i data-icon="users" class="w-5"></i><span>Not sure? <a class="accent" href="contact.html">Book a free demo</a></span></li>
+  </ul>
+  <details class="pc-compare-box">
+    <summary><span>Compare all features</span><i data-icon="down" class="w-5"></i></summary>
+    <div class="pc-compare" id="planCompare"></div>
+  </details>
   <div class="p-notes">
     <p class="fee">* Gateway payment fee per online payment: <span class="accent">RM 1.20</span></p>
     <p class="refund-note">All purchases are subject to our <a href="refund.html">No Refund Policy</a>.</p>
@@ -77,7 +87,7 @@
 <section class="section bordered"><div class="mw-5xl stack-10">
   <div class="reveal h-head"><span class="eyebrow">Questions</span><h2>Pricing questions</h2></div>
   <div class="faq-list">
-    <div class="card faq-item open"><button class="faq-q" type="button" aria-expanded="true"><span>How does yearly billing work?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>A yearly plan costs ten times the monthly price, so you get 12 months for the price of 10.</p></div></div></div>
+    <div class="card faq-item open"><button class="faq-q" type="button" aria-expanded="true"><span>How does yearly billing work?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>You pay once for the whole year and save compared with paying monthly: RM200 on Basic, RM300 on Standard and RM400 on Premium.</p></div></div></div>
     <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>Are there any other charges?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>Each online payment has a gateway fee of RM 1.20. It is shown in the total before you pay.</p></div></div></div>
     <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>How do I pay?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>After you register your club you pay online by FPX online banking or card through Billplz. D-Clix never sees your card or bank details.</p></div></div></div>
     <div class="card faq-item"><button class="faq-q" type="button" aria-expanded="false"><span>Can I get a refund?</span><i data-icon="down" class="w-5"></i></button><div class="faq-a"><div><p>All purchases are subject to our <a class="accent" href="refund.html">No Refund Policy</a>. Book a free demo first if you would like to see D-Clix before you buy.</p></div></div></div>
@@ -121,11 +131,11 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/icons.js?v=20261023-1515"></script>
-<script src="assets/banners/banners.js?v=20261023-1515"></script>
-<script src="js/shared/banner.js?v=20261023-1515"></script>
-<script src="js/shared/main.js?v=20261023-1515"></script>
-<script src="js/shared/i18n.js?v=20261023-1515"></script>
-<script src="js/shared/whatsapp.js?v=20261023-1515"></script>
+<script src="js/shared/icons.js?v=20261023-1557"></script>
+<script src="assets/banners/banners.js?v=20261023-1557"></script>
+<script src="js/shared/banner.js?v=20261023-1557"></script>
+<script src="js/shared/main.js?v=20261023-1557"></script>
+<script src="js/shared/i18n.js?v=20261023-1557"></script>
+<script src="js/shared/whatsapp.js?v=20261023-1557"></script>
 </body>
 </html>
