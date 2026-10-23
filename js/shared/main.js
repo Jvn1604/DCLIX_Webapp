@@ -30,6 +30,7 @@
     initTabs();
     initScrollBar();
     initCountUp();
+    initModules();
     initKeys();
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
@@ -421,6 +422,23 @@
       requestAnimationFrame(step);
     }
   }
+
+  /* ---------- Core modules: the node at the end of each line opens and closes the details ---------- */
+  function initModules() {
+    $$('.h-mod-toggle').forEach(function (btn) {
+      var mod = btn.closest('.h-module'), name = (btn.getAttribute('aria-label') || '').replace(/^(Show|Hide) /, '');
+      var label = btn.querySelector('span');
+      btn.addEventListener('click', function () {
+        var open = !mod.classList.contains('open');
+        mod.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', (open ? 'Hide ' : 'Show ') + name);
+        if (label) label.textContent = open ? 'Show less' : 'What it does';
+      });
+    });
+  }
+
+
 
   /* ---------- Keyboard shortcuts ---------- */
   function initKeys() {
