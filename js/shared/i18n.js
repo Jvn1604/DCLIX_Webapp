@@ -38,6 +38,15 @@
     var en = original.get(node), key = norm(en);
     if (!key) return;
     var bm = lang === 'ms' && BM ? BM[key] : null;
+    // Optional: a data-bm="…" on the element holding this text gives its Malay right in the page
+    // (used for the first piece of text in that element), so the word list file need not be edited
+    if (lang === 'ms') {
+      var pe = node.parentNode;
+      if (pe && pe.nodeType === 1 && pe.hasAttribute('data-bm')) {
+        var c = pe.firstChild; while (c && !(c.nodeType === 3 && norm(original.has(c) ? original.get(c) : c.nodeValue))) c = c.nextSibling;
+        if (c === node) bm = pe.getAttribute('data-bm');
+      }
+    }
     // keep the surrounding spaces so words next to links/icons stay separated
     var want = bm ? en.match(/^\s*/)[0] + bm + en.match(/\s*$/)[0] : en;
     if (node.nodeValue !== want) node.nodeValue = want;
