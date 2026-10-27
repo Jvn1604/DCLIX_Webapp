@@ -1,7 +1,8 @@
-/* The 18 combat sports used by the Competition portal. */
+/* Sports a club can register for (martial arts plus football). */
 window.SPORTS = [
   { id: 'aikido',     name: 'Aikido',     icon: 'shield',   color: '#00D4FF', description: 'The way of unifying with life energy.' },
   { id: 'boxing',     name: 'Boxing',     icon: 'box',      color: '#FF3D00', description: 'The sweet science of pugilism.' },
+  { id: 'football',   name: 'Football',   icon: 'circle',   color: '#22C55E', description: 'The world’s favourite team sport.' },
   { id: 'hapkido',    name: 'Hapkido',    icon: 'zap',      color: '#7B3FF2', description: 'The way of coordinated power.' },
   { id: 'judo',       name: 'Judo',       icon: 'users',    color: '#4CAF50', description: 'The gentle way of using force.' },
   { id: 'jujitsu',    name: 'Ju-Jitsu',   icon: 'activity', color: '#2196F3', description: 'The art of softness and yielding.' },
