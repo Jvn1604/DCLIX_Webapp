@@ -22,8 +22,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261023-1610" />
-<script src="js/shared/theme.js?v=20261023-1610"></script>
+<link rel="stylesheet" href="css/style.css?v=20261023-1730" />
+<script src="js/shared/theme.js?v=20261023-1730"></script>
 </head>
 <body class="home">
 <div class="page-layer">
@@ -137,73 +137,124 @@
   </div>
 </div></section>
 
-<!-- 5. Product tour by role -->
+<!-- 5. Why clubs switch: chapter rail (replaces the old three-role tabs). Script: js/shared/switch.js -->
 <section class="section bordered" id="tour"><div class="mw-7xl h-stack">
-  <div class="reveal h-head"><span class="eyebrow">One system, three views</span><h2>Everyone in your club gets the screen they need</h2></div>
-  <div class="reveal"><div class="h-tour" data-tabs>
-    <div class="h-tabs" role="tablist" aria-label="Choose a role">
-      <button type="button" role="tab" id="tab-owner" aria-controls="pane-owner" aria-selected="true"><i data-icon="building" class="w-5"></i>Club owner</button>
-      <button type="button" role="tab" id="tab-coach" aria-controls="pane-coach" aria-selected="false" tabindex="-1"><i data-icon="user" class="w-5"></i>Coach</button>
-      <button type="button" role="tab" id="tab-parent" aria-controls="pane-parent" aria-selected="false" tabindex="-1"><i data-icon="users" class="w-5"></i>Parents</button>
+  <div class="reveal h-head"><span class="eyebrow">Why clubs switch</span><h2>Why clubs move off paper, Excel and WhatsApp</h2><p class="lead">Five short chapters. Pick one, or press Next.</p></div>
+  <div class="reveal"><div class="sw" data-switch>
+    <div class="sw-rail" role="tablist" aria-label="Choose a chapter" aria-orientation="vertical">
+      <button type="button" role="tab" id="sw-t1" aria-controls="sw-p1" aria-selected="true"><span class="sw-n">01</span><span class="sw-l"><b>The all-in-one trap</b><small>Four tools, one leak</small></span></button>
+      <button type="button" role="tab" id="sw-t2" aria-controls="sw-p2" aria-selected="false" tabindex="-1"><span class="sw-n">02</span><span class="sw-l"><b>Before and after</b><small>One grading day</small></span></button>
+      <button type="button" role="tab" id="sw-t3" aria-controls="sw-p3" aria-selected="false" tabindex="-1"><span class="sw-n">03</span><span class="sw-l"><b>Your numbers</b><small>Hours and cash</small></span></button>
+      <button type="button" role="tab" id="sw-t4" aria-controls="sw-p4" aria-selected="false" tabindex="-1"><span class="sw-n">04</span><span class="sw-l"><b>Move in a week</b><small>A 7-day rollout</small></span></button>
+      <button type="button" role="tab" id="sw-t5" aria-controls="sw-p5" aria-selected="false" tabindex="-1"><span class="sw-n">05</span><span class="sw-l"><b>Parents stay</b><small>Progress they can see</small></span></button>
     </div>
 
-    <div class="h-pane" role="tabpanel" id="pane-owner" aria-labelledby="tab-owner">
-      <div class="h-pane-copy">
-        <h3>See the whole club at a glance</h3>
-        <ul class="h-ticks">
-          <li><b>Fees and outstanding</b> for every student, branch and month</li>
-          <li><b>Reports</b> on attendance, revenue and growth, ready to export</li>
-          <li><b>Branches and instructors</b> managed from one login</li>
-        </ul>
-      </div>
-      <div class="h-screen" aria-hidden="true">
-        <div class="h-screen-h"><b>Revenue by branch</b><small>October</small></div>
-        <div class="h-rows">
-          <div><span>Petaling Jaya</span><i style="--w:88%"></i><b>RM 8,240</b></div>
-          <div><span>Shah Alam</span><i style="--w:64%"></i><b>RM 6,010</b></div>
-          <div><span>Subang Jaya</span><i style="--w:43%"></i><b>RM 4,170</b></div>
+    <div class="sw-stage">
+      <div class="sw-panel" role="tabpanel" id="sw-p1" aria-labelledby="sw-t1">
+        <div class="sw-copy">
+          <span class="sw-tag">The all-in-one trap</span>
+          <h3>Four tools. Four places for fees to slip through.</h3>
+          <p>One sheet for attendance, one way to chase payments, one Excel for grading and a WhatsApp group for notices. Every hand-off between them is a chance to miss a payment or a name.</p>
+          <p>D-Clix is one system for the whole club, so nothing falls between the cracks.</p>
         </div>
-        <div class="h-screen-f"><span>Outstanding</span><b>RM 1,120 · 9 students</b></div>
+        <div class="sw-vis sw-merge" aria-hidden="true">
+          <div class="sw-chips">
+            <span><i data-icon="sheet" class="w-4"></i>Attendance sheet</span>
+            <span><i data-icon="card" class="w-4"></i>Chasing payments</span>
+            <span><i data-icon="award" class="w-4"></i>Grading Excel</span>
+            <span><i data-icon="bell" class="w-4"></i>WhatsApp groups</span>
+          </div>
+          <div class="sw-funnel"></div>
+          <div class="sw-node"><b>One D-Clix system</b><small>Attendance · Fees · Grading · Parent messages</small></div>
+        </div>
       </div>
-    </div>
 
-    <div class="h-pane" role="tabpanel" id="pane-coach" aria-labelledby="tab-coach" hidden>
-      <div class="h-pane-copy">
-        <h3>Take attendance in seconds</h3>
-        <ul class="h-ticks">
-          <li><b>Class lists</b> with each student's belt and payment status</li>
-          <li><b>Mark attendance</b> by QR scan or one tap per student</li>
-          <li><b>Grading and tournaments</b>: choose candidates and record results</li>
-        </ul>
-      </div>
-      <div class="h-screen" aria-hidden="true">
-        <div class="h-screen-h"><b>Karate · Beginners</b><small>Today 6:00 pm</small></div>
-        <div class="h-checks">
-          <div class="on"><span class="av">NA</span><span>Nur Aina binti Hakim</span><i data-icon="checkcircle" class="w-5"></i></div>
-          <div class="on"><span class="av">MD</span><span>Muhammad Danial bin Rosli</span><i data-icon="checkcircle" class="w-5"></i></div>
-          <div><span class="av">KS</span><span>Kavin a/l Suresh</span><i data-icon="circle" class="w-5"></i></div>
-          <div class="on"><span class="av">TM</span><span>Tan Mei Ling</span><i data-icon="checkcircle" class="w-5"></i></div>
+      <div class="sw-panel" role="tabpanel" id="sw-p2" aria-labelledby="sw-t2" hidden>
+        <div class="sw-copy">
+          <span class="sw-tag">Before and after</span>
+          <h3>A grading day, with and without D-Clix</h3>
+          <p>Belt tests are where paper and spreadsheets hurt most. The same day looks very different when the lists, fees and results live in one place.</p>
         </div>
-        <div class="h-screen-f"><span>Present</span><b>3 of 4</b></div>
+        <div class="sw-vis sw-vs" aria-hidden="true">
+          <div class="sw-col bad"><h4>Before</h4>
+            <p><i data-icon="x" class="w-4"></i>Attendance lists on paper</p>
+            <p><i data-icon="x" class="w-4"></i>Eligible students checked by hand</p>
+            <p><i data-icon="x" class="w-4"></i>Chasing parents for grading fees</p>
+            <p><i data-icon="x" class="w-4"></i>Results sent one by one</p>
+          </div>
+          <div class="sw-col good"><h4>With D-Clix</h4>
+            <p><i data-icon="check" class="w-4"></i>Attendance recorded by QR or one tap</p>
+            <p><i data-icon="check" class="w-4"></i>Unpaid and low-attendance lists in one view</p>
+            <p><i data-icon="check" class="w-4"></i>A grading fee invoice for each eligible student</p>
+            <p><i data-icon="check" class="w-4"></i>Results and certificates tracked in the system</p>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="h-pane" role="tabpanel" id="pane-parent" aria-labelledby="tab-parent" hidden>
-      <div class="h-pane-copy">
-        <h3>Pay and follow progress from the phone</h3>
-        <ul class="h-ticks">
-          <li><b>Pay fees online</b> by FPX and get the receipt instantly</li>
-          <li><b>Class schedule, attendance and grading results</b> for each child</li>
-          <li><b>Notices from the club</b> by push notification and WhatsApp</li>
-        </ul>
-      </div>
-      <div class="h-phone" aria-hidden="true">
-        <div class="h-phone-in">
-          <small>Hi, Puan Siti Aminah</small>
-          <div class="h-due"><span>October fee · Nur Aina</span><b>RM 120.00</b><em>Pay with FPX</em></div>
-          <div class="h-mini"><span><i data-icon="calendarcheck" class="w-4"></i>Next class</span><b>Thu, 6:00 pm</b></div>
-          <div class="h-mini"><span><i data-icon="award" class="w-4"></i>Grading</span><b>Orange belt · 9 Nov</b></div>
+      <div class="sw-panel" role="tabpanel" id="sw-p3" aria-labelledby="sw-t3" hidden>
+        <div class="sw-copy">
+          <span class="sw-tag">Your numbers</span>
+          <h3>See what manual admin costs your club</h3>
+          <p>Move the sliders to match your club. Everything below is worked out from your own numbers, so it is an illustration and not a promise.</p>
+          <div class="sw-ctrls">
+            <label><span>Students <output id="swo-s">120</output></span><input type="range" id="sw-s" min="20" max="500" step="5" value="120" /></label>
+            <label><span>Average monthly fee <output id="swo-f">RM 80</output></span><input type="range" id="sw-f" min="30" max="300" step="5" value="80" /></label>
+            <label><span>Admin minutes per student each month <output id="swo-m">10</output></span><input type="range" id="sw-m" min="2" max="30" step="1" value="10" /></label>
+            <label><span>Fees usually paid late <output id="swo-u">15%</output></span><input type="range" id="sw-u" min="0" max="40" step="1" value="15" /></label>
+            <label><span>Admin time you expect to save <output id="swo-p">40%</output></span><input type="range" id="sw-p" min="0" max="80" step="5" value="40" /></label>
+          </div>
         </div>
+        <div class="sw-vis sw-calc" aria-live="polite">
+          <div class="sw-big"><small>Admin hours back each month</small><b id="sw-r-back">8.0</b><em>hours</em></div>
+          <div class="sw-mini"><div><small>Fees you bill each month</small><b id="sw-r-bill">RM 9,600</b></div><div><small>Still unpaid at your rate</small><b id="sw-r-due">RM 1,440</b></div><div><small>Admin hours each month now</small><b id="sw-r-hrs">20.0</b></div></div>
+          <p class="sw-note">Estimate from the numbers you enter. Real results depend on your club.</p>
+        </div>
+      </div>
+
+      <div class="sw-panel" role="tabpanel" id="sw-p4" aria-labelledby="sw-t4" hidden>
+        <div class="sw-copy">
+          <span class="sw-tag">Move in a week</span>
+          <h3>A suggested 7-day rollout</h3>
+          <p>Switching does not have to mean starting over. Here is a simple order that keeps your student records intact. Your own timing may be faster or slower, and our team can guide you through it.</p>
+        </div>
+        <ol class="sw-vis sw-days" aria-hidden="true">
+          <li><b>Day 1</b><span>Create your club account and choose a plan</span></li>
+          <li><b>Day 2</b><span>Import your students from your spreadsheet</span></li>
+          <li><b>Day 3</b><span>Set up your fee structures in Fee Master</span></li>
+          <li><b>Day 4</b><span>Add classes, training centres and times</span></li>
+          <li><b>Day 5</b><span>Send WhatsApp login invites to parents</span></li>
+          <li><b>Day 6</b><span>Try QR attendance in a real class</span></li>
+          <li><b>Day 7</b><span>Go live and start collecting fees online</span></li>
+        </ol>
+      </div>
+
+      <div class="sw-panel" role="tabpanel" id="sw-p5" aria-labelledby="sw-t5" hidden>
+        <div class="sw-copy">
+          <span class="sw-tag">Parents stay</span>
+          <h3>Happier parents are easier to keep</h3>
+          <p>Most club software stops at billing. D-Clix also shows parents and students how they are doing, so they can see progress and not only invoices.</p>
+          <ul class="h-ticks">
+            <li><b>Belt progression</b> is clear for every child</li>
+            <li><b>BMI and health tracking</b> sit next to attendance</li>
+            <li><b>Instant digital receipts</b> after every FPX payment</li>
+          </ul>
+        </div>
+        <div class="sw-vis sw-app" aria-hidden="true">
+          <div class="sw-app-in">
+            <small>Nur Aina · Karate</small>
+            <div class="sw-belts"><i style="background:#f4f4f2"></i><i style="background:#f5d442"></i><i class="now" style="background:#f08a24"></i><i style="background:#3fae5a"></i><i style="background:#3b82f6"></i></div>
+            <div class="sw-row"><span><i data-icon="award" class="w-4"></i>Next grading</span><b>Orange belt · 9 Nov</b></div>
+            <div class="sw-row"><span><i data-icon="calendarcheck" class="w-4"></i>This month</span><b>7 of 8 classes</b></div>
+            <div class="sw-row ok"><span><i data-icon="checkcircle" class="w-4"></i>Receipt sent</span><b>RM 120 · FPX</b></div>
+            <p class="sw-note">Sample data</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sw-foot">
+        <button type="button" class="btn-outline sm" data-sw="-1"><i data-icon="arrowleft" class="w-4"></i>Back</button>
+        <span class="sw-count"><b id="sw-cur">1</b> / 5</span>
+        <button type="button" class="btn-primary sm" data-sw="1">Next<i data-icon="arrowright" class="w-4"></i></button>
       </div>
     </div>
   </div></div>
@@ -316,15 +367,16 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/config.js?v=20261023-1610"></script>
-<script src="js/shared/icons.js?v=20261023-1610"></script>
-<script src="js/shared/main.js?v=20261023-1610"></script>
-<script src="assets/banners/banners.js?v=20261023-1610"></script>
-<script src="js/shared/banner.js?v=20261023-1610"></script>
-<script src="js/shared/i18n.js?v=20261023-1610"></script>
-<script src="js/shared/whatsapp.js?v=20261023-1610"></script>
-<script src="assets/clubs/clubs.js?v=20261023-1610"></script>
-<script src="assets/clubs/malaysia-map.js?v=20261023-1610"></script>
-<script src="js/shared/map.js?v=20261023-1610"></script>
+<script src="js/shared/config.js?v=20261023-1730"></script>
+<script src="js/shared/icons.js?v=20261023-1730"></script>
+<script src="js/shared/main.js?v=20261023-1730"></script>
+<script src="assets/banners/banners.js?v=20261023-1730"></script>
+<script src="js/shared/banner.js?v=20261023-1730"></script>
+<script src="js/shared/i18n.js?v=20261023-1730"></script>
+<script src="js/shared/whatsapp.js?v=20261023-1730"></script>
+<script src="assets/clubs/clubs.js?v=20261023-1730"></script>
+<script src="assets/clubs/malaysia-map.js?v=20261023-1730"></script>
+<script src="js/shared/map.js?v=20261023-1730"></script>
+<script src="js/shared/switch.js?v=20261023-1730"></script>
 </body>
 </html>
