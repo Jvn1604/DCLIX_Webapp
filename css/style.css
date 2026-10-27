@@ -1465,6 +1465,7 @@ a.addr:hover { color: var(--accent-light); }
 .fp-pin { display: block; width: 100%; height: 100%; fill: var(--c); filter: drop-shadow(10px 14px 12px rgba(0,0,0,.22)); }
 .fp-year { position: absolute; left: 14px; top: 14px; width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center;
   background: #fff; color: #23201b; font: 800 24px/1 'Bricolage Grotesque', 'DM Sans', sans-serif; box-shadow: inset 0 3px 8px rgba(0,0,0,.12); }
+.fp-year.soon { font-size: 15px; line-height: 1.15; text-align: center; text-transform: uppercase; letter-spacing: .04em; }
 .fp-info { grid-column: 3; grid-row: 1; display: flex; gap: 14px; align-items: flex-start; padding-left: 28px; }
 .fp-info h3 { margin: 0 0 6px; font-size: 20px; }
 .fp-info p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; font-size: 15px; max-width: 340px; }
@@ -1690,6 +1691,19 @@ html.light .pc-level i { background: rgba(17,12,4,.12); }
 html.light .h-pain > .h-pain-top { background: rgba(17,12,4,.02); }
 html.light .h-pain-top .ic { color: var(--accent-ink); }
 html.light .h-pain:hover .h-pain-top .ic { color: var(--on-accent); }
+
+/* ---------- Home pricing preview: tier meters; Premium is the gold top tier ---------- */
+.h-plan-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.h-plan.top { border: 2px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, linear-gradient(160deg, #fbe3a8, #c98a22 40%, rgba(var(--accent-rgb),.25) 75%, #e9b04a) border-box;
+  box-shadow: 0 0 40px rgba(233,176,74,.14); }
+.h-plan.top::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(120% 80% at 100% 0%, rgba(251,227,168,.12), transparent 60%); }
+.h-plan.top:hover { box-shadow: 0 24px 48px rgba(0,0,0,.28), 0 0 50px rgba(233,176,74,.28); }
+.h-plan.top .n { background: linear-gradient(90deg, #fbe3a8, #e9b04a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.h-plan.top .pc-level i.on { background: linear-gradient(180deg, #fbe3a8, #e9b04a); }
+.h-plan .crown { position: absolute; top: -13px; right: 24px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 9px; border-radius: 999px;
+  font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #2a1a05; background: linear-gradient(135deg, #fbe3a8, #e9b04a 45%, #c98a22);
+  box-shadow: 0 8px 20px rgba(233,176,74,.4); }
+html.light .h-plan.top .n { background: linear-gradient(90deg, #a8680d, #7a4806); -webkit-background-clip: text; background-clip: text; }
 
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
