@@ -668,6 +668,9 @@ window.DCLIX_BM = {
     'soon': 'datang', 'Machine learning & AI': 'Pembelajaran mesin & AI',
     'More to come': 'Banyak lagi akan datang', 'Stay tuned': 'Nantikan',
 
+    /* ---- added ---- */
+    'Choose a plan': 'Pilih pelan', ', request a trial, and your club can begin onboarding with guided setup for registrations, payments, attendance, and member management.': ', minta percubaan, dan kelab anda boleh mula menggunakan D-Clix dengan bimbingan persediaan untuk pendaftaran, pembayaran, kehadiran dan pengurusan ahli.',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
