@@ -1705,6 +1705,12 @@ html.light .h-pain:hover .h-pain-top .ic { color: var(--on-accent); }
   box-shadow: 0 8px 20px rgba(233,176,74,.4); }
 html.light .h-plan.top .n { background: linear-gradient(90deg, #a8680d, #7a4806); -webkit-background-clip: text; background-clip: text; }
 
+/* ---------- Home sports hexagons: any number of sports, centred rows (5 in one row on wide screens) ---------- */
+.hex-grid.h-hexes { display: flex !important; flex-wrap: wrap; justify-content: center; gap: 16px 12px; max-width: 1200px; }
+.h-hexes .hex-card { flex: 0 0 auto; width: calc(50% - 6px); }
+@media (min-width: 640px) { .h-hexes .hex-card { width: calc(33.333% - 8px); } }
+@media (min-width: 1200px) { .hex-grid.h-hexes { gap: 18px; } .h-hexes .hex-card { width: calc(20% - 15px); } .h-hexes .hex { max-width: 212px; } }
+
 /* ---------- Light theme: readable text (the dark theme is unchanged) ---------- */
 /* Grey text was #9ca3af (2.5:1 on white) and gold text #de9836 (2.3:1); both now pass WCAG AA (4.5:1). */
 :root { --accent-ink: var(--accent); }
