@@ -659,6 +659,10 @@ window.DCLIX_BM = {
     'Questions?': 'Ada soalan?', 'Chat with us': 'Sembang dengan kami',
     'Hide': 'Sembunyi',
 
+    /* ---- added ---- */
+    'Football': 'Bola sepak', 'Silambam': 'Silambam',
+    'And 15 more, including Silat, Judo, Boxing, Muaythai and Wushu.': 'Dan 15 lagi, termasuk Silat, Judo, Tinju, Muaythai dan Wushu.', 'The world’s favourite team sport.': 'Sukan berpasukan paling digemari di dunia.',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
