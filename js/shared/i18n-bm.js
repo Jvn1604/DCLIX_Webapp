@@ -671,6 +671,14 @@ window.DCLIX_BM = {
     /* ---- added ---- */
     'Choose a plan': 'Pilih pelan', ', request a trial, and your club can begin onboarding with guided setup for registrations, payments, attendance, and member management.': ', minta percubaan, dan kelab anda boleh mula menggunakan D-Clix dengan bimbingan persediaan untuk pendaftaran, pembayaran, kehadiran dan pengurusan ahli.',
 
+    /* ---- added ---- */
+    'Clubs across Malaysia': 'Kelab di seluruh Malaysia', 'Tap a glowing dot to see the clubs in that state': 'Ketik titik bercahaya untuk melihat kelab di negeri itu',
+    'Drag the globe to spin it.': 'Seret glob untuk memutarnya.', 'All states': 'Semua negeri',
+    'Globe showing the Malaysian states where clubs use D-Clix': 'Glob menunjukkan negeri di Malaysia yang kelabnya menggunakan D-Clix',
+
+    /* ---- added ---- */
+    'Drag the globe to spin it, scroll to zoom.': 'Seret glob untuk memutarnya, skrol untuk zum.', 'Reset view': 'Set semula paparan',
+
     /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',

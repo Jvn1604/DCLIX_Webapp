@@ -46,12 +46,12 @@ DCLIX_Webapp/
 ├── arena/          club-register, payment, payment-status, mock-gateway    signup and payment flow
 ├── css/style.css   all styles (theme colours are the first lines)
 ├── js/shared/      main.js (shared behaviour and animations) · i18n.js (language switch) · i18n-bm.js (Bahasa Melayu words) · banner.js (event banners)
-│                   map.js (Malaysia club map) · config.js (where the API is) · mock-api.js (test mode) · icons.js
+│                   map.js (club globe) · config.js (where the API is) · mock-api.js (test mode) · icons.js
 │                   theme.js · whatsapp.js (chat button)
 ├── js/arena/       signup.js (registration) · payment.js · sports.js (the 18 sports)
 ├── assets/         logo, favicon, images
 │   ├── banners/    event banner pictures + banners.js (what to show, where and when)
-│   └── clubs/      club logos + clubs.js (the clubs on the home page map) + malaysia-map.js (state outlines)
+│   └── clubs/      club logos + clubs.js (the clubs on the home page map) + malaysia-geo.js (state outlines) + world.js (other countries, dim)
 ├── api/            PHP + MySQL: signup, checkout, contact form, Billplz, emails, file uploads
 │                   (api/config.php and api/storage/ are never committed)
 ├── set-version.js  run before pushing CSS/JS changes (see below)

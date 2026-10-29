@@ -1151,31 +1151,65 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
 .h-trust-nums > div { display: grid; gap: 6px; text-align: center; }
 .h-trust-nums b { font-family: var(--display); font-size: clamp(44px, 6vw, 72px); font-weight: 800; line-height: 1; background: linear-gradient(180deg, var(--accent-light), var(--accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .h-trust-nums span { color: var(--muted); font-size: 15px; font-weight: 500; }
-/* Home: Malaysia club map (js/shared/map.js) */
-.my-map { --pin: 46px; position: relative; width: min(1100px, 100%); }
-.my-stage { position: relative; }
-.my-stage svg { display: block; width: 100%; height: auto; overflow: visible; }
-.my-state { fill: rgba(255,255,255,.06); stroke: rgba(var(--accent-rgb),.35); stroke-width: 1; vector-effect: non-scaling-stroke; transition: fill .25s, stroke .25s; }
-.my-state.has { fill: rgba(var(--accent-rgb), calc(var(--lvl, .5) * .75)); }
-.my-state:hover, .my-state.on { fill: rgba(var(--accent-rgb), .9); stroke: var(--accent-light); }
-.my-group { position: absolute; width: 0; height: 0; }
-.my-group.many::before { content: ""; position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.3); }
-.my-pin { position: absolute; left: 0; top: 0; width: var(--pin); height: var(--pin); padding: 0; border-radius: 50%; cursor: pointer; overflow: hidden;
-  border: 2px solid var(--accent); background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.35);
-  transform: translate(-50%, -50%) translate(var(--ox, 0px), var(--oy, 0px));
-  transition: transform .25s var(--ease-spring), box-shadow .25s; animation: pinIn .5s var(--ease-spring) both; }
-.my-pin img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
-.my-pin.no-logo { display: grid; place-items: center; font: 800 13px/1 var(--font); color: #23201b; }
-.my-pin:hover, .my-pin:focus-visible { z-index: 2; transform: translate(-50%, -50%) translate(var(--ox, 0px), var(--oy, 0px)) scale(1.35);
-  box-shadow: 0 0 0 4px rgba(var(--accent-rgb),.35), 0 14px 30px rgba(0,0,0,.45); outline: none; }
-@keyframes pinIn { from { opacity: 0; scale: .4; } to { opacity: 1; scale: 1; } }
-.my-tip { position: absolute; z-index: 5; transform: translate(-50%, calc(-100% - 14px)); pointer-events: none; padding: 8px 12px; border-radius: 10px; white-space: nowrap;
-  background: #19191b; color: #f5efe6; border: 1px solid rgba(var(--accent-rgb),.5); box-shadow: 0 12px 28px rgba(0,0,0,.4); font-size: 13px; display: grid; gap: 2px; text-align: center; }
-.my-tip[hidden] { display: none; }
-.my-tip b { font-size: 14px; }
-.my-tip span { color: #f2b45a; font-weight: 600; }
-.my-legend { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
-.my-legend i { width: 120px; height: 8px; border-radius: 99px; background: linear-gradient(90deg, rgba(var(--accent-rgb),.2), rgba(var(--accent-rgb),.8)); }
+/* Home: club globe (js/shared/map.js): drag to spin, dots open each state's clubs */
+.mg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; width: min(1180px, 100%); }
+@media (min-width: 900px) {
+  .mg { grid-template-columns: minmax(0, 1.35fr) minmax(0, .65fr); gap: 40px; align-items: center; }
+  /* the panel keeps the globe's height and scrolls inside, so the globe never jumps */
+  .mg-panel { max-height: min(660px, 56vw); overflow-y: auto; overscroll-behavior: contain; }
+}
+.mg-globe { position: relative; width: min(660px, 100%); aspect-ratio: 1; margin-inline: auto; border-radius: 50%; cursor: grab; touch-action: pan-y; user-select: none;
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb),.35), 0 0 60px rgba(var(--accent-rgb),.22), 0 0 140px rgba(var(--accent-rgb),.12), inset 0 0 40px rgba(0,0,0,.6); }
+.mg-globe.grab { cursor: grabbing; }
+.mg-globe::after { content: ""; position: absolute; inset: -14px; border-radius: 50%; pointer-events: none; border: 1px dashed rgba(var(--accent-rgb),.25); animation: mgOrbit 40s linear infinite; }
+@keyframes mgOrbit { to { transform: rotate(360deg); } }
+.mg-globe canvas { display: block; width: 100%; height: 100%; border-radius: 50%; }
+.mg-dots { position: absolute; inset: 0; pointer-events: none; }
+.mg-dot { position: absolute; left: 0; top: 0; width: 30px; height: 30px; margin: -15px 0 0 -15px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; pointer-events: auto;
+  display: grid; place-items: center; background: var(--accent); color: #1a1206; font: 800 12px/1 var(--font);
+  box-shadow: 0 0 0 3px rgba(20,16,10,.85), 0 0 18px rgba(var(--accent-rgb),.9); transition: opacity .25s, scale .25s var(--ease-spring), background .2s; }
+.mg-dot .ring { position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--accent); animation: mgPing 2s ease-out infinite; }
+@keyframes mgPing { from { transform: scale(.7); opacity: .9; } to { transform: scale(1.7); opacity: 0; } }
+.mg-dot:hover, .mg-dot:focus-visible { scale: 1.25; outline: none; background: #f2b45a; }
+.mg-dot.on { background: #fbe3a8; scale: 1.3; }
+.mg-dot.off { opacity: 0; pointer-events: none; }
+.mg-reset { position: absolute; left: 50%; bottom: 7%; z-index: 3; display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px 7px 10px; border-radius: 999px; cursor: pointer;
+  transform: translateX(-50%); border: 1px solid rgba(var(--accent-rgb),.55); background: rgba(14,12,9,.78); color: #f5efe6; font: 600 13px/1 var(--font); backdrop-filter: blur(4px); transition: background .2s, border-color .2s; }
+.mg-reset[hidden] { display: none; }
+.mg-reset svg { width: 15px; height: 15px; color: var(--accent); }
+.mg-reset:hover, .mg-reset:focus-visible { background: rgba(var(--accent-rgb),.25); border-color: var(--accent); outline: none; }
+.mg-dot.many { width: 38px; height: 38px; margin: -19px 0 0 -19px; font-size: 14px; background: radial-gradient(circle at 35% 30%, #fbe3a8, var(--accent) 60%); }
+.mg-dot.many::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; border: 2px dashed rgba(251,227,168,.7); animation: mgOrbit 12s linear infinite; }
+.mg-sub { display: flex; align-items: center; gap: 8px; margin: 10px 0 -2px; font-size: 15px; }
+.mg-sub b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--accent); color: #1a1206; font-size: 12px; }
+/* side panel */
+.mg-panel { display: grid; gap: 14px; align-content: start; min-height: 260px; padding: 26px; border-radius: 22px; background: var(--card); border: 1px solid rgba(var(--accent-rgb),.28);
+  box-shadow: 0 24px 50px rgba(0,0,0,.3); animation: mgIn .35s ease both; }
+@keyframes mgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.mg-panel h3 { margin: 0; font-size: 20px; line-height: 1.35; }
+.mg-panel h3.mg-state { font-family: var(--display, inherit); font-size: clamp(20px, 2.4vw, 30px); letter-spacing: -.02em; }
+.mg-kicker { font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.mg-states { display: flex; flex-wrap: wrap; gap: 8px; }
+.mg-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px; border-radius: 999px; cursor: pointer; font: 600 14px/1 var(--font); color: var(--fg);
+  background: var(--field); border: 1px solid rgba(var(--accent-rgb),.35); transition: background .2s, border-color .2s, transform .2s; }
+.mg-chip b { min-width: 24px; height: 24px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; background: var(--accent); color: #1a1206; font-size: 12px; }
+.mg-chip:hover, .mg-chip:focus-visible { background: rgba(var(--accent-rgb),.16); border-color: var(--accent); transform: translateY(-2px); outline: none; }
+.mg-hint { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.mg-back { justify-self: start; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px 6px 6px; border-radius: 999px; border: 1px solid var(--line2); background: none; color: var(--muted); font: 600 13px/1 var(--font); cursor: pointer; }
+.mg-back svg { width: 18px; height: 18px; }
+.mg-back:hover { color: var(--fg); border-color: rgba(var(--accent-rgb),.5); }
+.mg-clubs { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+.mg-clubs li { display: grid; justify-items: center; gap: 8px; padding: 14px 10px; border-radius: 16px; text-align: center; background: var(--field); border: 1px solid var(--line);
+  animation: mgPop .4s var(--ease-spring) both; }
+@keyframes mgPop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+.mg-clubs .pic { width: 64px; height: 64px; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #fff; border: 2px solid var(--accent);
+  box-shadow: 0 8px 18px rgba(0,0,0,.3); font: 800 16px/1 var(--font); color: #23201b; }
+.mg-clubs .pic img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+.mg-clubs .nm { font-size: 13px; font-weight: 600; line-height: 1.35; }
+html.light .mg-globe { box-shadow: 0 0 0 1px rgba(var(--accent-rgb),.45), 0 0 60px rgba(var(--accent-rgb),.25), inset 0 0 40px rgba(0,0,0,.5); }
+html.light .mg-panel { box-shadow: 0 20px 44px rgba(17,12,4,.1); }
+html.light .mg-kicker { color: var(--accent-ink); }
+@media (prefers-reduced-motion: reduce) { .mg-globe::after, .mg-dot .ring, .mg-panel, .mg-clubs li { animation: none; } }
 .my-more { display: grid; gap: 14px; justify-items: center; width: min(1100px, 100%); }
 .my-more-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .my-more-item { position: relative; margin: 0; width: 52px; height: 52px; border-radius: 50%; background: #fff; border: 2px solid rgba(var(--accent-rgb),.6); overflow: visible;
@@ -1185,13 +1219,9 @@ html.light .ev-frame { box-shadow: 0 20px 44px rgba(17,12,4,.12), 0 0 30px rgba(
   background: #19191b; color: #f5efe6; font-size: 12px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 3; }
 .my-more-item:hover { transform: translateY(-4px) scale(1.12); box-shadow: 0 10px 24px rgba(var(--accent-rgb),.35); z-index: 2; }
 .my-more-item:hover figcaption { opacity: 1; }
-html.light .my-state { fill: rgba(17,12,4,.05); }
 @media (max-width: 760px) {
-  .my-map { --pin: 30px; }
-  .my-legend { justify-content: center; }
   .my-more-item { width: 44px; height: 44px; }
 }
-@media (prefers-reduced-motion: reduce) { .my-pin { animation: none; } }
 /* Home: app store badges */
 .h-stores { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .store { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 16px 0 14px; border-radius: 10px; background: #000; border: 1px solid #a6a6a6; color: #fff; transition: transform .2s, border-color .2s; }
