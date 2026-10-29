@@ -1,4 +1,5 @@
 User-agent: *
+Allow: /
 Disallow: /api/
 Disallow: /arena/payment.html
 Disallow: /arena/payment-status.html
