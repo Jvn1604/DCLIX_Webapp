@@ -22,8 +22,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=20261029-1126" />
-<script src="js/shared/theme.js?v=20261029-1126"></script>
+<link rel="stylesheet" href="css/style.css?v=20261029-1145" />
+<script src="js/shared/theme.js?v=20261029-1145"></script>
 </head>
 <body class="home">
 <div class="page-layer">
@@ -289,13 +289,56 @@
   <p class="reveal h-more" data-bm="Dan banyak lagi, termasuk Karate, Judo, Tinju, Muaythai, MMA dan Wushu. ">And many more, including Karate, Judo, Boxing, Muaythai, MMA and Wushu. <a class="accent" href="pricing.html">Choose a plan to start</a></p>
 </div></section>
 
-<!-- 9. Testimonials (initials until the clubs send photos) -->
+<!-- 9. Testimonials: portrait video carousel. To use real videos, drop the files in assets/videos/ and change the
+     data-src / poster paths below (MP4, portrait 9:16, 15-30 sec, under ~5 MB each works best). -->
 <section class="section bordered" id="stories"><div class="mw-7xl h-stack">
-  <div class="reveal h-head"><span class="eyebrow">From club leaders</span><h2>What clubs say after switching</h2></div>
+  <div class="reveal h-head"><span class="eyebrow">From club leaders</span><h2>What clubs say after switching</h2><p class="lead">Hear it from the coaches and club leaders who run on D-Clix every day.</p></div>
+  <div class="reveal vt" id="vtCarousel" role="region" aria-roledescription="carousel" aria-label="Video testimonials" tabindex="0">
+    <div class="vt-glow" aria-hidden="true"></div>
+    <div class="vt-stage">
+      <button type="button" class="vt-nav prev" aria-label="Previous testimonial"><i data-icon="left" class="w-5"></i></button>
+      <div class="vt-track">
+      <div class="vt-card" role="group" aria-roledescription="slide" aria-label="1 of 3: Coach Ashraff" data-i="0">
+        <video muted playsinline preload="none" poster="assets/videos/testimonial-1-poster.jpg" data-src="assets/videos/testimonial-1.mp4" aria-label="Video testimonial from Coach Ashraff"></video>
+        <span class="vt-shade"></span>
+        <span class="vt-bar"><i></i></span>
+        <span class="vt-badge"><span class="av">CA</span><span><b>Coach Ashraff</b><small>Club leader</small></span></span>
+        <button type="button" class="vt-play" aria-label="Play or pause video"><svg viewBox="0 0 24 24" class="i-play"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" class="i-pause"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+        <button type="button" class="vt-mute" aria-label="Turn sound on or off" aria-pressed="false"><svg viewBox="0 0 24 24" class="i-off" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg viewBox="0 0 24 24" class="i-on" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+      </div>
+      <div class="vt-card" role="group" aria-roledescription="slide" aria-label="2 of 3: Master Uthaya Kumar" data-i="1">
+        <video muted playsinline preload="none" poster="assets/videos/testimonial-2-poster.jpg" data-src="assets/videos/testimonial-2.mp4" aria-label="Video testimonial from Master Uthaya Kumar"></video>
+        <span class="vt-shade"></span>
+        <span class="vt-bar"><i></i></span>
+        <span class="vt-badge"><span class="av">UK</span><span><b>Master Uthaya Kumar</b><small>Club leader</small></span></span>
+        <button type="button" class="vt-play" aria-label="Play or pause video"><svg viewBox="0 0 24 24" class="i-play"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" class="i-pause"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+        <button type="button" class="vt-mute" aria-label="Turn sound on or off" aria-pressed="false"><svg viewBox="0 0 24 24" class="i-off" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg viewBox="0 0 24 24" class="i-on" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+      </div>
+      <div class="vt-card" role="group" aria-roledescription="slide" aria-label="3 of 3: Cikgu Akmal Hamdi" data-i="2">
+        <video muted playsinline preload="none" poster="assets/videos/testimonial-3-poster.jpg" data-src="assets/videos/testimonial-3.mp4" aria-label="Video testimonial from Cikgu Akmal Hamdi"></video>
+        <span class="vt-shade"></span>
+        <span class="vt-bar"><i></i></span>
+        <span class="vt-badge"><span class="av">AH</span><span><b>Cikgu Akmal Hamdi</b><small>Club leader</small></span></span>
+        <button type="button" class="vt-play" aria-label="Play or pause video"><svg viewBox="0 0 24 24" class="i-play"><path d="M8 5.5v13a1 1 0 0 0 1.52.85l10.4-6.5a1 1 0 0 0 0-1.7L9.52 4.65A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" class="i-pause"><path d="M8 5h3v14H8zM13 5h3v14h-3z"/></svg></button>
+        <button type="button" class="vt-mute" aria-label="Turn sound on or off" aria-pressed="false"><svg viewBox="0 0 24 24" class="i-off" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg viewBox="0 0 24 24" class="i-on" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></button>
+      </div>
+      </div>
+      <button type="button" class="vt-nav next" aria-label="Next testimonial"><i data-icon="right" class="w-5"></i></button>
+    </div>
+    <div class="vt-dots">
+      <button type="button" class="vt-dot" aria-label="Show testimonial 1"></button>
+      <button type="button" class="vt-dot" aria-label="Show testimonial 2"></button>
+      <button type="button" class="vt-dot" aria-label="Show testimonial 3"></button>
+    </div>
+  </div>
+  <!-- Text testimonials. The last three ("Unknown User") are PLACEHOLDERS: replace the quote, name and initials with real ones from your clubs. -->
   <div class="h-quotes">
     <div class="reveal"><figure class="h-quote"><blockquote>D-Clix helped move my academy from manual work to a proper online system that I can use at any time.</blockquote><figcaption><span class="av">CA</span><span><b>Coach Ashraff</b><small>Club leader</small></span></figcaption></figure></div>
     <div class="reveal" data-delay="0.08"><figure class="h-quote feature"><blockquote>Student fee collection went up once parents could pay online. Everything is at your fingertips.</blockquote><figcaption><span class="av">UK</span><span><b>Master Uthaya Kumar</b><small>Club leader</small></span></figcaption></figure></div>
     <div class="reveal" data-delay="0.16"><figure class="h-quote"><blockquote>Pendaftaran pelajar baru meningkat sebab D-Clix memudahkan urusan pendaftaran dan komunikasi dengan setiap pelajar.</blockquote><figcaption><span class="av">AH</span><span><b>Cikgu Akmal Hamdi</b><small>Club leader</small></span></figcaption></figure></div>
+    <div class="reveal"><figure class="h-quote"><blockquote data-bm="Sebelum D-Clix, kami mengejar yuran ibu bapa melalui WhatsApp dan mencatat kehadiran dalam buku. Kini semuanya dalam satu sistem dan kami menjimatkan berjam-jam setiap minggu.">Before D-Clix, we were chasing parents for fees on WhatsApp and writing attendance in a notebook. Now everything is in one system and we save hours every week.</blockquote><figcaption><span class="av">UU</span><span><b>Unknown User</b><small>Club leader</small></span></figcaption></figure></div>
+    <div class="reveal" data-delay="0.08"><figure class="h-quote"><blockquote data-bm="Dahulu kami sukar menjejak siapa yang sudah bayar dan siapa belum, dan saya terpaksa mesej ibu bapa satu demi satu. Kini D-Clix menunjukkan semua yuran tertunggak dalam beberapa saat dan ibu bapa membayar dalam talian tanpa perlu diingatkan berulang kali. Akhirnya saya ada masa petang saya semula.">We used to lose track of who had paid and who had not, and I messaged parents one by one. Now D-Clix shows every outstanding fee in seconds and parents pay online without being reminded twice. I finally have my evenings back.</blockquote><figcaption><span class="av">UU</span><span><b>Unknown User</b><small>Club owner</small></span></figcaption></figure></div>
+    <div class="reveal" data-delay="0.16"><figure class="h-quote"><blockquote data-bm="Waktu pengredan dahulu bermakna menyelak buku dan mesej lama untuk menyemak siapa yang bersedia. Kini kehadiran dan sejarah gred setiap pelajar ada di satu tempat, dan saya boleh merancang kelas dengan yakin. Saya harap kami bertukar lebih awal.">Grading time used to mean digging through notebooks and old messages to see who was ready. Now every student's attendance and grade history is in one place, and I plan my classes with confidence. I wish we had switched sooner.</blockquote><figcaption><span class="av">UU</span><span><b>Unknown User</b><small>Instructor</small></span></figcaption></figure></div>
   </div>
   <div class="reveal h-center"><a class="btn-outline sm" href="community.html">Join our community</a></div>
 </div></section>
@@ -367,16 +410,17 @@
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund.html">No Refund Policy</a></nav></div></div>
 </footer>
 </div>
-<script src="js/shared/config.js?v=20261029-1126"></script>
-<script src="js/shared/icons.js?v=20261029-1126"></script>
-<script src="js/shared/main.js?v=20261029-1126"></script>
-<script src="assets/banners/banners.js?v=20261029-1126"></script>
-<script src="js/shared/banner.js?v=20261029-1126"></script>
-<script src="js/shared/i18n.js?v=20261029-1126"></script>
-<script src="js/shared/whatsapp.js?v=20261029-1126"></script>
-<script src="assets/clubs/clubs.js?v=20261029-1126"></script>
-<script src="assets/clubs/malaysia-geo.js?v=20261029-1126"></script>
-<script src="js/shared/map.js?v=20261029-1126"></script>
-<script src="js/shared/switch.js?v=20261029-1126"></script>
+<script src="js/shared/config.js?v=20261029-1145"></script>
+<script src="js/shared/icons.js?v=20261029-1145"></script>
+<script src="js/shared/main.js?v=20261029-1145"></script>
+<script src="assets/banners/banners.js?v=20261029-1145"></script>
+<script src="js/shared/banner.js?v=20261029-1145"></script>
+<script src="js/shared/i18n.js?v=20261029-1145"></script>
+<script src="js/shared/whatsapp.js?v=20261029-1145"></script>
+<script src="assets/clubs/clubs.js?v=20261029-1145"></script>
+<script src="assets/clubs/malaysia-geo.js?v=20261029-1145"></script>
+<script src="js/shared/map.js?v=20261029-1145"></script>
+<script src="js/shared/switch.js?v=20261029-1145"></script>
+<script src="js/shared/testimonials.js?v=20261029-1145"></script>
 </body>
 </html>
