@@ -177,14 +177,14 @@
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; run(); }).observe(c);
   }
 
-  /* ---------- Parallax karate background (home page) ---------- */
-  // The moving karate figures behind every page (pages can opt out with <body data-no-backdrop>)
+  /* ---------- Parallax sport background (home page) ---------- */
+  // The moving sport figures (swimming, silat, taekwondo, silambam, boxing, badminton, football) behind every page (pages can opt out with <body data-no-backdrop>)
   function addBackdrop() {
     if ($('#parallax') || document.body.hasAttribute('data-no-backdrop')) return;
     // phones get half-size images (the figures are faint background art)
     var sm = window.matchMedia('(max-width: 760px)').matches ? '-sm' : '';
-    var poses = [1, 2, 3, 4].map(function (n) {
-      var src = ROOT + 'assets/images/karate-' + n + sm + '.webp';
+    var poses = [1, 2, 3, 4, 5, 6, 7].map(function (n) {
+      var src = ROOT + 'assets/images/pose-' + n + sm + '.webp';
       return '<div class="pose"><img class="main" src="' + src + '" alt="" draggable="false" decoding="async" fetchpriority="low" /></div>';
     }).join('');
     var el = document.createElement('div');
@@ -200,7 +200,10 @@
       { x: [-240, 180], y: [130, -120], r: [-16, 10] },
       { x: [260, -160], y: [160, -80], r: [14, -12] },
       { x: [-220, 210], y: [200, -180], r: [-22, 16] },
-      { x: [240, -220], y: [120, -140], r: [16, -14] }
+      { x: [240, -220], y: [120, -140], r: [16, -14] },
+      { x: [-200, 220], y: [150, -110], r: [-12, 14] },
+      { x: [220, -200], y: [180, -150], r: [12, -16] },
+      { x: [-240, 160], y: [110, -170], r: [-18, 12] }
     ];
     var MAXO = 0.32, total = poses.length, smooth = 0, target = 0;
     function lerp(p, i0, i1, o0, o1) { var t = Math.min(1, Math.max(0, (p - i0) / ((i1 - i0) || 1))); return o0 + (o1 - o0) * t; }
