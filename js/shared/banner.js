@@ -1,11 +1,5 @@
-/* ==========================================================
-   Event banners: every element with data-banner="home" or
-   data-banner="pricing" (the page name) becomes a banner.
-   The slides come from assets/banners/banners.js — edit that file,
-   not this one. A slide shows on the pages in its `pages` list
-   (home only when it has none). One slide shows as a single banner;
-   two or more become a slider (auto-plays, arrows, dots, swipe).
-   ========================================================== */
+/* event banners: data-banner="home" / "pricing"
+   slides come from assets/banners/banners.js (edit that, not this) */
 (function () {
   'use strict';
   var cfg = window.DCLIX_BANNERS;
@@ -20,12 +14,12 @@
 
   function url(f) { return /^(https?:)?\/\//.test(f) || f.indexOf('/') === 0 ? f : FOLDER + f; }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  // Banner links may only be web addresses or pages on this site (never javascript: or data:)
+  // only allow http links or our own pages
   function safeLink(l) {
     l = String(l || '').trim();
-    if (/^https?:\/\//i.test(l)) return l;              // full web address
-    if (/^[\w.\/#?=&%-]+$/.test(l) && l.indexOf(':') < 0 && l.indexOf('//') !== 0) return l; // page on this site, e.g. pricing.html?billing=yearly
-    return '';                                            // anything else (javascript:, data:, …) is ignored
+    if (/^https?:\/\//i.test(l)) return l;
+    if (/^[\w.\/#?=&%-]+$/.test(l) && l.indexOf(':') < 0 && l.indexOf('//') !== 0) return l; // own page
+    return '';                                            // block javascript: etc
   }
   function isVideo(f) { return /\.(mp4|webm)(\?|$)/i.test(f); }
 
@@ -60,7 +54,7 @@
         '<div class="ev-dots" role="tablist" aria-label="Choose banner">' + slides.map(function (s, i) {
           return '<button type="button" role="tab" aria-label="Banner ' + (i + 1) + '" aria-selected="' + (i ? 'false' : 'true') + '"><i></i></button>';
         }).join('') + '</div>' : '');
-    // Phone shape (4:3) only when every slide has a phone picture; otherwise phones show the whole wide banner
+    // 4:3 on phone only if every slide has a phone pic
     if (slides.every(function (s) { return s.mobileSrc; })) box.querySelector('.ev-frame').classList.add('phone-art');
     var holder = box.closest('.ev-top, .h-events, section'); if (holder) holder.hidden = false;
     if (window.hydrateIcons) window.hydrateIcons(box);
@@ -87,7 +81,7 @@
       clearTimeout(timer);
       if (!many || paused || reduceMotion) return;
       var v = video(cur);
-      if (v) { v.onended = function () { go(cur + 1); }; return; } // a video slide moves on when it finishes
+      if (v) { v.onended = function () { go(cur + 1); }; return; } // next slide when video ends
       var d = dots[cur]; if (d) { void d.offsetWidth; d.style.setProperty('--ev-ms', ms + 'ms'); d.classList.add('run'); }
       timer = setTimeout(function () { go(cur + 1); }, ms);
     }
@@ -105,7 +99,7 @@
       if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
       if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
     });
-    // Swipe on touch screens
+    // swipe
     var x0 = null;
     track.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; paused = true; clearTimeout(timer); }, { passive: true });
     track.addEventListener('touchend', function (e) {

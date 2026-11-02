@@ -1,10 +1,10 @@
 <?php
-/* D-Clix API — email. Driver "log" stores emails only; driver "smtp" sends them. */
+/* email. "log" = save only, "smtp" = send */
 declare(strict_types=1);
 
 function esc(string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
-/** Wrap content in the D-Clix email layout. $rows = [[label, value], …] shown as a table. */
+/** email template */
 function email_layout(string $title, string $intro, array $rows = [], ?array $button = null, string $outro = ''): string
 {
     $table = '';
@@ -22,8 +22,8 @@ function email_layout(string $title, string $intro, array $rows = [], ?array $bu
         . '<p style="text-align:center;color:#6b7280;font-size:12px;margin-top:14px">Raig Technologies (M) Sdn Bhd · D-Clix Club Management System</p></div></body></html>';
 }
 
-/** Queue/send an email. Never throws: failures are recorded in email_outbox. */
-/** $attach: list of ['path' => file on disk, 'name' => file name shown in the email, 'type' => MIME type] */
+/** send email, never throws (errors go to email_outbox) */
+/** $attach: [path, name, type] */
 function send_mail(string $to, string $subject, string $html, string $kind, string $relatedId = '', array $attach = []): void
 {
     $driver = cfg('mail.driver', 'log');
@@ -35,7 +35,7 @@ function send_mail(string $to, string $subject, string $html, string $kind, stri
         if (!is_dir($dir)) @mkdir($dir, 0775, true);
         $base = $dir . '/' . date('Ymd-His') . '-' . $id . '-' . preg_replace('/\W+/', '_', $kind);
         @file_put_contents($base . '.html', $html);
-        // Keep a copy of each attachment next to the logged email
+        // copy attachments next to the log
         foreach ($attach as $a) if (is_file($a['path'])) @copy($a['path'], $base . '-attachment-' . preg_replace('/[^\w.-]+/', '_', $a['name']));
         q('UPDATE email_outbox SET status = ? WHERE id = ?', ['logged', $id]);
         return;
@@ -49,7 +49,7 @@ function send_mail(string $to, string $subject, string $html, string $kind, stri
     }
 }
 
-/** Minimal SMTP client (STARTTLS or SSL, AUTH LOGIN). */
+/** simple smtp client */
 function smtp_send(string $to, string $subject, string $html, array $attach = []): void
 {
     $c = cfg('mail.smtp');
@@ -81,7 +81,7 @@ function smtp_send(string $to, string $subject, string $html, array $attach = []
     if (!$files) {
         $msg = $headers . "Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html)) . "\r\n.";
     } else {
-        // HTML body plus attachments
+        // with attachments
         $b = 'dclix-' . bin2hex(random_bytes(8));
         $msg = $headers . 'Content-Type: multipart/mixed; boundary="' . $b . "\"\r\n\r\n"
             . "--$b\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n" . chunk_split(base64_encode($html));
@@ -93,7 +93,7 @@ function smtp_send(string $to, string $subject, string $html, array $attach = []
         }
         $msg .= "--$b--\r\n.";
     }
-    // A line that starts with "." would end the message early (SMTP dot-stuffing)
+    // dot stuffing
     $msg = preg_replace('/\r\n\.(?=[^\r\n])/', "\r\n..", $msg);
     $cmd($msg, [250]);
     $cmd('QUIT', [221]);

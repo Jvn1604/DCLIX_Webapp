@@ -1,11 +1,11 @@
-# Block direct web access to configuration, code libraries, seed data and logs (Apache / cPanel)
+# block config, lib, storage
 <FilesMatch "^(config\.php|config\.example\.php|install\.php|schema\.sql)$">
   Require all denied
 </FilesMatch>
 RedirectMatch 404 ^/(.*/)?api/(lib|storage|seed)(/|$)
 Options -Indexes
 
-# API answers are data only: never cached, never framed, never run as a page
+# api = json only
 <IfModule mod_headers.c>
   Header always set Cache-Control "no-store"
   Header always set X-Content-Type-Options "nosniff"
@@ -14,13 +14,13 @@ Options -Indexes
   Header always set Referrer-Policy "no-referrer"
   Header always unset X-Powered-By
 </IfModule>
-# The test payment page is a real page (only works while billplz.mode is "mock")
+# test payment page (mock mode only)
 <Files "mock-gateway.php">
   <IfModule mod_headers.c>
     Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
   </IfModule>
 </Files>
-# Pass the Authorization header through to PHP
+# pass auth header to php
 RewriteEngine On
 RewriteCond %{HTTP:Authorization} .
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

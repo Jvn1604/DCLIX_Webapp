@@ -1,8 +1,7 @@
 <?php
-/*
- * Step 2 of the website signup (payment.html).
- *   POST {action: "load", token}                         → club + plan details to pre-fill the page
- *   POST {action: "pay", token, plan, billing, billing…} → creates the invoice + Billplz bill, returns {url}
+/* signup step 2 (payment.html)
+ * action load -> club + plans
+ * action pay  -> invoice + bill, returns {url}
  */
 require __DIR__ . '/lib/init.php';
 require_method('POST');
@@ -51,7 +50,7 @@ try {
     $club = rec_get('clubs', $lead['clubId']);
     if ($club && $club['status'] !== 'Active') { $club['plan'] = explode(' ', $quote['plan']['name'])[0]; $club['billing'] = $quote['billing']; rec_put('clubs', $club, 'website'); }
 
-    // Re-use the open invoice for this signup if there is one, so retries do not pile up invoices.
+    // reuse open invoice so retries dont make new ones
     $open = q("SELECT data FROM records WHERE coll = 'subscriptions' AND JSON_UNQUOTE(JSON_EXTRACT(data, '$.leadId')) = ? ORDER BY created_at DESC LIMIT 1", [$lead['id']])->fetchColumn();
     $sub = $open ? json_decode($open, true) : null;
     if (!$sub || $sub['status'] === 'Paid') {

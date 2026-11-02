@@ -1,13 +1,8 @@
 <?php
-/*
- * D-Clix installer (command line only).
- *
+/* installer (cli only)
  *   php api/install.php
- *       Creates the database + app user, api/config.php, the tables and the plan prices.
- *       Safe to run again: existing data is kept.
- *
- * Options: --root-user=root --root-pass= (MySQL account used to create the database, XAMPP default is root with no password)
- *          --db=dclix --site-url=http://127.0.0.1:8000
+ * makes db + user, config.php, tables, plans. safe to rerun
+ * options: --root-user=root --root-pass= --db=dclix --site-url=http://127.0.0.1:8000
  */
 declare(strict_types=1);
 if (PHP_SAPI !== 'cli') { http_response_code(404); exit; }
@@ -18,7 +13,7 @@ $cfgFile = $root . '/config.php';
 $say = function (string $m) { fwrite(STDOUT, $m . PHP_EOL); };
 $die = function (string $m) { fwrite(STDERR, 'ERROR: ' . $m . PHP_EOL); exit(1); };
 
-/* 1. Database, app user and config.php */
+/* 1. db + config */
 if (!is_file($cfgFile)) {
     $dbName = $opt['db'] ?? 'dclix';
     if (!preg_match('/^\w+$/', $dbName)) $die('Invalid database name.');
@@ -46,7 +41,7 @@ if (!is_file($cfgFile)) {
     $say('api/config.php already exists — using it.');
 }
 
-/* 2. Tables */
+/* 2. tables */
 $_SERVER['REQUEST_METHOD'] = 'CLI';
 require $root . '/lib/core.php';
 require $root . '/lib/data.php';
@@ -55,7 +50,7 @@ $sql = file_get_contents($root . '/schema.sql');
 foreach (array_filter(array_map('trim', explode(';', preg_replace('/^--.*$/m', '', $sql)))) as $stmt) db()->exec($stmt);
 $say('Tables are ready.');
 
-/* 3. Plans */
+/* 3. plans */
 if (settings_get('plans') === null) {
     settings_put('plans', ['fee' => 1.20, 'items' => [
         ['id' => 'basic', 'name' => 'Basic Plan', 'monthly' => 100, 'yearly' => 1000],

@@ -1,4 +1,4 @@
-/* Sports a club can register for (martial arts plus football). */
+/* sports list */
 window.SPORTS = [
   { id: 'aikido',     name: 'Aikido',     icon: 'shield',   color: '#00D4FF', description: 'The way of unifying with life energy.' },
   { id: 'boxing',     name: 'Boxing',     icon: 'box',      color: '#FF3D00', description: 'The sweet science of pugilism.' },
@@ -23,7 +23,7 @@ window.SPORTS = [
 window.getSport = function (id) {
   return window.SPORTS.find(function (s) { return s.id === id; });
 };
-/* Read ?sport=karate from the URL (falls back to taekwondo like the original app) */
+/* ?sport=karate from url, default taekwondo */
 window.currentSportId = function () {
   return new URLSearchParams(location.search).get('sport') || 'taekwondo';
 };

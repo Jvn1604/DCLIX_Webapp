@@ -1,14 +1,10 @@
-/* ==========================================================
-   Shared behaviour for every page
-   theme · mobile menu · scroll reveal · FAQ · sparkles ·
-   parallax background · hex tilt · pricing · referral · forms
-   ========================================================== */
+/* shared js for all pages */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Site root (pages in arena/ are one folder down), worked out from this script's own address
+  // site root (arena/ is one folder down)
   var ROOT = ((document.currentScript && document.currentScript.src) || '').replace(/js\/shared\/main\.js(\?.*)?$/, '');
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -35,7 +31,7 @@
     var y = $('#year'); if (y) y.textContent = new Date().getFullYear();
   });
 
-  /* ---------- Theme ---------- */
+  /* ---------- theme ---------- */
   function initTheme() {
     $$('[data-theme-toggle]').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -48,7 +44,7 @@
     });
   }
 
-  /* ---------- Mobile menu ---------- */
+  /* ---------- mobile menu ---------- */
   function initMenu() {
     var btn = $('#menuToggle'), menu = $('#mobileMenu');
     if (!btn || !menu) return;
@@ -59,7 +55,7 @@
     });
   }
 
-  /* ---------- Scroll reveal ---------- */
+  /* ---------- scroll reveal ---------- */
   function initReveal() {
     var items = $$('.reveal');
     if (!('IntersectionObserver' in window) || reduceMotion) { items.forEach(function (e) { e.classList.add('in'); }); return; }
@@ -72,7 +68,7 @@
     });
   }
 
-  /* ---------- FAQ accordion (first item open, one at a time) ---------- */
+  /* ---------- faq ---------- */
   function initFaq() {
     var items = $$('.faq-item');
     items.forEach(function (item) {
@@ -85,7 +81,7 @@
     });
   }
 
-  /* ---------- Contact / lead form (front-end only) ---------- */
+  /* ---------- contact form ---------- */
   function initLeadForm() {
     var form = $('#leadForm'); if (!form) return;
     var toast = $('#leadToast');
@@ -94,11 +90,11 @@
       toast.textContent = msg; toast.classList.toggle('err', !ok); toast.classList.add('show');
       clearTimeout(say.t); say.t = setTimeout(function () { toast.classList.remove('show'); }, ok ? 4500 : 7000);
     }
-    // Country code picker: show the chosen code (e.g. "MY +60") on the button
+    // show selected code on the button
     var cc = $('#leadCC'), ccShow = $('.tel-cc-show b', form), tel = $('#leadTel');
     function showCode() { var o = cc.options[cc.selectedIndex]; ccShow.textContent = o.getAttribute('data-iso') + ' ' + o.value; }
     if (cc) { cc.addEventListener('change', function () { showCode(); $('#leadPhone').focus(); }); showCode(); }
-    // Errors shown under each field (field name in the API → element to mark)
+    // field errors
     var MSG = { name: 'Enter your name.', phone: 'Enter a phone number.', phoneBad: 'Enter a valid phone number, digits only.', email: 'Enter a valid email address.', club: 'Enter your club name.', inquiries: 'Tell us how we can help.' };
     function target(k) { return k === 'phone' ? tel : form.elements[k]; }
     function clearErr(el) { if (!el) return; el.removeAttribute('aria-invalid'); var n = el.nextElementSibling; if (n && n.classList.contains('field-err')) n.remove(); }
@@ -129,7 +125,7 @@
         return;
       }
       var data = {}; new FormData(form).forEach(function (v, k) { data[k] = v; });
-      // One phone number for the API: country code + number without its leading 0, e.g. "+60 12-345 6789"
+      // +60 12-345 6789 (no leading 0)
       data.phone = data.phoneCode + ' ' + String(data.phoneNumber).trim().replace(/^0+/, '');
       delete data.phoneCode; delete data.phoneNumber;
       if (!window.dclixApi) { say('Sorry, the form is not available right now. Please call us at +603-7804 1412.', false); return; }
@@ -146,7 +142,7 @@
     });
   }
 
-  /* ---------- Sparkles (hero particle background) ---------- */
+  /* ---------- sparkles ---------- */
   function initSparkles() {
     var c = $('canvas.sparkles'); if (!c || reduceMotion) return;
     var ctx = c.getContext('2d'), dots = [], w = 0, h = 0, raf;
@@ -181,7 +177,7 @@
   // The moving sport figures (swimming, silat, taekwondo, silambam, boxing, badminton, football) behind every page (pages can opt out with <body data-no-backdrop>)
   function addBackdrop() {
     if ($('#parallax') || document.body.hasAttribute('data-no-backdrop')) return;
-    // phones get half-size images (the figures are faint background art)
+    // smaller pics on phone
     var sm = window.matchMedia('(max-width: 760px)').matches ? '-sm' : '';
     var poses = [1, 2, 3, 4, 5, 6, 7].map(function (n) {
       var src = ROOT + 'assets/images/pose-' + n + sm + '.webp';
@@ -238,7 +234,7 @@
     $$('img', root).forEach(function (img) { img.addEventListener('error', function () { var pose = img.closest('.pose'); if (pose) pose.remove(); }); });
   }
 
-  /* ---------- Hex card tilt ---------- */
+  /* ---------- hex tilt ---------- */
   function initHexTilt() {
     if (reduceMotion) return;
     $$('.hex-wrap').forEach(function (el) {
@@ -254,7 +250,7 @@
   /* ---------- Pricing (monthly / yearly) ---------- */
   function initPricing() {
     var grid = $('#planGrid'); if (!grid) return;
-    // Each plan lists only what it adds; the cards show what it includes from the plans below it
+    // each plan only lists what it adds
     var plans = [
       { key: 'basic', name: 'Basic', tier: 1, who: 'For a club that wants registration, fees and attendance in one place', m: 100, desc: 'Essential Features',
         classes: '3 Basic classes, 1 advanced class a week',
@@ -267,7 +263,7 @@
         items: ['Contribution', 'Purchase request by branch to HQ', 'Purchase request by students to branch', 'Tournament participations, scores, results & history', 'Financial reports customizations', 'Payroll module', 'HQ approval on manual payment', 'Student class booking via app', 'Dedicated WhatsApp group support'] }
     ];
     var SHARED = 'Dedicated WhatsApp group support';
-    // features counted once across plans (+1 for the classes allowance)
+    // total features (+1 for classes)
     var seen = {};
     plans.forEach(function (p) {
       p.added = p.items.filter(function (t) { if (seen[t]) return false; seen[t] = 1; return true; });
@@ -275,7 +271,7 @@
       p.own = p.inherit ? p.added : p.items;
     });
     var rm = function (n) { return 'RM' + n.toLocaleString('en-MY'); };
-    // tier meter: one bar per level, Premium fills all three
+    // tier bars
     var tier = function (n) {
       var bars = ''; for (var i = 1; i <= plans.length; i++) bars += '<i' + (i <= n ? ' class="on"' : '') + '></i>';
       return '<span class="pc-level" role="img" aria-label="Tier ' + n + ' of ' + plans.length + '">' + bars + '</span>';
@@ -302,11 +298,11 @@
         '</div></article></div>';
     }
 
-    // full comparison table: grouped by the plan that adds each feature
+    // compare table
     function table() {
       var cols = plans.length + 1;
       var cell = function (on) { return on ? '<td><span class="yes" aria-label="Included">' + window.icon('check') + '</span></td>' : '<td><span class="no" aria-label="Not included"></span></td>'; };
-      // section rows keep one cell per column so the highlighted column runs unbroken
+      // keep one cell per column so the highlight doesnt break
       var group = function (label) { return '<tr class="grp"><th scope="rowgroup">' + label + '</th>' + new Array(cols).join('<td></td>') + '</tr>'; };
       var rows = ['<tr><th scope="row">Classes a week</th>' + plans.map(function (p) { return '<td class="txt">' + p.classes.replace(/ a week$/, '') + '</td>'; }).join('') + '</tr>'];
       plans.forEach(function (q, qi) {
@@ -334,11 +330,11 @@
     $$('.billing button').forEach(function (b) {
       b.addEventListener('click', function () { pick(b.getAttribute('data-mode')); });
     });
-    // pricing.html?billing=yearly opens on the yearly prices (used by the Deepavali banner)
+    // ?billing=yearly opens yearly
     pick(new URLSearchParams(location.search).get('billing') === 'yearly' ? 'yearly' : 'monthly');
   }
 
-  /* ---------- Referral slideshow ---------- */
+  /* ---------- referral slides ---------- */
   function initReferral() {
     var box = $('#refCarousel'); if (!box) return;
     var slides = window.REFERRAL_SLIDES || [], i = 0;
@@ -376,11 +372,11 @@
     $$('img[data-fallback], img[data-person]').forEach(bind);
   }
 
-  /* ---------- Click ripple on buttons (styles: "Micro-interactions" in style.css) ---------- */
+  /* ---------- button ripple ---------- */
   var RIPPLE = '.btn-primary, .btn-outline, .btn-ghost, .billing button, .mobile-menu a, .icon-btn.boxed, .lang-btn, .wa-fab, .faq-q';
   function initRipple() {
     if (reduceMotion) return;
-    // Delegated, so buttons added later (pricing cards, payment links) get it too
+    // works for buttons added later too
     document.addEventListener('pointerdown', function (e) {
       var el = e.target.closest && e.target.closest(RIPPLE);
       if (!el || el.disabled) return;
@@ -394,7 +390,7 @@
     });
   }
 
-  /* ---------- Soft glow that follows the mouse on cards ---------- */
+  /* ---------- card glow ---------- */
   function initCardGlow() {
     if (reduceMotion || !window.matchMedia('(hover: hover)').matches) return;
     var cards = '.benefit, .feature-card, .elevate-card, .t-card, .plan, .demo-card';
@@ -409,11 +405,11 @@
     }, { passive: true });
   }
 
-  /* ---------- Tabs (home page product tour: [data-tabs] with role=tab buttons) ---------- */
+  /* ---------- tabs ---------- */
   function initTabs() {
     $$('[data-tabs]').forEach(function (box) {
       var tabs = $$('[role=tab]', box), list = $('[role=tablist]', box);
-      // A gold pill that slides to the selected tab
+      // sliding pill
       var pill = document.createElement('span'); pill.className = 'tab-pill'; pill.setAttribute('aria-hidden', 'true');
       if (list) { list.appendChild(pill); list.classList.add('has-pill'); }
       function place() {
@@ -443,7 +439,7 @@
     });
   }
 
-  /* ---------- Home page: gold reading-progress line at the top ---------- */
+  /* ---------- scroll progress bar ---------- */
   function initScrollBar() {
     if (!document.body.classList.contains('home')) return;
     var bar = document.createElement('div'); bar.className = 'scroll-bar'; bar.setAttribute('aria-hidden', 'true');
@@ -458,13 +454,13 @@
     draw();
   }
 
-  /* ---------- Numbers count up when they scroll into view (e.g. 29,000+, RM 18,420, 92%) ---------- */
+  /* ---------- count up numbers ---------- */
   function initCountUp() {
     var els = $$('[data-count], .h-facts b, .h-trust-nums b, .h-kpis b');
     if (!els.length || reduceMotion || !('IntersectionObserver' in window)) return;
     els.forEach(function (el) {
       var m = el.textContent.trim().match(/^(\D*?)(\d[\d,]*)(\.\d+)?(\D*)$/);
-      if (!m || /\//.test(el.textContent)) return; // skip things like 24/7
+      if (!m || /\//.test(el.textContent)) return; // skip 24/7
       el.dataset.countTo = m[2].replace(/,/g, '') + (m[3] || '');
       el.dataset.countFmt = JSON.stringify([m[1], m[4], m[2].indexOf(',') >= 0, m[3] ? m[3].length - 1 : 0]);
     });
@@ -493,7 +489,7 @@
     }
   }
 
-  /* ---------- Core modules: the node at the end of each line opens and closes the details ---------- */
+  /* ---------- core modules open/close ---------- */
   function initModules() {
     $$('.h-mod-toggle').forEach(function (btn) {
       var mod = btn.closest('.h-module'), name = (btn.getAttribute('aria-label') || '').replace(/^(Show|Hide) /, '');
@@ -510,7 +506,7 @@
 
 
 
-  /* ---------- Keyboard shortcuts ---------- */
+  /* ---------- keys ---------- */
   function initKeys() {
     var seq = [38, 38, 40, 40, 37, 39], at = 0;
     document.addEventListener('keydown', function (e) {

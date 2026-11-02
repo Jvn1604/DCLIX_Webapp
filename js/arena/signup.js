@@ -17,7 +17,7 @@
   });
 
   function initClub() {
-    // Pre-selected only when the visitor came from a sport page (?sport=…); from the pricing page they must choose one.
+    // only preselect when coming from a sport page
     var chosen = new URLSearchParams(location.search).get('sport') && sport ? sport.id : '';
     var typeSel = $('#clubType');
     typeSel.innerHTML = '<option value="">Select your club type</option>' + window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
@@ -43,7 +43,7 @@
     });
     // Field name in the API → input id on this page
     var FIELD_IDS = { ssmFile: 'ssmDrop', regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
-    // Registration certificate (SSM / ROS / PJS): PDF, JPG or PNG up to 5 MB, sent with the form as base64
+    // ssm cert: pdf/jpg/png max 5MB, sent as base64
     var MAX_FILE = 5 * 1024 * 1024;
     var drop = $('#ssmDrop'), fileIn = $('#ssmFile'), clearBtn = $('#ssmClear'), ssm = null;
     function fileProblem(f) {
@@ -71,7 +71,7 @@
     drop.addEventListener('drop', function (e) {
       e.preventDefault(); drop.classList.remove('drag');
       var f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return;
-      try { fileIn.files = e.dataTransfer.files; } catch (err) { /* older browsers: keep the file in memory only */ }
+      try { fileIn.files = e.dataTransfer.files; } catch (err) { /* old browsers */ }
       setFile(f);
     });
     function readFile(f) {
@@ -96,7 +96,7 @@
         input.insertAdjacentElement('afterend', p);
       });
       errBox.textContent = summary || 'Please fix the highlighted fields.'; errBox.classList.add('show');
-      // Focus the first problem in page order, so the visitor starts at the top of the form
+      // focus first error
       first = $$('[aria-invalid="true"]', form)[0];
       if (first) first.focus();
     }

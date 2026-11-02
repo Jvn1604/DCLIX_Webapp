@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TjirRuEiwbHGO+vzdFSwaNK7KZS7Fip6/QOPQYD3RBY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://app.supademo.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-DecTl4e65nCbh9w2rdkvVuGD1q6YTisZg09VcuFBs/0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self'; frame-src https://app.supademo.com https://www.google.com; object-src 'none'; base-uri 'self'; form-action 'self'" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <title>Payment Status | D-Clix</title>
 <meta name="description" content="The result of your D-Clix subscription payment." />
@@ -24,8 +24,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/style.css?v=20261030-0441" />
-<script src="../js/shared/theme.js?v=20261030-0441"></script>
+<link rel="stylesheet" href="../css/style.css?v=20261102-1358" />
+<script src="../js/shared/theme.js?v=20261102-1358"></script>
 </head>
 <body data-page="payment-status">
 <nav class="nav" aria-label="Main">
@@ -70,12 +70,12 @@
   </div>
   <div class="footer-bar"><div><span>&copy; 2026 by Raig Technologies (M) Sdn Bhd</span><nav class="f-legal" aria-label="Legal"><a href="../privacy.html">Privacy Policy</a><a href="../terms.html">Terms &amp; Conditions</a><a href="../refund.html">No Refund Policy</a></nav></div></div>
 </footer>
-<script src="../js/shared/config.js?v=20261030-0441"></script>
-<script src="../js/shared/icons.js?v=20261030-0441"></script>
-<script src="../js/arena/sports.js?v=20261030-0441"></script>
-<script src="../js/shared/main.js?v=20261030-0441"></script>
-<script src="../js/shared/i18n.js?v=20261030-0441"></script>
-<script src="../js/shared/whatsapp.js?v=20261030-0441"></script>
+<script src="../js/shared/config.js?v=20261102-1358"></script>
+<script src="../js/shared/icons.js?v=20261102-1358"></script>
+<script src="../js/arena/sports.js?v=20261102-1358"></script>
+<script src="../js/shared/main.js?v=20261102-1358"></script>
+<script src="../js/shared/i18n.js?v=20261102-1358"></script>
+<script src="../js/shared/whatsapp.js?v=20261102-1358"></script>
 <script>
 (function () {
   'use strict';
@@ -87,7 +87,7 @@
     pending: ['clock', 'Confirming your payment', 'We are still waiting for the bank to confirm your payment. This usually takes a minute. You will receive an email once it is confirmed.', '<button class="btn-primary" type="button" data-reload>Check again</button>'],
     error: ['info', 'Something went wrong', 'We could not confirm this payment. If money was taken from your account, please contact D-Clix at +603-7804 1412 and we will sort it out.', '<a class="btn-primary" href="../pricing.html">Back to plans</a>']
   };
-  // Only known statuses reach the page (the value comes from the address bar)
+  // only known statuses
   if (!S.hasOwnProperty(status)) status = 'error';
   var s = S[status];
   if (status === 'paid') { try { sessionStorage.removeItem('dclixSignup'); } catch (e) {} }

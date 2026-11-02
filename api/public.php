@@ -1,5 +1,5 @@
 <?php
-/* Public, read-only information: GET ?action=health | plans */
+/* public: ?action=health | plans */
 require __DIR__ . '/lib/init.php';
 
 $action = $_GET['action'] ?? 'health';
