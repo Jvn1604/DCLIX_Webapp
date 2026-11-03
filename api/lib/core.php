@@ -1,5 +1,5 @@
 <?php
-/* core: config, db, json, cors, throttle, logs */
+/* D-Clix API — core helpers: config, database, JSON responses, CORS, rate limits, logging. */
 declare(strict_types=1);
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -63,7 +63,7 @@ function fail(string $message, int $code = 400, array $extra = []): never
     json_out(['error' => $message] + $extra, $code);
 }
 
-/** request body (json or form) */
+/** Request body as an array (JSON or form-encoded). */
 function body(): array
 {
     static $b = null;
@@ -86,6 +86,7 @@ function str_in(array $src, string $key, int $max = 255): string
 function client_ip(): string { return substr((string) ($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64); }
 function client_agent(): string { return substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255); }
 
+/** Allow the configured websites to call the API from the browser. */
 function cors(): void
 {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -138,7 +139,7 @@ function settings_put(string $key, $value): void
         [$key, json_encode($value, JSON_UNESCAPED_UNICODE), now()]);
 }
 
-/** max $max hits per $window sec, else 429 */
+/** Allow at most $max hits per $window seconds for this key, otherwise reply 429. */
 function throttle(string $key, int $max, int $window): void
 {
     $k = substr($key, 0, 120);

@@ -1,6 +1,8 @@
 <?php
-/* signup step 1 (club-register.html)
- * saves club, admin login + lead as pending, returns token for payment page
+/*
+ * Step 1 of the website signup (club-register.html).
+ * Saves the club, a Club Admin login and a sales lead, all "Pending Payment",
+ * then returns a token that the payment page uses for step 2.
  */
 require __DIR__ . '/lib/init.php';
 require_method('POST');
@@ -17,7 +19,7 @@ $f = [
     'username' => str_in($in, 'username', 60), 'branch' => str_in($in, 'branch', 80), 'regNo' => str_in($in, 'regNo', 60),
 ];
 $password = is_string($in['password'] ?? null) ? $in['password'] : '';
-// simulated=true marks test records (mock only)
+// A request with simulated=true marks its records so they can be told apart and removed (test payment mode only)
 $isTest = !empty($in['simulated']) && billplz_mode() === 'mock';
 
 $errors = [];
@@ -37,7 +39,7 @@ $quote = plan_quote($plan['id'], $billing);
 $existing = valid_email($f['email']) ? user_by_email($f['email']) : null;
 $resume = null;
 if ($existing) {
-    // unpaid signup can continue with same email + password
+    // Someone who registered before but never paid can continue with the same email + password.
     $lead = q("SELECT data FROM records WHERE coll = 'leads' AND JSON_UNQUOTE(JSON_EXTRACT(data, '$.userId')) = ? ORDER BY created_at DESC LIMIT 1", [$existing['id']])->fetchColumn();
     if ($existing['status'] === 'Pending Payment' && $lead && password_verify($password, $existing['pw_hash'])) $resume = json_decode($lead, true);
     else $errors['email'] = 'An account with this email already exists. Please log in, or use a different email.';
@@ -46,14 +48,14 @@ if (!isset($errors['clubCode'])) {
     $dup = q("SELECT id FROM records WHERE coll = 'clubs' AND UPPER(JSON_UNQUOTE(JSON_EXTRACT(data, '$.clubCode'))) = ? AND id <> ?", [$f['clubCode'], $resume['clubId'] ?? ''])->fetchColumn();
     if ($dup) $errors['clubCode'] = 'This club code is already taken. Please choose another.';
 }
-// ssm cert required unless resuming
+// Registration certificate (SSM / ROS / PJS). Required, except when someone resumes a signup that already has one.
 $upload = upload_from_json($in['ssmFile'] ?? null);
 if (isset($upload['error'])) $errors['ssmFile'] = $upload['error'];
 elseif (!$upload && empty($resume['ssmFile'])) $errors['ssmFile'] = 'Please upload your SSM / registration certificate.';
 if ($errors) fail('Please fix the highlighted fields.', 422, ['fields' => $errors]);
 
 $sportName = $f['sportName'] !== '' ? $f['sportName'] : ucwords(str_replace('-', ' ', $f['sport']));
-// empty if no number
+// Country code + WhatsApp number; empty when no number was given (a bare "+60" is not a phone number)
 $phone = $f['whatsapp'] === '' ? '' : trim(preg_replace('/\s*\(.*\)$/', '', $f['phoneCode']) . ' ' . $f['whatsapp']);
 $address = trim($f['address1'] . ($f['address2'] !== '' ? ', ' . $f['address2'] : ''));
 
@@ -62,7 +64,7 @@ $pdo->beginTransaction();
 $saved = null;
 try {
     $leadId = $resume['id'] ?? next_id('leads', 'LD');
-    // save new cert first, replaces the old one
+    // Store the new certificate first; a re-registration with a new file replaces the old one
     $ssm = $resume['ssmFile'] ?? null;
     if ($upload) { $saved = upload_save($upload, 'ssm', $leadId); $ssm = $saved; }
 

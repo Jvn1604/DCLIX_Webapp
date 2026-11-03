@@ -1,7 +1,15 @@
-/* test api for uat, runs in the browser
-   used when there's no real api (PRODUCTION_API empty)
-   saves to localStorage (dclix_test_api), see DCLIX_MOCK.data() in console
-   dont delete when going live, just set PRODUCTION_API */
+/* ==========================================================
+   Built-in TEST API for UAT (runs in the browser).
+   Used automatically when the site has no real server, e.g. on
+   GitHub Pages while PRODUCTION_API in js/shared/config.js is
+   empty. It answers the same requests as the PHP API in api/:
+     public.php · signup.php · checkout.php · contact.php
+   and saves signups, invoices, payments and the emails that would
+   be sent into this browser only (localStorage key dclix_test_api).
+   To look at them, run DCLIX_MOCK.data() in the browser console.
+   Payments go to arena/mock-gateway.html (Pay / Cancel, no money).
+   Delete nothing here when going live: set PRODUCTION_API instead.
+   ========================================================== */
 (function () {
   'use strict';
   var root = (window.DCLIX_CONFIG && window.DCLIX_CONFIG.siteRoot) || '';
@@ -13,7 +21,7 @@
 
   var KEY = 'dclix_test_api', LOGIN = 'https://www.maclubsystem.com/index.php?/login/proceed';
 
-  /* storage */
+  /* ---------- storage (this browser only) ---------- */
   function pad(n, len) { return ('000000' + n).slice(-len); }
   var A = {
     data: null,
@@ -25,7 +33,7 @@
       if (!x.seq) x.seq = {};
       A.data = x;
     },
-    save: function () { try { localStorage.setItem(KEY, JSON.stringify(A.data)); } catch (e) { } },
+    save: function () { try { localStorage.setItem(KEY, JSON.stringify(A.data)); } catch (e) { /* storage full or blocked: keep in memory */ } },
     nextId: function (coll, prefix) { var q = A.data.seq; q[coll] = (q[coll] || 0) + 1; return prefix + pad(q[coll], 4); },
     iso: function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2); },
     addDays: function (d, n) { var x = new Date(d); x.setDate(x.getDate() + n); return x; },
@@ -46,7 +54,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function save() { DB().save(); }
 
-  /* emails (not sent) */
+  /* ---------- emails (saved in this browser, never sent) ---------- */
   function layout(title, intro, rows, button, outro) {
     var t = rows && rows.length ? '<table style="width:100%;border-collapse:collapse;margin:16px 0">' + rows.map(function (r) { return '<tr><td style="padding:8px 10px;border:1px solid #e5e7eb;background:#f9fafb;width:40%;font-weight:600">' + esc(r[0]) + '</td><td style="padding:8px 10px;border:1px solid #e5e7eb">' + esc(r[1]) + '</td></tr>'; }).join('') + '</table>' : '';
     var b = button ? '<p style="margin:22px 0"><a href="' + esc(button[1]) + '" style="background:#de9836;color:#1a1208;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:700;display:inline-block">' + esc(button[0]) + '</a></p>' : '';
@@ -57,15 +65,16 @@
     d.emails.unshift({ id: 'EM' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), kind: kind, to: to, subject: subject, status: 'logged', error: '', relatedId: related || '', createdAt: now(), sentAt: '', html: html });
   }
 
-  // same as api/lib/billing.php
+  // Everything the sales team needs to set the club up in the D-Clix club system (same as api/lib/billing.php)
   function setupRows(l) {
     var addr = [l.address, l.state, l.country].filter(Boolean).join(', ');
     return [['Club', l.clubName], ['Registration no.', l.regNo || '—'], ['Certificate', l.ssmFile ? l.ssmFile.name + ' (attached)' : '—'], ['Club code', l.clubCode || ''], ['Branch', l.branch || '—'], ['Username', l.username || '—'], ['Head instructor', l.contactName || '—'],
       ['Sport', l.sport || ''], ['Email', l.email], ['Phone', l.phone || '—'], ['Address', addr || '—']];
   }
+  // Club code + username the client uses on the club system's login page
   function loginRows(l) { return [['Club code', l.clubCode || ''], ['Username', l.username || '']].filter(function (r) { return r[1]; }); }
 
-  /* endpoints */
+  /* ---------- endpoints ---------- */
   function signup(b) {
     var d = DB().data;
     var f = { clubCode: str(b.clubCode, 30).toUpperCase(), clubName: str(b.clubName, 120), headInstructor: str(b.headInstructor, 120), sport: str(b.sport, 40), sportName: str(b.sportName, 60),
@@ -74,7 +83,7 @@
     var e = {};
     if (!f.clubName) e.clubName = 'Club name is required.';
     if (!f.regNo) e.regNo = 'Registration number is required (SSM / ROS (JPPM) / PJS).';
-    // same checks as api/lib/files.php
+    // Registration certificate: same checks as api/lib/files.php. Test mode keeps only its details, not the file.
     var up = b.ssmFile && typeof b.ssmFile.data === 'string' && b.ssmFile.data ? b.ssmFile : null, ssm = null;
     if (up) {
       var head = ''; try { head = atob(up.data.slice(0, 16)); } catch (x) { head = ''; }
@@ -93,7 +102,7 @@
     var existing = d.users.filter(function (u) { return u.email.toLowerCase() === f.email; })[0], resume = null;
     if (existing) {
       var lead0 = d.leads.filter(function (l) { return l.userId === existing.id; })[0];
-      if (existing.status === 'Pending Payment' && lead0) resume = lead0; // no password in test mode
+      if (existing.status === 'Pending Payment' && lead0) resume = lead0; // test mode keeps no password, so a pending signup simply continues
       else e.email = 'An account with this email already exists. Please log in, or use a different email.';
     }
     if (!e.clubCode && d.clubs.some(function (c) { return String(c.clubCode || '').toUpperCase() === f.clubCode && c.id !== (resume && resume.clubId); })) e.clubCode = 'This club code is already taken. Please choose another.';
@@ -180,7 +189,7 @@
     return { ok: true };
   }
 
-  /* test payment */
+  /* ---------- test payment gateway (arena/mock-gateway.html) ---------- */
   function billInfo(billId) {
     var d = DB().data, bill = d.bills.filter(function (x) { return x.id === billId; })[0];
     if (!bill) return null;
@@ -213,7 +222,7 @@
     return { status: 'paid', ref: sub.id };
   }
 
-  /* router */
+  /* ---------- router: same paths as the PHP API ---------- */
   function handle(path, opts) {
     var p = path.split('?')[0], qs = new URLSearchParams(path.split('?')[1] || ''), body = (opts && opts.body) || {};
     switch (p) {
@@ -229,6 +238,6 @@
     billInfo: function (id) { return billInfo(id); },
     pay: pay,
     data: function () { return DB().data; },
-    reset: function () { try { localStorage.removeItem(KEY); } catch (e) { } A.data = null; }
+    reset: function () { try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ } A.data = null; }
   };
 })();

@@ -1,5 +1,9 @@
 <?php
-/* contact form -> saves lead, emails sales + visitor */
+/*
+ * Home page "Fill in your details" form.
+ * Saves the enquiry as a sales lead (Admin → Leads, source "Contact form"),
+ * alerts the sales inbox and sends the visitor a short confirmation.
+ */
 require __DIR__ . '/lib/init.php';
 require_method('POST');
 throttle('contact:' . client_ip(), 10, 3600);
@@ -7,7 +11,7 @@ throttle('contact:' . client_ip(), 10, 3600);
 $in = body();
 $f = ['name' => str_in($in, 'name', 120), 'phone' => str_in($in, 'phone', 30), 'email' => strtolower(str_in($in, 'email', 190)),
       'club' => str_in($in, 'club', 120), 'inquiries' => str_in($in, 'inquiries', 2000)];
-if (str_in($in, 'website', 100) !== '') json_out(['ok' => true]); // honeypot
+if (str_in($in, 'website', 100) !== '') json_out(['ok' => true]); // hidden field only bots fill in
 
 $errors = [];
 if ($f['name'] === '') $errors['name'] = 'Please enter your name.';

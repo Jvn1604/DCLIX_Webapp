@@ -36,14 +36,14 @@
       $('#bEmail').value = b.email || lead.email; $('#bPhone').value = b.phone || lead.phone || '';
       ['company', 'firstName', 'lastName', 'address', 'zip', 'city'].forEach(function (k) { var id = { company: '#bCompany', firstName: '#bFirst', lastName: '#bLast', address: '#bAddr', zip: '#bZip', city: '#bCity' }[k]; if (b[k]) $(id).value = b[k]; });
       if (b.country) $('#bCountry').value = b.country;
-      // first time: fill from the register page
+      // First visit: start from what the club entered on the registration page
       if (!lead.billingInfo) {
         var name = (lead.contactName || '').trim().split(/\s+/);
         if (name[0]) { $('#bFirst').value = name[0]; $('#bLast').value = name.slice(1).join(' '); }
         if (lead.address) $('#bAddr').value = lead.address;
         if (lead.country && [].some.call($('#bCountry').options, function (o) { return o.value === lead.country; })) $('#bCountry').value = lead.country;
       }
-      // plain text options, not html (names come from server)
+      // Built as plain text options (never as HTML), because plan names come from the server
       sel.textContent = '';
       PLANS.forEach(function (p) {
         ['monthly', 'yearly'].forEach(function (m) {

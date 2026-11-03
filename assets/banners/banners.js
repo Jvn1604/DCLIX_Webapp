@@ -1,26 +1,39 @@
-/* home event banner - edit this file only
-   1. put the pic/video in assets/banners/
-   2. add one { } line per slide (2+ slides = slider)
-   3. save, commit, push. empty list = no banner
+/* ==========================================================
+   EVENT BANNER on the home page — edit this file to change it.
 
-   src        pic or .mp4 in this folder (required)
-   mobileSrc  taller pic for phones (all slides need one or none)
-   alt        what the banner says (required)
-   pages      ['home'], ['pricing'] or both (default home)
-   link       page or https:// link when clicked
-   start/end  'YYYY-MM-DD', turns on/off by itself
-   preview    true = only shows on localhost
+   1. Put the picture or video in this folder (assets/banners/).
+   2. Add one { … } line per slide below. Several slides = a slider.
+   3. Save, then commit and push. The banner hides itself when
+      no slide is active, so an empty list shows nothing.
 
-   size: desktop 1600x500, phone 800x600. pics < 500KB, videos < 5MB (mp4, muted) */
+   Each slide:
+     src        file in this folder: .png .jpg .webp .svg or .mp4   (required)
+     mobileSrc  optional taller picture for phones (same types, not .mp4).
+                Give one for every slide, or for none: phones show the 4 : 3
+                phone pictures only when every active slide has one.
+     alt        what the banner says, for screen readers and Google    (required)
+     pages      where it shows: ['home'], ['pricing'] or ['home', 'pricing']
+                (home only when left out)
+     link       optional page to open when clicked, e.g. 'pricing.html'
+                or a full https:// address (opens in a new tab)
+     start/end  optional dates 'YYYY-MM-DD'; the slide shows only from
+                start to end (inclusive), so it switches off by itself
+     preview    true = show only on your own PC (127.0.0.1 / localhost),
+                never on the live site. Remove it to publish the slide.
+
+   Sizes: desktop 1600 × 500 px (3.2 : 1); phone picture 800 × 600 px.
+   Keep pictures under 500 KB and videos under 5 MB (MP4, H.264, no
+   sound needed — videos play muted and loop).
+   ========================================================== */
 window.DCLIX_BANNERS = {
-  seconds: 6, // seconds per slide
+  seconds: 6, // how long each picture stays before the next slide
 
   slides: [
-    // deepavali offer, add end date once confirmed
+    // Deepavali offer. Add an end date (e.g. end: '2026-11-30') when the company decides how long it runs.
     { src: 'deepavali-offer.svg', mobileSrc: 'deepavali-offer-phone.svg', alt: 'Deepavali offer: 2 months free on every yearly plan. Happy Deepavali!', link: 'pricing.html?billing=yearly', pages: ['home', 'pricing'] },
     { src: 'free-demo.svg', mobileSrc: 'free-demo-phone.svg', alt: 'Free demo: see D-Clix in action with a guided demo for your club', link: 'contact.html', pages: ['home', 'pricing'] },
 
-    // examples:
+    // Examples:
     // { src: 'merdeka-promo.png', mobileSrc: 'merdeka-promo-phone.png', alt: 'Merdeka promo: 20% off yearly plans', link: 'pricing.html', pages: ['home', 'pricing'], start: '2026-08-20', end: '2026-09-16' },
     // { src: 'tournament-2026.mp4', alt: 'D-Clix Open Karate Championship 2026, 6 December', link: 'https://www.instagram.com/dclixmalaysia/' },
   ]

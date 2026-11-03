@@ -1,5 +1,8 @@
 <?php
-/* billplz sends the user back here (redirect_url). always recheck the bill */
+/*
+ * Billplz sends the customer's browser here after paying (redirect_url).
+ * We never trust the query string alone: the bill is re-checked with Billplz before anything is activated.
+ */
 require __DIR__ . '/lib/init.php';
 
 $site = rtrim((string) cfg('site_url'), '/') . '/arena/payment-status.html';

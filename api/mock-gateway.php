@@ -1,5 +1,9 @@
 <?php
-/* test payment page (mock mode only) */
+/*
+ * Test payment page used while billplz.mode = 'mock' (no Billplz account needed).
+ * It behaves like Billplz: the customer pays or cancels, then returns to billplz-return.php.
+ * Disabled automatically in sandbox/live mode.
+ */
 require __DIR__ . '/lib/init.php';
 
 $billId = is_string($_GET['bill'] ?? null) ? $_GET['bill'] : '';

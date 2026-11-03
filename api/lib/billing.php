@@ -1,5 +1,5 @@
 <?php
-/* plans, billplz, after payment */
+/* D-Clix API — plans, Billplz, and what happens automatically after a payment. */
 declare(strict_types=1);
 
 function plans(): array
@@ -22,7 +22,7 @@ function plan_by_id(string $id): ?array
     return null;
 }
 
-/** price + fee */
+/** Price for a plan + billing cycle, including the gateway fee. */
 function plan_quote(string $planId, string $billing): ?array
 {
     $p = plan_by_id($planId);
@@ -37,7 +37,7 @@ function doc_no(string $prefix, string $id): string
     return $prefix . '-' . date('Y') . '-' . str_pad(preg_replace('/\D/', '', $id), 5, '0', STR_PAD_LEFT);
 }
 
-/* ---------- billplz ---------- */
+/* ---------- Billplz ---------- */
 function billplz_mode(): string { return (string) cfg('billplz.mode', 'mock'); }
 function billplz_base(): string { return billplz_mode() === 'live' ? 'https://www.billplz.com/api/v3/' : 'https://www.billplz-sandbox.com/api/v3/'; }
 
@@ -65,7 +65,10 @@ function billplz_request(string $method, string $path, array $data = []): array
     return $json;
 }
 
-/** check x_signature. redirect keys are prefixed with "billplz" */
+/**
+ * Check Billplz's X-Signature. $fields are the received parameters (without x_signature);
+ * for the redirect they arrive nested as billplz[...] so the keys are prefixed with "billplz".
+ */
 function billplz_signature_ok(array $fields, string $signature, string $prefix = ''): bool
 {
     $key = (string) cfg('billplz.x_signature_key');
@@ -79,7 +82,7 @@ function billplz_signature_ok(array $fields, string $signature, string $prefix =
     return hash_equals(hash_hmac('sha256', implode('|', $parts), $key), $signature);
 }
 
-/** make a bill -> [id, url] */
+/** Create a payment bill. Returns ['id' => …, 'url' => …]. */
 function create_bill(array $sub, array $lead): array
 {
     $cents = (int) round($sub['total'] * 100);
@@ -111,7 +114,7 @@ function create_bill(array $sub, array $lead): array
     return ['id' => $id, 'url' => $url];
 }
 
-/** real bill state from billplz (or mock) */
+/** Ask Billplz (or the mock) for the bill's real state. Returns ['paid' => bool, 'state' => …, 'paid_at' => …]. */
 function fetch_bill_state(string $billId): ?array
 {
     $b = q('SELECT * FROM bills WHERE bill_id = ?', [$billId])->fetch();
@@ -121,9 +124,9 @@ function fetch_bill_state(string $billId): ?array
     return ['paid' => !empty($r['paid']), 'state' => (string) ($r['state'] ?? ''), 'paid_at' => $r['paid_at'] ?? null, 'raw' => $r];
 }
 
-/* ---------- after payment ---------- */
+/* ---------- After payment ---------- */
 
-/** mark paid + activate. safe to call twice */
+/** Mark a bill paid and switch everything on. Safe to call more than once (callback + redirect). */
 function complete_payment(string $billId, array $raw = []): ?array
 {
     $pdo = db();
@@ -139,7 +142,7 @@ function complete_payment(string $billId, array $raw = []): ?array
         $club = rec_get('clubs', $b['club_id']);
         if (!$sub || !$lead || !$club) throw new RuntimeException('Payment ' . $billId . ' has missing records');
 
-        // renewal continues from end date, new club starts today
+        // Renewals continue from the current end date; new clubs start today.
         $start = ($club['status'] ?? '') === 'Active' && !empty($club['subEnd']) && $club['subEnd'] >= today() ? date('Y-m-d', strtotime($club['subEnd'] . ' +1 day')) : today();
         $end = date('Y-m-d', strtotime($start . ($sub['billing'] === 'yearly' ? ' +1 year' : ' +1 month') . ' -1 day'));
 
@@ -173,7 +176,7 @@ function fail_payment(string $billId, string $state): void
     if ($lead && $lead['status'] !== 'Paid') { $lead['status'] = 'Payment Failed'; rec_put('leads', $lead, 'system'); }
 }
 
-/** resume link (7 days) */
+/** A fresh link that lets the client resume payment (valid 7 days). */
 function resume_link(string $leadId): string
 {
     $token = random_token();
@@ -181,8 +184,8 @@ function resume_link(string $leadId): string
     return rtrim((string) cfg('site_url'), '/') . '/arena/payment.html?t=' . $token;
 }
 
-/* ---------- emails ---------- */
-// club details for sales
+/* ---------- Emails ---------- */
+// Everything the sales team needs to set the club up in the D-Clix club system
 function club_setup_rows(array $lead): array
 {
     $address = implode(', ', array_filter([$lead['address'] ?? '', $lead['state'] ?? '', $lead['country'] ?? ''], 'strlen'));
@@ -190,7 +193,7 @@ function club_setup_rows(array $lead): array
         ['Head instructor', ($lead['contactName'] ?? '') ?: '—'], ['Sport', $lead['sport'] ?? ''], ['Email', $lead['email']], ['Phone', ($lead['phone'] ?? '') ?: '—'], ['Address', $address ?: '—']];
 }
 
-// login details for the client
+// Club code + username the client uses on the club system's login page
 function client_login_rows(array $lead): array
 {
     return array_values(array_filter([['Club code', $lead['clubCode'] ?? ''], ['Username', $lead['username'] ?? '']], fn($r) => $r[1] !== ''));

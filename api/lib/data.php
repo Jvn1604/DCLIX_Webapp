@@ -1,8 +1,8 @@
 <?php
-/* records, users, audit */
+/* D-Clix API — records, users and audit trail used by the website signup, payment and contact form. */
 declare(strict_types=1);
 
-/* ---------- records ---------- */
+/* ---------- Records ---------- */
 function rec_get(string $coll, string $id): ?array
 {
     $v = q('SELECT data FROM records WHERE coll = ? AND id = ?', [$coll, $id])->fetchColumn();
@@ -26,7 +26,7 @@ function rec_put(string $coll, array $d, string $by = ''): void
 
 function rec_del(string $coll, string $id): void { q('DELETE FROM records WHERE coll = ? AND id = ?', [$coll, $id]); }
 
-/** next id e.g. CLB0007 (locked so no duplicates) */
+/** Next ID such as CLB0007. Uses a locked counter so two requests never get the same number. */
 function next_id(string $coll, string $prefix, int $len = 4): string
 {
     $pdo = db();
@@ -44,11 +44,11 @@ function next_id(string $coll, string $prefix, int $len = 4): string
     return $prefix . str_pad((string) $n, $len, '0', STR_PAD_LEFT);
 }
 
-/* ---------- users ---------- */
+/* ---------- Users ---------- */
 function user_by_id(string $id): ?array { $r = q('SELECT * FROM users WHERE id = ?', [$id])->fetch(); return $r ?: null; }
 function user_by_email(string $email): ?array { $r = q('SELECT * FROM users WHERE email = ?', [strtolower(trim($email))])->fetch(); return $r ?: null; }
 
-/* ---------- audit ---------- */
+/* ---------- Audit ---------- */
 function audit(?array $u, string $action, string $module, string $recordId, string $summary = '', array $changes = []): void
 {
     q('INSERT INTO audit_log (at, user_id, user_name, action, module, record_id, summary, changes, ip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',

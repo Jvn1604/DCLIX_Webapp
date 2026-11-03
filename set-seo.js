@@ -1,14 +1,17 @@
-/* seo tags, json-ld, sitemap + robots
-   run after changing titles, faq, prices or domain:
-   node set-seo.js
-   change SITE when moving to the real domain */
+/* Adds search and social-sharing tags and structured data (JSON-LD) to every page,
+   and writes sitemap.xml + robots.txt. Run after changing a page title, description,
+   FAQ, price or company detail, or when the site moves to its own domain:
+
+       node set-seo.js
+
+   SITE is the public address of the website (change it when d-clix.com points here). */
 const SITE = 'https://jvn1604.github.io/DCLIX_Webapp/';
 
 const fs = require('fs');
 const IMAGE = SITE + 'assets/og-image.jpg';
-// hidden from google
+// pages visitors should not land on from a search engine
 const NOINDEX = ['arena/payment.html', 'arena/payment-status.html', 'arena/mock-gateway.html', '404.html'];
-// titles (~50-60 chars)
+// page titles shown in Google (about 50-60 characters: what the page is + D-Clix)
 const TITLE = {
   'index.html': 'D-Clix | Martial Arts & Sports Club Management System Malaysia',
   'pricing.html': 'D-Clix Pricing | Club Management Plans from RM100 a Month',
@@ -17,7 +20,7 @@ const TITLE = {
   'community.html': 'D-Clix Community | For Martial Arts and Sports Club Owners',
   'arena/club-register.html': 'Register Your Club | D-Clix'
 };
-// descriptions (~120-160 chars)
+// descriptions shown under the title in Google (about 120-160 characters)
 const DESC = {
   'about.html': 'D-Clix is a Malaysian club management system for martial arts and sports clubs: registration, attendance, fees, grading and a parent app in one place.',
   'edu-hub.html': 'Learn D-Clix at your own pace: try the real screens in an interactive tour and keep the full user guide for club admins and coaches.',
@@ -25,13 +28,13 @@ const DESC = {
   'arena/payment.html': 'Choose your D-Clix plan and pay securely by FPX online banking or card through Billplz.',
   'arena/payment-status.html': 'The result of your D-Clix subscription payment.'
 };
-// breadcrumb names
+// short page names for the breadcrumb trail (Home › Page)
 const CRUMB = {
   'about.html': 'About', 'pricing.html': 'Pricing', 'edu-hub.html': 'Edu-Hub', 'community.html': 'Community', 'contact.html': 'Contact',
   'privacy.html': 'Privacy Policy', 'terms.html': 'Terms & Conditions', 'refund.html': 'No Refund Policy', 'arena/club-register.html': 'Club Registration'
 };
 
-/* company info */
+/* ---------- company and product facts used in the structured data ---------- */
 const ORG = {
   '@type': 'Organization', '@id': SITE + '#org', name: 'D-Clix', legalName: 'Raig Technologies (M) Sdn Bhd',
   url: SITE, logo: SITE + 'assets/dclix-logo.webp', image: IMAGE, telephone: '+60378041412',
@@ -57,7 +60,7 @@ const unesc = s => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&rs
 const text = html => unesc(html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
 const listed = [];
 
-// faq from the page
+// questions and answers from the page's FAQ accordion
 function faqs(s) {
   const out = [];
   const re = /class="faq-q"[^>]*><span[^>]*>([\s\S]*?)<\/span>[\s\S]*?class="faq-a"><div>([\s\S]*?)<\/div><\/div>/g;
@@ -73,7 +76,7 @@ for (const f of pages) {
   if (DESC[f]) s = s.replace(/<meta name="description" content="[^"]*"\s*\/?>/, '<meta name="description" content="' + esc(DESC[f]) + '" />');
   const desc = unesc((s.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
   const url = SITE + (f === 'index.html' ? '' : f);
-  // remove old tags then add again
+  // remove tags this script manages, then add them back after the description
   s = s.replace(/[ \t]*<meta (?:property="og:[^"]+"|name="twitter:[^"]+"|name="robots"|name="theme-color") content="[^"]*"\s*\/?>\r?\n?/g, '')
        .replace(/[ \t]*<link rel="canonical" href="[^"]*"\s*\/?>\r?\n?/g, '')
        .replace(/[ \t]*<script type="application\/ld\+json" data-seo>[\s\S]*?<\/script>\r?\n?/g, '');
@@ -96,7 +99,7 @@ for (const f of pages) {
   if (!anchor) { console.log('skip (no description):', f); continue; }
   s = s.replace(anchor[0], anchor[0] + nl + tags);
 
-  // json-ld
+  // structured data (JSON-LD) for search engines; browsers never run it, so the security policy is unaffected
   if (!noindex) {
     const graph = [ORG];
     if (f === 'index.html') graph.push({ '@type': 'WebSite', '@id': SITE + '#site', url: SITE, name: 'D-Clix', inLanguage: ['en-MY', 'ms-MY'], publisher: { '@id': SITE + '#org' } });

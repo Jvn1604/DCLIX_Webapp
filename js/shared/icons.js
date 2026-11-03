@@ -1,4 +1,5 @@
-/* svg icons. <i data-icon="trophy" class="w-5"></i> */
+/* Inline SVG icon set (Lucide-style, 24x24 stroke icons).
+   Usage in HTML: <i data-icon="trophy" class="w-5"></i>  -> replaced with an <svg>. */
 window.ICONS = {
   menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   x: '<path d="M18 6 6 18M6 6l12 12"/>',
@@ -68,11 +69,12 @@ window.ICONS = {
   nfc: '<path d="M6 8.32a7.43 7.43 0 0 1 0 7.36"/><path d="M9.46 6.21a11.76 11.76 0 0 1 0 11.58"/><path d="M12.91 4.1a15.91 15.91 0 0 1 .01 15.8"/><path d="M16.37 2a20.16 20.16 0 0 1 0 20"/>'
 };
 
+/* Build an <svg> string for an icon name */
 window.icon = function (name, cls) {
   return '<svg class="i ' + (cls || '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (window.ICONS[name] || '') + '</svg>';
 };
 
-/* swap <i data-icon> with svg */
+/* Replace every <i data-icon="name"> with its SVG */
 window.hydrateIcons = function (root) {
   (root || document).querySelectorAll('i[data-icon]').forEach(function (el) {
     var name = el.getAttribute('data-icon');

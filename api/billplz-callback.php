@@ -1,5 +1,9 @@
 <?php
-/* billplz server callback (callback_url). only works on public hosting */
+/*
+ * Billplz calls this server-to-server when a bill changes (callback_url).
+ * This is the reliable confirmation: it arrives even if the customer closes the browser.
+ * It cannot reach a PC on a home network, so it only works once the API is on public hosting.
+ */
 require __DIR__ . '/lib/init.php';
 require_method('POST');
 
@@ -15,7 +19,7 @@ if (cfg('billplz.x_signature_key')) {
     $paid = ($f['paid'] ?? '') === 'true';
     $state = ['paid' => $paid, 'state' => (string) ($f['state'] ?? ''), 'raw' => $f];
 } else {
-    // no key set: check with billplz instead
+    // No signature key configured: ask Billplz directly instead of trusting the POST.
     $state = fetch_bill_state($billId);
 }
 
