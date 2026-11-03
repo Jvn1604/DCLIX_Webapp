@@ -55,7 +55,7 @@ in place before the real API and club data go live.
 
 ## 3. Rules for both of us
 
-- Never commit `api/config.php`, `.env` files, the portal client secret or any other key or password.
+- Never commit `api/config.php`, `.env` files, the portal client secret, the SMTP password, the WhatsApp token or any other key or password.
   If one is ever pushed, **change the key immediately**; deleting the file is not enough, because the old version stays in git history.
 - Never commit real client data: registrations, exported emails, screenshots showing names, phone numbers or ICs.
   Test with sample data only (local tests go to the portal's staging system).

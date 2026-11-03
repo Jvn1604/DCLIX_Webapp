@@ -119,21 +119,24 @@ worked. A screenshot of anything that looks wrong helps me a lot.
    - Promo Code: leave it empty for now
    - Tick the terms box
    - Press **Save Club**
-   → You'll see "Club saved!" and then the **Boost** payment page opens (the address starts with
-   `stage-pay.boostconnect.biz`).
-   → Check the amount: **RM100** for Basic, **RM150** for Standard, **RM200** for Premium.
+   → You'll see "Club saved!" and then step 3, **Registration saved**: our admin approves the club first,
+   and payment only opens after that.
+   → Check the club name, plan and amount: **RM100** for Basic, **RM150** for Standard, **RM200** for Premium.
+   → Close the tab, open http://127.0.0.1:8000 again: it should bring you straight back to step 3.
+   → Until the portal team fixes their status check, step 3 keeps saying it's waiting. That's expected for now.
 5. **Same club again:** go back to the registration page and register again with the **same club code and email**.
-   → It should take you back to the same Boost page instead of creating a new order.
+   → It should not create a second order (just tell me the club code, I'll check in the portal).
 6. **Double click:** register with another new club code, and double-click Save Club quickly.
    → Only one order should be created (just tell me the club code, I'll check in the portal).
 7. **Other sport:** register once with Club Type set to **Football**.
-   → It should still reach the Boost page.
+   → It should still reach step 3.
 8. **Promo code:** register once with a made-up promo code like `HELLO123`.
-   → Note down what happens: a message about the code, or straight to Boost at the normal price.
+   → Note down what happens: a message about the code, or straight to step 3 at the normal price.
    (We don't have real promo codes set up yet, so I just want to see how the portal reacts.)
 
 ### Test C: After the payment page
 
+Once the portal can approve clubs, step 3 turns into "Your club is approved". Press **Continue to payment**.
 On the Boost page, try paying (it's the test system, so it's not real money) and, in another test, try
 cancelling. Both should bring you back to our result page with a matching message.
 

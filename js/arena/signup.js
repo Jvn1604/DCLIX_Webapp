@@ -123,8 +123,12 @@
         country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw,
         promoCode: v('promoCode'), acceptedTerms: true, requestKey: key
       } }).then(function (res) {
-        // boost payment page, or the result page when the portal has online payment off
-        var next = res.url && /^https:///i.test(res.url) ? res.url : 'payment-status.html?ref=' + encodeURIComponent(res.ref || '');
+        // step 3: wait for admin approval, payment opens after that. ref kept so they can come back later
+        // + a few details so step 3 can show them even before the portal answers
+        var p = PLANS.filter(function (x) { return x[0] === plan; })[0];
+        try { localStorage.setItem('dclix-reg', JSON.stringify({ ref: res.ref || '', at: Date.now(), clubName: v('clubName'), plan: p[1].replace(' Plan', '') + ' (' + billing + ')',
+          amount: billing === 'monthly' ? p[2] : p[3], payUrl: res.url && /^https:\/\//i.test(res.url) ? res.url : '' })); } catch (e) {}
+        var next = 'payment-status.html?ref=' + encodeURIComponent(res.ref || '');
         modal.classList.add('show');
         setTimeout(function () { location.href = next; }, 1500);
       }, function (err) {

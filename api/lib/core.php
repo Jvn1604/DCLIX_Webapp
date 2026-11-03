@@ -38,6 +38,27 @@ function json_out($data, int $code = 200): never
     exit;
 }
 
+/** reply now, then run $after (emails etc.) so the browser isnt kept waiting */
+function json_out_then($data, callable $after): never
+{
+    $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store');
+    header('X-Content-Type-Options: nosniff');
+    header('X-Frame-Options: DENY');
+    header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
+    header('Referrer-Policy: no-referrer');
+    header_remove('X-Powered-By');
+    header('Content-Length: ' . strlen($json));
+    header('Connection: close');
+    ignore_user_abort(true);
+    echo $json;
+    if (function_exists('fastcgi_finish_request')) fastcgi_finish_request();
+    else { while (ob_get_level()) ob_end_flush(); flush(); }
+    try { $after(); } catch (Throwable $e) { log_line('error', 'after reply: ' . $e->getMessage()); }
+    exit;
+}
+
 function fail(string $message, int $code = 400, array $extra = []): never
 {
     json_out(['error' => $message] + $extra, $code);

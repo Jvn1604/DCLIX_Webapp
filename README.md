@@ -62,6 +62,19 @@ See [TESTING.md](TESTING.md) for what to try.
 3. Ask the portal team to send customers back to `https://<site>/arena/payment-status.html` after payment.
 4. Set `PRODUCTION_API` in `js/shared/config.js`, add it to `API_ORIGINS` in `set-security.js`, run both scripts and push.
 
+## Email and WhatsApp after Save Club
+
+When a club is saved, the client and the company each get an email and a WhatsApp message
+(`api/lib/notify.php`). They are sent after the page has its answer, so a problem here never stops a
+registration; problems are written to `api/storage/logs/notify-*.log`. Each channel stays off until its
+settings are filled in under `notify` in `api/config.php`.
+
+- **Email:** an SMTP mailbox from the company's email host (host, port, user, password) and its address as `from_email`.
+- **WhatsApp:** a WhatsApp Business Platform (Meta Cloud API) number: the phone number ID and a permanent token.
+  Meta only allows pre-approved templates for these messages, so create these two (category *Utility*, English):
+  - `dclix_registration_saved`: *Hi {{1}}, thank you for registering {{2}} with D-Clix. Our admin will approve your club within 5–10 minutes, then you can pay online. Reference: {{3}}*
+  - `dclix_new_registration`: *New D-Clix club registration waiting for approval. Club: {{1}} ({{2}}), plan: {{3}}, phone: {{4}}, email: {{5}}. Please approve it in the MAClub portal.*
+
 ## Working together
 
 - Always `git pull origin main` before you start.

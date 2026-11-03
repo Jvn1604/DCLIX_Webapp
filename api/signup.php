@@ -1,16 +1,20 @@
 <?php
 /* signup (club-register.html) -> portal registration
- * returns {url} = send the browser to boost to pay, or {ref, state} when payment is off
+ * returns {ref, state, url?}. the site shows step 3 (approval) and keeps url for the pay button
+ * then emails + whatsapps the client and the company (lib/notify.php)
  */
 declare(strict_types=1);
 require __DIR__ . '/lib/core.php';
 require __DIR__ . '/lib/portal.php';
+require __DIR__ . '/lib/notify.php';
 cors();
 require_method('POST');
 throttle('signup:' . client_ip(), 10, 3600);
 
 // our plan keys -> portal plan codes
 const PLAN_CODES = ['basic' => 'BASIC', 'standard' => 'ADVANCE', 'premium' => 'PREMIUM'];
+// monthly prices on the site, for the emails
+const PLAN_NAMES = ['basic' => ['Basic', 100], 'standard' => ['Standard', 150], 'premium' => ['Premium', 200]];
 
 $in = body();
 $f = [
@@ -61,5 +65,11 @@ try {
     portal_fail($e, $map);
 }
 
-if (!empty($res['payment']['url'])) json_out(['ok' => true, 'url' => $res['payment']['url'], 'ref' => $res['reference']]);
-json_out(['ok' => true, 'ref' => $res['reference'] ?? '', 'state' => $res['state'] ?? '']);
+$out = ['ok' => true, 'ref' => $res['reference'] ?? '', 'state' => $res['state'] ?? ''];
+if (!empty($res['payment']['url'])) $out['url'] = $res['payment']['url'];
+// new registration: email + whatsapp the client and the company, after the reply
+json_out_then($out, fn() => notify_signup([
+    'ref' => $out['ref'], 'clubName' => $f['clubName'], 'clubCode' => $f['clubCode'], 'headInstructor' => $f['headInstructor'],
+    'email' => $f['email'], 'phone' => ltrim($code, '+') . $phone, 'sport' => str_in($in, 'sportName', 60) ?: $f['sport'],
+    'plan' => PLAN_NAMES[$f['plan']][0] . ' (monthly)', 'amount' => PLAN_NAMES[$f['plan']][1], 'promoCode' => $f['promoCode'],
+]));

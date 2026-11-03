@@ -494,27 +494,51 @@ button.li:hover { border-color: rgba(var(--accent-rgb),.4); }
 .field-err { display: block; color: #ef4444; font-size: 13px; margin-top: 6px; }
 .field-hint { display: block; color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5; }
 .input[aria-invalid="true"], .select[aria-invalid="true"] { border-color: #ef4444; }
-.pay-status { text-align: center; padding: 40px 28px; }
+.pay-status { text-align: center; padding: 40px 28px; max-width: 640px; margin: 0 auto; }
 .pay-status h1 { font-size: 28px; margin: 16px 0 10px; }
 .pay-status p { color: var(--muted); line-height: 1.6; }
 .pay-status .form-actions { justify-content: center; }
 .ps-icon { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto; background: rgba(239,68,68,.12); color: #ef4444; }
 .ps-icon.paid { background: rgba(16,185,129,.12); color: #10b981; }
 .ps-icon.pending { background: rgba(var(--accent-rgb),.12); color: var(--accent); }
+/* step 3 approval wait: spinning ring, mini timeline, note */
+.ps-icon.wait { position: relative; }
+.ps-icon.wait::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--accent); animation: psSpin 1.4s linear infinite; }
+@keyframes psSpin { to { transform: rotate(360deg); } }
+.ps-track { list-style: none; padding: 0; margin: 28px auto 0; max-width: 340px; text-align: left; }
+.ps-track li { display: flex; gap: 14px; align-items: flex-start; padding: 8px 0 14px; position: relative; }
+.ps-track li:not(:last-child)::after { content: ""; position: absolute; left: 12px; top: 38px; bottom: -4px; width: 2px; background: var(--line2); }
+.ps-track li.done:not(:last-child)::after { background: #10b981; }
+.ps-track .d { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line2); }
+.ps-track li.done .d { background: #10b981; border-color: #10b981; color: #fff; }
+.ps-track li.now .d { border-color: var(--accent); }
+.ps-track li.now .d::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: stepPulse 2.4s ease-in-out infinite; }
+.ps-track b { display: block; font-size: 15px; }
+.ps-track li:not(.done):not(.now) b { color: var(--muted); }
+.ps-track small { color: var(--muted); font-size: 13px; }
+.ps-note { display: flex; gap: 12px; text-align: left; margin: 12px 0 0; padding: 14px 16px; border-radius: 12px; background: rgba(var(--accent-rgb),.08); border: 1px solid rgba(var(--accent-rgb),.25); font-size: 14px; line-height: 1.55; }
+.ps-note svg { flex: none; color: var(--accent); margin-top: 2px; }
+.ps-live { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; margin: 18px 0 0; }
+.ps-live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: stepPulse 2s ease-in-out infinite; }
+.ps-alt { margin-top: 20px; font-size: 13px; }
+.ps-alt a { color: var(--muted); text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { .ps-icon.wait::after, .ps-track li.now .d::before, .ps-live::before { animation: none; } }
 /* ---------- Signup progress (pricing → club details → payment → done) ---------- */
 .flow-steps { list-style: none; display: flex; align-items: center; gap: 8px; padding: 0; margin: 0 0 32px; flex-wrap: wrap; }
 .flow-steps li { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 600; }
 .flow-steps li a { display: flex; align-items: center; gap: 8px; color: inherit; }
-.flow-steps li:not(:last-child)::after { content: ""; width: 32px; height: 2px; background: var(--line2); border-radius: 2px; margin-left: 4px; }
+.flow-steps li:not(:last-child)::after { content: ""; width: 24px; height: 2px; background: var(--line2); border-radius: 2px; margin-left: 4px; }
 .flow-steps .n { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line2); font-size: 13px; }
 .flow-steps li.done { color: var(--fg); }
 .flow-steps li.done .n { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .flow-steps li.done:not(:last-child)::after { background: var(--accent); }
 .flow-steps li.now { color: var(--accent); }
 .flow-steps li.now .n { border-color: var(--accent); }
-@media (max-width: 560px) {
+@media (max-width: 860px) {
   .flow-steps li:not(.now) .t { display: none; }
-  .flow-steps li:not(:last-child)::after { width: 18px; }
+  .flow-steps { flex-wrap: nowrap; gap: 6px; }
+  .flow-steps li { gap: 6px; }
+  .flow-steps li:not(:last-child)::after { width: 12px; margin-left: 0; }
 }
 .plan-pick .pp-l { flex: 1 1 280px; max-width: 420px; }
 .plan-pick .pp-l .lbl { margin-bottom: 6px; }
