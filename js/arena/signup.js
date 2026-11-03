@@ -47,7 +47,7 @@
     var FIELD_IDS = { ssmFile: 'ssmDrop', regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2', promoCode: 'promoCode', terms: 'termsRow', plan: 'planSel' };
     // one key per form, so a double click or retry doesnt make 2 orders in the portal
     var key = newKey();
-    // ssm cert: pdf/jpg/png max 5MB. checked here only, portal cant take it yet (PORTAL-TODO.md)
+    // ssm cert: pdf/jpg/png max 5MB. checked here only, portal cant take it yet
     var MAX_FILE = 5 * 1024 * 1024;
     var drop = $('#ssmDrop'), fileIn = $('#ssmFile'), clearBtn = $('#ssmClear'), ssm = null;
     function fileProblem(f) {

@@ -38,7 +38,7 @@ in place before the real API and club data go live.
 | 12 | Debug | `debug => false` in `config.example.php`; error details only when debug is on |
 | 13–14 | Dependencies | No npm/composer packages; unused images and payment-page CSS removed |
 | 15 | Exposed files | `.htaccess` hides config, lib, storage, `*.md`, `set-*.js`. **Not Apache (e.g. nginx)? Block `/api/lib`, `/api/storage`, `config*.php` there too** |
-| 16–17 | Database, passwords | No database any more; we never store passwords. The portal keeps them readable (its docs) — raised in PORTAL-TODO.md |
+| 16–17 | Database, passwords | No database any more; we never store passwords. The portal keeps them readable (its docs) — raised with the portal team |
 | 18 | Git history | Whole history scanned: no keys, passwords or config files ever committed |
 
 ---
