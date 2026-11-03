@@ -1,18 +1,10 @@
-/* Writes the browser security policy (Content-Security-Policy) and referrer policy into every page.
-   GitHub Pages cannot send security headers, so they go in <meta> tags. Run before pushing when you:
-     - add or edit a <script> block inside a page (its fingerprint must be recalculated),
-     - start using a new outside service (fonts, video, payment, analytics...),
-     - connect the real API (add its address to API_ORIGINS).
+/* writes the CSP meta into every page. run it when you:
+   - change an inline <script>
+   - add an outside service (fonts, video, analytics)
+   - connect the real api (add it to API_ORIGINS)
 
-       node set-security.js
-
-   What the policy allows:
-     scripts  only files from this site, plus the exact inline scripts that are on each page now
-     styles   this site + Google Fonts        fonts   Google Fonts
-     images   this site (and data: icons)     frames  Supademo tour, Google Maps (contact)
-     data     this site's API + API_ORIGINS   forms   this site only
-   Everything else (injected scripts, unknown trackers, other sites receiving data) is blocked. */
-const API_ORIGINS = [];            // e.g. ['https://api.d-clix.com'] once PRODUCTION_API is set in js/shared/config.js
+   node set-security.js */
+const API_ORIGINS = [];            // e.g. ['https://api.d-clix.com']
 const FRAMES = ['https://app.supademo.com', 'https://www.google.com'];
 
 const fs = require('fs');
@@ -25,7 +17,7 @@ for (const f of pages) {
   const nl = s.includes('\r\n') ? '\r\n' : '\n';
   s = s.replace(/[ \t]*<meta http-equiv="Content-Security-Policy" content="[^"]*"\s*\/?>\r?\n?/g, '')
        .replace(/[ \t]*<meta name="referrer" content="[^"]*"\s*\/?>\r?\n?/g, '');
-  // fingerprints of inline <script> blocks (browsers hash the exact text between the tags)
+  // hashes of inline scripts
   const hashes = [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)]
     .map(m => "'sha256-" + crypto.createHash('sha256').update(m[1], 'utf8').digest('base64') + "'");
   const csp = [
@@ -43,7 +35,7 @@ for (const f of pages) {
   ].join('; ');
   const tags = '<meta http-equiv="Content-Security-Policy" content="' + csp + '" />' + nl +
                '<meta name="referrer" content="strict-origin-when-cross-origin" />' + nl;
-  // as early as possible in <head>: right after the charset/viewport tags
+  // right after charset/viewport
   const anchor = s.match(/<meta name="viewport"[^>]*>\r?\n/);
   if (!anchor) { console.log('skip (no viewport tag):', f); continue; }
   s = s.replace(anchor[0], anchor[0] + tags);

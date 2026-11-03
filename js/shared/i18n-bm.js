@@ -1,8 +1,6 @@
-/* Bahasa Melayu translations for i18n.js, keyed on the exact English text.
-   Loaded only when a visitor uses BM, so English visitors never download it.
-   To add a line: copy the English text exactly as it appears on the page. */
+/* bm translations, keyed by exact english text. only loaded when bm is used */
 window.DCLIX_BM = {
-    /* ---- menu, footer, shared ---- */
+    /* ---- menu, footer ---- */
     'Club Management': 'Pengurusan Kelab', 'Home': 'Utama', 'About': 'Tentang', 'Pricing': 'Harga', 'D-Clix Edu-Hub': 'D-Clix Edu-Hub',
     'D-Clix Referral Program': 'Program Rujukan D-Clix', 'Club Login': 'Log Masuk Kelab', 'Follow': 'Ikut', 'Follow us': 'Ikuti Kami', 'Call us': 'Hubungi Kami', 'Visit us': 'Lawati Kami', 'Contact': 'Hubungi', 'Links': 'Pautan',
     'Edu-Hub': 'Edu-Hub', 'Referral': 'Rujukan', 'Community': 'Komuniti', 'Privacy Policy': 'Dasar Privasi',
@@ -11,7 +9,7 @@ window.DCLIX_BM = {
     'Grow revenue and streamline your club with a modern, reliable club management system.': 'Tingkatkan pendapatan dan lancarkan kelab anda dengan sistem pengurusan kelab yang moden dan boleh dipercayai.',
     'Toggle theme': 'Tukar tema', 'Open menu': 'Buka menu', 'D-Clix on Facebook': 'D-Clix di Facebook',
 
-    /* ---- home: hero + benefits ---- */
+    /* ---- home hero ---- */
     "Core modules": "Modul utama",
     "Fees, grading and attendance, made simple": "Yuran, pergredan dan kehadiran, dipermudahkan",
     "What is the fee module?": "Apakah modul yuran?",
@@ -224,7 +222,7 @@ window.DCLIX_BM = {
     'Scalability, Security, and Customization': 'Kebolehskalaan, Keselamatan dan Penyesuaian',
     'Grow from one centre to many branches, securely, set up the way your club works.': 'Berkembang daripada satu pusat kepada banyak cawangan dengan selamat, mengikut cara kelab anda beroperasi.',
 
-    /* ---- home: features ---- */
+    /* ---- home features ---- */
     "It's more. Everything you need to elevate your club": 'Ianya Lengkap. Semua yang anda perlukan untuk memartabatkan kelab anda',
     'Discover powerful features in D-Clix. Streamline club management with online registration, automated payments, attendance tracking, member management, participate in the community and more. Accessible via web and mobile for a seamless experience.':
       'Terokai ciri-ciri hebat D-Clix. Permudahkan pengurusan kelab dengan pendaftaran dalam talian, pembayaran automatik, penjejakan kehadiran, pengurusan ahli, penyertaan komuniti dan banyak lagi. Boleh diakses melalui web dan mudah alih.',
@@ -247,7 +245,7 @@ window.DCLIX_BM = {
       'Ucapkan selamat tinggal kepada hamparan yang tidak kemas. Urus keahlian, jadual kelas, daftar masuk dan pembayaran daripada satu sistem intuitif. Dapatkan kalendar dan sistem tempahan yang boleh disesuaikan sepenuhnya supaya ahli boleh mencari, melihat dan menempah kelas dengan mudah melalui laman web dan aplikasi anda.',
     'Learn About D-Clix': 'Ketahui Tentang D-Clix',
 
-    /* ---- home: testimonials, FAQ, call to action, contact ---- */
+    /* ---- home testimonials, faq, contact ---- */
     'Trusted by Clubs': 'Dipercayai oleh Kelab', 'What club leaders say about D-Clix': 'Apa kata pemimpin kelab tentang D-Clix', 'Join Our Community': 'Sertai Komuniti Kami', 'Club Leader': 'Pemimpin Kelab',
     '“The grading process is seamless. Tracking, payment, and results are clear and consistent for every session.”': '“Proses penggredan sangat lancar. Penjejakan, pembayaran dan keputusan jelas dan konsisten untuk setiap sesi.”',
     '“Online payment helped improve fee collection revenue. It is simple for parents and easy for admins to track.”': '“Pembayaran dalam talian membantu meningkatkan kutipan yuran. Mudah untuk ibu bapa dan senang untuk admin menjejak.”',
@@ -307,7 +305,7 @@ window.DCLIX_BM = {
     'Monitor real time update of your club performance and and manage registration, approval, attendance and payment (RAP)': 'Pantau kemas kini masa nyata prestasi kelab anda dan urus pendaftaran, kelulusan, kehadiran dan pembayaran (RAP)',
     "Let's join our community": 'Jom sertai komuniti kami', 'to track your training and grading!': 'untuk menjejak latihan dan penggredan anda!', 'Web portal :': 'Portal web :',
 
-    /* ---- pricing (text built by js/shared/main.js) ---- */
+    /* ---- pricing ---- */
     'D-CLIX Subscription Plan': 'Pelan Langganan D-CLIX', 'Tailored for Your Needs: Optimal Value with Every Plan': 'Disesuaikan Mengikut Keperluan Anda: Nilai Terbaik untuk Setiap Pelan',
     'Monthly': 'Bulanan', 'Yearly': 'Tahunan', 'Billing period': 'Tempoh bil', '* Gateway payment fee per online payment:': '* Caj gerbang pembayaran bagi setiap pembayaran dalam talian:',
     'Basic Plan': 'Pelan Asas', 'Standard Plan': 'Pelan Standard', 'Premium Plan': 'Pelan Premium', '/month': '/bulan', '/year': '/tahun', 'Select Plan': 'Pilih Pelan',
@@ -333,7 +331,7 @@ window.DCLIX_BM = {
     "Elevate Your Club: A Comprehensive Guide to D-Clix is your essential user manual for mastering the D-Clix platform. Whether you're managing registrations, tracking attendance, handling payments, or communicating with members, this guide walks you through every feature step by step. Designed to help club administrators and coaches make the most of D-Clix's web and mobile tools, it ensures a smooth, efficient, and professional experience for running your club.":
       'Elevate Your Club: A Comprehensive Guide to D-Clix ialah manual pengguna penting untuk menguasai platform D-Clix. Sama ada anda mengurus pendaftaran, menjejak kehadiran, mengendalikan pembayaran atau berkomunikasi dengan ahli, panduan ini membimbing anda melalui setiap ciri langkah demi langkah. Ia membantu pentadbir kelab dan jurulatih menggunakan sepenuhnya alatan web dan mudah alih D-Clix untuk mengurus kelab dengan lancar, cekap dan profesional. (Panduan dalam Bahasa Inggeris.)',
 
-    /* ---- referral (slides from js/marketing/referral-data.js) ---- */
+    /* ---- referral ---- */
     'Referral Program': 'Program Rujukan', 'Designed to onboard referral partners/agents with clear visuals that explain how rewards work.': 'Direka untuk rakan rujukan/ejen dengan visual jelas yang menerangkan cara ganjaran berfungsi.',
     'Previous slide': 'Slaid sebelumnya', 'Next slide': 'Slaid seterusnya',
     'Become a D-Clix Partner': 'Jadi Rakan D-Clix', 'Help clubs go digital and earn rewards as you grow.': 'Bantu kelab menjadi digital dan raih ganjaran sambil anda berkembang.',
@@ -344,7 +342,7 @@ window.DCLIX_BM = {
     'Marketing Materials': 'Bahan Pemasaran', 'Use ready-made banners, posts, and presentation decks.': 'Gunakan sepanduk, hantaran dan slaid pembentangan yang sedia ada.',
     'Start Referring Today': 'Mula Merujuk Hari Ini', 'Join the referral program and grow with D-Clix.': 'Sertai program rujukan dan berkembang bersama D-Clix.',
 
-    /* ---- community (wording from d-clix.com/ms/community) ---- */
+    /* ---- community ---- */
     'D-Clix Community': 'Komuniti D-Clix', 'Join Our Community – Be Part of Something Bigger!': 'Sertai Komuniti Kami – Jadilah Sebahagian daripada Sesuatu yang Lebih Besar!',
     'Connect with like-minded business owners and professionals in our exclusive D-Clix Community.': 'Berhubung dengan pemilik perniagaan dan profesional yang berfikiran sama dalam Komuniti D-Clix eksklusif kami.',
     'Join via WhatsApp': 'Sertai melalui WhatsApp', 'Follow on Facebook': 'Ikuti di Facebook',
@@ -357,7 +355,7 @@ window.DCLIX_BM = {
     'Error 404': 'Ralat 404', "We can't find that page": 'Kami tidak dapat mencari halaman itu', 'The link may be old or mistyped. Here are some places to go instead:': 'Pautan mungkin lama atau salah taip. Berikut adalah beberapa halaman lain:',
     'Plans & signup': 'Pelan & pendaftaran',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'New': 'Baharu', 'Collect club fees online with FPX': 'Kutip yuran kelab dalam talian dengan FPX',
     'Club management for martial arts & sports': 'Pengurusan kelab untuk seni mempertahankan diri & sukan', 'Run your club,': 'Uruskan kelab anda,',
     'not the paperwork': 'bukan kertas kerja', 'Registration, attendance, fees, grading and parent updates in one system, built for dojos and sports academies in Malaysia.': 'Pendaftaran, kehadiran, yuran, gred dan makluman kepada ibu bapa dalam satu sistem, dibina untuk dojo dan akademi sukan di Malaysia.',
@@ -437,23 +435,23 @@ window.DCLIX_BM = {
     'Before': 'Sebelum', 'With D-Clix': 'Dengan D-Clix', 'Events and announcements': 'Acara dan pengumuman',
     'Previous banner': 'Banner sebelumnya', 'Next banner': 'Banner seterusnya', 'Choose banner': 'Pilih banner',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'How it works': 'Cara ia berfungsi', 'From sign-up to first class': 'Dari pendaftaran hingga kelas pertama',
     'Three steps run every club: Register, Attendance and Payment (RAP).': 'Tiga langkah menggerakkan setiap kelab: Pendaftaran, Kehadiran dan Bayaran (RAP).', 'Register': 'Daftar',
     'New students and instructors sign up online. No paper forms.': 'Pelajar dan jurulatih baharu mendaftar dalam talian. Tiada borang kertas.', 'Mark attendance by QR code scan or a manual update by the coach.': 'Tanda kehadiran dengan imbasan kod QR atau kemas kini manual oleh jurulatih.',
     'Payment': 'Bayaran', 'Pay fees online by FPX from the app, and see every invoice and receipt.': 'Bayar yuran dalam talian dengan FPX melalui aplikasi, dan lihat setiap invois dan resit.',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Registration certificate (SSM / ROS / PJS)': 'Sijil pendaftaran (SSM / ROS / PJS)', 'Upload your SSM certificate': 'Muat naik sijil SSM anda',
     'PDF, JPG or PNG, up to 5 MB. Drag the file here or choose it.': 'PDF, JPG atau PNG, sehingga 5 MB. Seret fail ke sini atau pilih fail.', 'Choose file': 'Pilih fail',
     'Change': 'Tukar', 'Remove file': 'Buang fail',
     'Please upload your SSM / registration certificate.': 'Sila muat naik sijil SSM / pendaftaran anda.', 'Upload a PDF, JPG or PNG file.': 'Muat naik fail PDF, JPG atau PNG.',
     'This file is larger than 5 MB. Please upload a smaller copy.': 'Fail ini melebihi 5 MB. Sila muat naik salinan yang lebih kecil.',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Live': 'Langsung',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'About D-Clix': 'Tentang D-Clix', 'Built for the people who': 'Dibina untuk mereka yang',
     'run clubs': 'mengurus kelab', 'D-Clix is a club management system for sports and martial arts clubs. Registration, online payments and attendance in one place, on the web and in the mobile app.': 'D-Clix ialah sistem pengurusan kelab untuk kelab sukan dan seni mempertahankan diri. Pendaftaran, bayaran dalam talian dan kehadiran di satu tempat, di web dan dalam aplikasi mudah alih.',
     'Welcome to Martial Arts': 'Selamat datang ke Aplikasi', 'Club App': 'Kelab Seni Mempertahankan Diri',
@@ -507,7 +505,7 @@ window.DCLIX_BM = {
     'News and club stories': 'Berita dan kisah kelab', 'Bring your club on board': 'Bawa kelab anda bersama kami',
     'Club members training together': 'Ahli kelab berlatih bersama',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Choose plan': 'Pilih pelan', 'Club details': 'Butiran kelab',
     'Done': 'Selesai', 'Club': 'Kelab',
     'Registration': 'Pendaftaran', 'Create your D-Clix club account. You will use it to manage your club in D-Clix.': 'Cipta akaun kelab D-Clix anda. Anda akan menggunakannya untuk mengurus kelab dalam D-Clix.',
@@ -559,12 +557,12 @@ window.DCLIX_BM = {
     'We could not confirm this payment. If money was taken from your account, please contact D-Clix at +603-7804 1412 and we will sort it out.': 'Kami tidak dapat mengesahkan bayaran ini. Jika wang telah ditolak daripada akaun anda, sila hubungi D-Clix di +603-7804 1412 dan kami akan menyelesaikannya.', 'Download on the': 'Muat turun di',
     'GET IT ON': 'DAPATKANNYA DI', 'Get it on': 'Dapatkannya di',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Thank you! Your club is registered. We have emailed your receipt and our team has been notified.': 'Terima kasih! Kelab anda telah didaftarkan. Kami telah menghantar resit melalui e-mel dan pasukan kami telah dimaklumkan.', 'Reference:': 'Rujukan:',
     'Try again': 'Cuba lagi', 'Check again': 'Semak lagi',
     'Back to plans': 'Kembali ke pelan', 'Log in to D-Clix': 'Log masuk ke D-Clix',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Customer Data and Data Protection for the Software': 'Data Pelanggan dan Perlindungan Data untuk Perisian', 'Term and Termination for the Software Subscription': 'Tempoh dan Penamatan Langganan Perisian',
     'Subscription payments for the D-Clix Club Management System': 'Bayaran langganan untuk Sistem Pengurusan Kelab D-Clix', 'Questions about this document? Call': 'Ada soalan tentang dokumen ini? Hubungi',
     'Questions about this policy? Call': 'Ada soalan tentang dasar ini? Hubungi', 'or use the': 'atau gunakan',
@@ -575,7 +573,7 @@ window.DCLIX_BM = {
     'Clubs and students using D-Clix': 'Kelab dan pelajar yang menggunakan D-Clix', 'Globe showing clubs that use D-Clix': 'Glob menunjukkan kelab yang menggunakan D-Clix',
     'Download on the App Store': 'Muat turun di App Store', 'Get it on Google Play': 'Dapatkannya di Google Play',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Singapore (+65)': 'Singapura (+65)', 'Philippines (+63)': 'Filipina (+63)',
     'Cambodia (+855)': 'Kemboja (+855)', 'Japan (+81)': 'Jepun (+81)',
     'South Korea (+82)': 'Korea Selatan (+82)', 'United Arab Emirates (+971)': 'Emiriah Arab Bersatu (+971)',
@@ -585,10 +583,10 @@ window.DCLIX_BM = {
     'Enter a valid phone number, digits only.': 'Masukkan nombor telefon yang sah, digit sahaja.', 'Enter a valid email address.': 'Masukkan alamat e-mel yang sah.',
     'Enter your club name.': 'Masukkan nama kelab anda.', 'Tell us how we can help.': 'Beritahu kami bagaimana kami boleh membantu.',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Popular': 'Pilihan popular', 'All countries': 'Semua negara',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Contact us': 'Hubungi kami', 'Let\'s talk about': 'Mari bincang tentang',
     'your club': 'kelab anda', 'Book a free demo, ask a question or drop by our office. A D-Clix specialist will get back to you within one working day.': 'Tempah demo percuma, tanya soalan atau singgah ke pejabat kami. Pakar D-Clix akan menghubungi anda dalam satu hari bekerja.',
     'Open in Google Maps': 'Buka di Google Maps', 'Drive there with Waze': 'Pandu ke sana dengan Waze',
@@ -596,7 +594,7 @@ window.DCLIX_BM = {
     'Our office in Petaling Jaya': 'Pejabat kami di Petaling Jaya', 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Click a button to get directions.': 'Raig Technologies (M) Sdn Bhd · Kelana Centre Point, SS7, Petaling Jaya. Klik butang untuk mendapatkan arah.',
     'Book a free demo and a D-Clix specialist will contact you within one working day.': 'Tempah demo percuma dan pakar D-Clix akan menghubungi anda dalam satu hari bekerja.', 'Contact D-Clix | Book a Free Demo': 'Hubungi D-Clix | Tempah Demo Percuma',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Future plan': 'Pelan masa depan', 'What\'s next for D-Clix': 'Apa seterusnya untuk D-Clix',
     'The features we\'re building next to make running a club even easier.': 'Ciri yang sedang kami bina seterusnya untuk memudahkan lagi pengurusan kelab.', 'NFC attendance': 'Kehadiran NFC',
     'Students tap an NFC card or tag at the dojo door and their attendance is recorded instantly. No QR scanning, no paper lists.': 'Pelajar hanya ketik kad atau tag NFC di pintu dojo dan kehadiran direkodkan serta-merta. Tiada imbasan QR, tiada senarai kertas.', 'Next up': 'Seterusnya',
@@ -604,18 +602,18 @@ window.DCLIX_BM = {
     'Planned': 'Dirancang', 'Tournament hub': 'Hab kejohanan',
     'Parent app 2.0': 'Aplikasi ibu bapa 2.0', 'Regional expansion': 'Pengembangan serantau',
 
-    /* ---- home page (revamp) ---- */
+    /* ---- home ---- */
     'Show Fee Module details': 'Tunjuk butiran Modul Yuran', 'Hide Fee Module details': 'Sembunyi butiran Modul Yuran',
     'Show Grading Module details': 'Tunjuk butiran Modul Gred', 'Hide Grading Module details': 'Sembunyi butiran Modul Gred',
     'Show Attendance Module details': 'Tunjuk butiran Modul Kehadiran', 'Hide Attendance Module details': 'Sembunyi butiran Modul Kehadiran',
     'Show less': 'Tunjuk kurang',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Fewer clubs': 'Kurang kelab', 'More clubs': 'Lebih kelab',
     'More clubs using D-Clix': 'Lebih banyak kelab menggunakan D-Clix', 'See what it does': 'Lihat fungsinya',
     'Map of Malaysia showing clubs that use D-Clix, by state': 'Peta Malaysia menunjukkan kelab yang menggunakan D-Clix mengikut negeri',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'For a club that wants registration, fees and attendance in one place': 'Untuk kelab yang mahukan pendaftaran, yuran dan kehadiran di satu tempat', 'For growing clubs that run gradings, activities and stock': 'Untuk kelab yang berkembang dengan penggredan, aktiviti dan stok',
     'For an HQ with branches, tournaments and payroll': 'Untuk HQ dengan cawangan, kejohanan dan gaji', 'features included': 'ciri disertakan',
     'Everything in Basic': 'Semua dalam Asas', 'Everything in Basic + Standard': 'Semua dalam Asas + Standard',
@@ -630,11 +628,11 @@ window.DCLIX_BM = {
     '3 Basic classes, 1 advanced class': '3 kelas asas, 1 kelas lanjutan', '5 Basic classes, 2 advanced classes': '5 kelas asas, 2 kelas lanjutan',
     'Not included': 'Tidak disertakan',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'a day': 'sehari', 'Save': 'Jimat',
     'Includes all': 'Termasuk kesemua', 'features': 'ciri',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Billed yearly': 'Dibayar setahun', 'Billed monthly': 'Dibayar bulanan',
     'Save up to RM400': 'Jimat sehingga RM400', 'Classes': 'Kelas',
     'Included in every plan': 'Disertakan dalam setiap pelan', 'Added in Standard': 'Ditambah dalam Standard',
@@ -643,14 +641,14 @@ window.DCLIX_BM = {
     'Choose monthly, or pay yearly and save up to RM400 a year. Every plan includes the web dashboard and the mobile app.': 'Pilih bulanan, atau bayar tahunan dan jimat sehingga RM400 setahun. Setiap pelan termasuk papan pemuka web dan aplikasi mudah alih.', 'Pay monthly, or pay yearly and save up to RM400.': 'Bayar bulanan, atau bayar tahunan dan jimat sehingga RM400.',
     'You pay once for the whole year and save compared with paying monthly: RM200 on Basic, RM300 on Standard and RM400 on Premium.': 'Anda bayar sekali untuk setahun dan jimat berbanding bayaran bulanan: RM200 untuk Asas, RM300 untuk Standard dan RM400 untuk Premium.',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Top tier': 'Peringkat tertinggi', 'Parent updates': 'Makluman ibu bapa',
     'Paper sign-up forms that someone has to type in again': 'Borang pendaftaran kertas yang perlu ditaip semula', 'New students register online and you approve them from one list.': 'Pelajar baru mendaftar dalam talian dan anda luluskan mereka dari satu senarai.',
     'Adding up fees and attendance by hand at month end': 'Mengira yuran dan kehadiran secara manual pada hujung bulan', 'Collection, outstanding and attendance reports, ready to export to Excel or PDF.': 'Laporan kutipan, tunggakan dan kehadiran, sedia dieksport ke Excel atau PDF.',
     'Tier 1 of 3': 'Peringkat 1 daripada 3', 'Tier 2 of 3': 'Peringkat 2 daripada 3',
     'Tier 3 of 3': 'Peringkat 3 daripada 3',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'D-Clix Sales Team': 'Pasukan Jualan D-Clix', 'Harith · We typically reply within a few minutes': 'Harith · Kami biasanya membalas dalam beberapa minit',
     'Today': 'Hari ini', 'Hey there 👋 I\'m Harith from the D-Clix sales team.': 'Hai 👋 Saya Harith dari pasukan jualan D-Clix.',
     'Ask me anything about running your club with D-Clix, or pick a topic below.': 'Tanya apa sahaja tentang menguruskan kelab anda dengan D-Clix, atau pilih topik di bawah.', 'Which plan suits my club?': 'Pelan mana sesuai untuk kelab saya?',
@@ -659,27 +657,27 @@ window.DCLIX_BM = {
     'Questions?': 'Ada soalan?', 'Chat with us': 'Sembang dengan kami',
     'Hide': 'Sembunyi',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Football': 'Bola sepak', 'Silambam': 'Silambam',
     'And 15 more, including Silat, Judo, Boxing, Muaythai and Wushu.': 'Dan 15 lagi, termasuk Silat, Judo, Tinju, Muaythai dan Wushu.', 'The world’s favourite team sport.': 'Sukan berpasukan paling digemari di dunia.',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Coming soon': 'Akan datang', 'Coming': 'Akan',
     'soon': 'datang', 'Machine learning & AI': 'Pembelajaran mesin & AI',
     'More to come': 'Banyak lagi akan datang', 'Stay tuned': 'Nantikan',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Choose a plan': 'Pilih pelan', ', request a trial, and your club can begin onboarding with guided setup for registrations, payments, attendance, and member management.': ', minta percubaan, dan kelab anda boleh mula menggunakan D-Clix dengan bimbingan persediaan untuk pendaftaran, pembayaran, kehadiran dan pengurusan ahli.',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Clubs across Malaysia': 'Kelab di seluruh Malaysia', 'Tap a glowing dot to see the clubs in that state': 'Ketik titik bercahaya untuk melihat kelab di negeri itu',
     'Drag the globe to spin it.': 'Seret glob untuk memutarnya.', 'All states': 'Semua negeri',
     'Globe showing the Malaysian states where clubs use D-Clix': 'Glob menunjukkan negeri di Malaysia yang kelabnya menggunakan D-Clix',
 
-    /* ---- added ---- */
+    /* ---- more ---- */
     'Drag the globe to spin it, scroll to zoom.': 'Seret glob untuk memutarnya, skrol untuk zum.', 'Reset view': 'Set semula paparan',
 
-    /* ---- WhatsApp chat button (js/shared/whatsapp.js) ---- */
+    /* ---- whatsapp ---- */
     'Hey 👋': 'Hai 👋', 'Welcome to WhatsApp Chat and Share. Feel free to ask us anything 💫': 'Selamat datang ke Sembang WhatsApp. Tanya kami apa sahaja 💫',
     'We typically reply within a few minutes': 'Kami biasanya membalas dalam beberapa minit', 'Sales Team': 'Pasukan Jualan', 'Chat with us on WhatsApp': 'Sembang dengan kami di WhatsApp',
     'Close chat': 'Tutup sembang', 'Start chat': 'Mula sembang', 'Leave your details': 'Tinggalkan butiran anda', 'Call us': 'Hubungi kami'

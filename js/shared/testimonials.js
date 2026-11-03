@@ -124,5 +124,5 @@
   } else { visible = true; }
   document.addEventListener('visibilitychange', function () { if (document.hidden) { var v = vid(cur); if (!v.paused) v.pause(); } else play(); });
 
-  layout(); load(cur);
+  layout(); if (!('IntersectionObserver' in window)) load(cur);
 })();

@@ -1,17 +1,14 @@
-/* Adds search and social-sharing tags and structured data (JSON-LD) to every page,
-   and writes sitemap.xml + robots.txt. Run after changing a page title, description,
-   FAQ, price or company detail, or when the site moves to its own domain:
-
-       node set-seo.js
-
-   SITE is the public address of the website (change it when d-clix.com points here). */
+/* seo tags, json-ld, sitemap + robots
+   run after changing titles, faq, prices or domain:
+   node set-seo.js
+   change SITE when moving to the real domain */
 const SITE = 'https://jvn1604.github.io/DCLIX_Webapp/';
 
 const fs = require('fs');
 const IMAGE = SITE + 'assets/og-image.jpg';
-// pages visitors should not land on from a search engine
-const NOINDEX = ['arena/payment.html', 'arena/payment-status.html', 'arena/mock-gateway.html', '404.html'];
-// page titles shown in Google (about 50-60 characters: what the page is + D-Clix)
+// hidden from google
+const NOINDEX = ['arena/payment-status.html', '404.html'];
+// titles (~50-60 chars)
 const TITLE = {
   'index.html': 'D-Clix | Martial Arts & Sports Club Management System Malaysia',
   'pricing.html': 'D-Clix Pricing | Club Management Plans from RM100 a Month',
@@ -20,21 +17,20 @@ const TITLE = {
   'community.html': 'D-Clix Community | For Martial Arts and Sports Club Owners',
   'arena/club-register.html': 'Register Your Club | D-Clix'
 };
-// descriptions shown under the title in Google (about 120-160 characters)
+// descriptions (~120-160 chars)
 const DESC = {
   'about.html': 'D-Clix is a Malaysian club management system for martial arts and sports clubs: registration, attendance, fees, grading and a parent app in one place.',
   'edu-hub.html': 'Learn D-Clix at your own pace: try the real screens in an interactive tour and keep the full user guide for club admins and coaches.',
   'arena/club-register.html': 'Register your martial arts or sports club with D-Clix. Choose a plan, add your club details and start managing members, fees and attendance online.',
-  'arena/payment.html': 'Choose your D-Clix plan and pay securely by FPX online banking or card through Billplz.',
-  'arena/payment-status.html': 'The result of your D-Clix subscription payment.'
+  'arena/payment-status.html': 'The result of your D-Clix club registration and payment.'
 };
-// short page names for the breadcrumb trail (Home › Page)
+// breadcrumb names
 const CRUMB = {
   'about.html': 'About', 'pricing.html': 'Pricing', 'edu-hub.html': 'Edu-Hub', 'community.html': 'Community', 'contact.html': 'Contact',
   'privacy.html': 'Privacy Policy', 'terms.html': 'Terms & Conditions', 'refund.html': 'No Refund Policy', 'arena/club-register.html': 'Club Registration'
 };
 
-/* ---------- company and product facts used in the structured data ---------- */
+/* company info */
 const ORG = {
   '@type': 'Organization', '@id': SITE + '#org', name: 'D-Clix', legalName: 'Raig Technologies (M) Sdn Bhd',
   url: SITE, logo: SITE + 'assets/dclix-logo.webp', image: IMAGE, telephone: '+60378041412',
@@ -60,7 +56,7 @@ const unesc = s => s.replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&rs
 const text = html => unesc(html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim());
 const listed = [];
 
-// questions and answers from the page's FAQ accordion
+// faq from the page
 function faqs(s) {
   const out = [];
   const re = /class="faq-q"[^>]*><span[^>]*>([\s\S]*?)<\/span>[\s\S]*?class="faq-a"><div>([\s\S]*?)<\/div><\/div>/g;
@@ -76,7 +72,7 @@ for (const f of pages) {
   if (DESC[f]) s = s.replace(/<meta name="description" content="[^"]*"\s*\/?>/, '<meta name="description" content="' + esc(DESC[f]) + '" />');
   const desc = unesc((s.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '');
   const url = SITE + (f === 'index.html' ? '' : f);
-  // remove tags this script manages, then add them back after the description
+  // remove old tags then add again
   s = s.replace(/[ \t]*<meta (?:property="og:[^"]+"|name="twitter:[^"]+"|name="robots"|name="theme-color") content="[^"]*"\s*\/?>\r?\n?/g, '')
        .replace(/[ \t]*<link rel="canonical" href="[^"]*"\s*\/?>\r?\n?/g, '')
        .replace(/[ \t]*<script type="application\/ld\+json" data-seo>[\s\S]*?<\/script>\r?\n?/g, '');
@@ -99,7 +95,7 @@ for (const f of pages) {
   if (!anchor) { console.log('skip (no description):', f); continue; }
   s = s.replace(anchor[0], anchor[0] + nl + tags);
 
-  // structured data (JSON-LD) for search engines; browsers never run it, so the security policy is unaffected
+  // json-ld
   if (!noindex) {
     const graph = [ORG];
     if (f === 'index.html') graph.push({ '@type': 'WebSite', '@id': SITE + '#site', url: SITE, name: 'D-Clix', inLanguage: ['en-MY', 'ms-MY'], publisher: { '@id': SITE + '#org' } });
@@ -127,5 +123,5 @@ const today = new Date().toISOString().slice(0, 10);
 const prio = f => f === 'index.html' ? '1.0' : /pricing|club-register/.test(f) ? '0.9' : /privacy|terms|refund/.test(f) ? '0.3' : '0.7';
 fs.writeFileSync('sitemap.xml', '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   listed.map(p => '  <url><loc>' + p.url + '</loc><lastmod>' + today + '</lastmod><priority>' + prio(p.file) + '</priority></url>').join('\n') + '\n</urlset>\n');
-fs.writeFileSync('robots.txt', 'User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /arena/payment.html\nDisallow: /arena/payment-status.html\nDisallow: /arena/mock-gateway.html\n\nSitemap: ' + SITE + 'sitemap.xml\n');
+fs.writeFileSync('robots.txt', 'User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /arena/payment-status.html\n\nSitemap: ' + SITE + 'sitemap.xml\n');
 console.log('SEO tags on', pages.length, 'pages; sitemap lists', listed.length, 'pages');

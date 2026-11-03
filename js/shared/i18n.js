@@ -1,17 +1,10 @@
-/* ==========================================================
-   Language switcher: English / Bahasa Melayu
-   Adds an "EN / BM" menu to the top bar and translates the
-   public pages in place. Translations are matched on the exact
-   English text, so if you change English wording on a page,
-   update the same line in i18n-bm.js too. Text without a translation
-   simply stays in English (the competition portal and the
-   admin portal are English only).
-   Wording follows d-clix.com/ms where that page has it.
-   ========================================================== */
+/* EN / BM switch
+   matches the exact english text, so if you change english also change it in i18n-bm.js
+   no translation = stays english */
 (function () {
   'use strict';
   var KEY = 'dclix_lang';
-  // The word list lives in i18n-bm.js and is fetched only when BM is used
+  // bm words only loaded when needed
   var BM = window.DCLIX_BM || null, bmWait = [];
   var BM_SRC = ((document.currentScript && document.currentScript.src) || '').replace(/i18n\.js(\?.*)?$/, 'i18n-bm.js$1');
   function needBM(cb) {
@@ -28,7 +21,7 @@
   var lang = 'en';
   try { lang = localStorage.getItem(KEY) || ((navigator.language || '').toLowerCase().indexOf('ms') === 0 ? 'ms' : 'en'); } catch (e) {}
   if (lang === 'ms') needBM(function () {});
-  var original = new WeakMap(); // text node → its English text
+  var original = new WeakMap();
   var ATTRS = ['placeholder', 'aria-label', 'title', 'label'];
   var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1, CODE: 1, PRE: 1 };
   function norm(t) { return t.replace(/\s+/g, ' ').trim(); }
@@ -47,7 +40,7 @@
         if (c === node) bm = pe.getAttribute('data-bm');
       }
     }
-    // keep the surrounding spaces so words next to links/icons stay separated
+    // keep spaces around the text
     var want = bm ? en.match(/^\s*/)[0] + bm + en.match(/\s*$/)[0] : en;
     if (node.nodeValue !== want) node.nodeValue = want;
   }
@@ -89,7 +82,7 @@
   window.dclixSetLang = setLang;
 
   document.addEventListener('DOMContentLoaded', function () {
-    // one switcher in the desktop menu and one next to the mobile menu button
+    // desktop menu + mobile
     $$('.nav-links, .nav-mobile-actions').forEach(function (bar) {
       var theme = bar.querySelector('[data-theme-toggle]');
       var sw = switcher();
@@ -106,7 +99,7 @@
       });
     });
     apply();
-    // text added later (pricing cards, slides, FAQ answers, chat popup…) is translated as it appears
+    // translate stuff added later too
     new MutationObserver(function (list) {
       if (lang !== 'ms' || !BM) return;
       list.forEach(function (m) { m.addedNodes.forEach(walk); });

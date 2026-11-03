@@ -5,7 +5,7 @@ The public website for **D-Clix**, a club management system for martial arts and
 log in to the D-Clix club system at [maclubsystem.com](https://www.maclubsystem.com/index.php?/login/proceed).
 
 - **Live (test) site:** https://jvn1604.github.io/DCLIX_Webapp/
-- **Built with:** plain HTML, CSS and JavaScript (no build step) + a small PHP / MySQL API for signup, payment and emails
+- **Built with:** plain HTML, CSS and JavaScript (no build step) + a small PHP API that passes signup and enquiries to the MAClub portal API
 - **Languages:** English and Bahasa Melayu (switch at the top of every page) · dark and light theme
 - **Team:** @Jvn1604 · @thurghathaarani0103
 
@@ -14,19 +14,20 @@ log in to the D-Clix club system at [maclubsystem.com](https://www.maclubsystem.
 ## Site flow
 
 ```
-Visitor                     Website                                   Behind the scenes
-───────                     ───────                                   ─────────────────
-Home / Pricing  ──▶  Choose a plan (monthly or yearly)
-                ──▶  1. Club details  (+ SSM certificate upload)  ──▶  club + lead saved · emails to client and sales
-                ──▶  2. Payment       (billing details, "I agree")  ──▶  invoice + bill · Billplz (FPX / card)
-                ──▶  3. Payment result (paid / failed / pending)   ──▶  welcome + receipt to client · "payment received" to sales
-                ──▶  4. Club Login    ──▶  maclubsystem.com (the sales team sets up the club's account there)
+Visitor                     Website                                   Behind the scenes (MAClub portal)
+───────                     ───────                                   ─────────────────────────────────
+Home / Pricing  ──▶  Choose a plan
+                ──▶  1. Club details + login + "I agree"   ──▶  order saved in the portal
+                ──▶  2. Payment on Boost (FPX)              ──▶  portal checks the payment with Boost
+                ──▶  3. Result page (asks the portal)       ──▶  staff approve · customer gets the login email
+                ──▶  4. Club Login    ──▶  maclubsystem.com
 
-Home page "Book a free demo" form  ──▶  lead saved · emails to sales and the visitor
+Contact / "Book a free demo" form  ──▶  portal enquiry (Website CMS > Enquiries)
 ```
 
 - Every **Club Login** button opens maclubsystem.com. This website has no login of its own.
-- Without a server (for example on GitHub Pages), signup and payment run in **test mode** in the browser: no real money, nothing sent.
+- Without our PHP API (for example on GitHub Pages), the forms say "not open yet, please WhatsApp or call".
+- Open questions with the portal: [PORTAL-TODO.md](PORTAL-TODO.md) · how to test: [TESTING.md](TESTING.md).
 
 ## Pages
 
@@ -34,7 +35,7 @@ Home page "Book a free demo" form  ──▶  lead saved · emails to sales and 
 |---|---|
 | `index.html` | Home: hero, event banner, sports, Malaysia club map, problems we solve, product tour, features, testimonials, pricing preview, FAQ, demo form |
 | `about.html` · `pricing.html` · `edu-hub.html` · `community.html` | About D-Clix · plans (monthly / yearly) · guides and videos · community |
-| `arena/club-register.html` → `payment.html` → `payment-status.html` | The signup flow (steps 1 to 3) |
+| `arena/club-register.html` → Boost → `payment-status.html` | The signup flow |
 | `privacy.html` · `terms.html` · `refund.html` · `404.html` | Legal pages and "page not found" |
 
 ## Folder layout
@@ -43,16 +44,16 @@ Home page "Book a free demo" form  ──▶  lead saved · emails to sales and 
 DCLIX_Webapp/
 ├── index.html, about.html, pricing.html, edu-hub.html, community.html     website pages
 ├── privacy.html, terms.html, refund.html, 404.html                        legal pages, page not found
-├── arena/          club-register, payment, payment-status, mock-gateway    signup and payment flow
+├── arena/          club-register, payment-status                           signup flow
 ├── css/style.css   all styles (theme colours are the first lines)
 ├── js/shared/      main.js (shared behaviour and animations) · i18n.js (language switch) · i18n-bm.js (Bahasa Melayu words) · banner.js (event banners)
-│                   map.js (club globe) · config.js (where the API is) · mock-api.js (test mode) · icons.js
+│                   map.js (club globe) · config.js (where the API is) · icons.js
 │                   theme.js · whatsapp.js (chat button)
-├── js/arena/       signup.js (registration) · payment.js · sports.js (the 18 sports)
+├── js/arena/       signup.js (registration) · status.js (result page) · sports.js (the sports list)
 ├── assets/         logo, favicon, images
 │   ├── banners/    event banner pictures + banners.js (what to show, where and when)
 │   └── clubs/      club logos + clubs.js (the clubs on the home page map) + malaysia-geo.js (state outlines) + world.js (other countries, dim)
-├── api/            PHP + MySQL: signup, checkout, contact form, Billplz, emails, file uploads
+├── api/            PHP: signup, status, contact form, plans. Talks to the MAClub portal API (lib/dclix-client.php)
 │                   (api/config.php and api/storage/ are never committed)
 ├── set-version.js  run before pushing CSS/JS changes (see below)
 └── start-local.bat starts the site on your PC
@@ -60,11 +61,13 @@ DCLIX_Webapp/
 
 ## Run it on your PC
 
-1. Install XAMPP and start **MySQL** in the XAMPP Control Panel.
-2. First time only, in this folder: `C:\xampp\php\php.exe api/install.php` (creates the database, tables and `api/config.php`).
+1. Install XAMPP (only PHP is used, no MySQL needed).
+2. First time only: copy `api/config.example.php` to `api/config.php` and fill in the portal client id and secret
+   (ask Jeeven, never commit it). If PHP says "SSL certificate problem", set `ca_bundle` to a fresh CA file,
+   e.g. `C:/Program Files/Git/usr/ssl/certs/ca-bundle.crt`.
 3. Double-click `start-local.bat` and open http://127.0.0.1:8000.
 
-Emails are not really sent on your PC: they are saved as `.html` files in `api/storage/mail/` (with any attachments).
+Everything you submit on your PC goes to the portal's **staging** system, so use sample details.
 
 ## Everyday changes
 
@@ -98,8 +101,8 @@ Tick a box (`[x]`) when it is done.
 - [ ] Get from the company: real dashboard screenshots, club logos (with permission), testimonials with photos, real figures
 - [ ] Company confirms: office address, plan names and prices, monthly/yearly vs. the 12-month auto-renewal in the Terms, the No Refund Policy text
 - [ ] Replace the home page samples (dashboard mock-up, testimonial initials) with the real material
-- [ ] Connect Billplz **sandbox**, test real FPX/card test payments, then switch to **live** keys
-- [ ] Connect email (SMTP) and test every email, including the certificate attachment
+- [x] Connect the MAClub portal API (staging): enquiries, plans, signup + Boost payment
+- [ ] Sort out the open points in [PORTAL-TODO.md](PORTAL-TODO.md), then switch to the **production** client
 - [ ] Put the `api/` folder on the company's PHP hosting (HTTPS) and set `PRODUCTION_API` in `js/shared/config.js`
 - [ ] Point **d-clix.com** to the new site
 - [ ] Full test on Chrome, Edge, Safari (iPhone) and Chrome (Android), in English and BM, dark and light
@@ -159,41 +162,35 @@ Add a row when you start something and update it when you finish. Newest at the 
 **How signup works**
 
 ```
-club-register.html ──POST api/signup.php──▶ club + lead (Pending Payment) + certificate file · emails to client + sales
-payment.html       ──POST api/checkout.php──▶ invoice + Billplz bill ──▶ Billplz payment page
-                   ◀── api/billplz-return.php (+ billplz-callback.php) re-checks the bill, then marks it paid and sends the emails
-index.html form    ──POST api/contact.php──▶ lead (source "Contact form") · emails to sales + visitor
+club-register.html   ──POST api/signup.php──▶ portal POST /registration ──▶ {payment.url}
+                     ──▶ browser goes to Boost (FPX) ──▶ portal ──▶ arena/payment-status.html?ref=…
+payment-status.html  ──GET api/status.php?ref=…──▶ portal GET /registration/status/{ref}  (never trust ?state=)
+contact form         ──POST api/contact.php──▶ portal POST /enquiry
 ```
 
-- The registration certificate (PDF / JPG / PNG, up to 5 MB) is checked on the server, stored in
-  `api/storage/uploads/ssm/` (never committed, blocked from the web) and attached to the sales emails.
-- **Test mode:** when `PRODUCTION_API` in `js/shared/config.js` is empty and the site is not on your PC, everything runs
-  in the browser (`js/shared/mock-api.js`); payments go to `arena/mock-gateway.html`. In the browser console,
-  `DCLIX_MOCK.data()` shows what was saved and `DCLIX_MOCK.reset()` clears it.
+- Every portal call is signed with the client secret (HMAC). The secret is only in `api/config.php`.
+- Full API details: https://www.maclubsystem.com/api-docs/index.html · our own endpoints: [API.md](API.md).
 
 **Settings in `api/config.php`** (never commit this file)
 
 | Setting | What it does |
 |---|---|
-| `billplz.mode` | `mock` = test page · `sandbox` = Billplz sandbox · `live` = real money |
-| `billplz.api_key`, `collection_id`, `x_signature_key` | From the Billplz account |
-| `mail.driver` | `log` = save emails to `api/storage/mail/` · `smtp` = really send (fill in `mail.smtp`) |
-| `mail.sales_to` | Inbox for new-signup, payment and enquiry emails |
-| `login_url` | Club Login address in the welcome email |
-| `site_url`, `api_url`, `allowed_origins` | Public addresses and the websites allowed to call the API |
+| `portal.base`, `client_id`, `secret` | MAClub portal API (Website CMS > API Clients). A staging client only works on staging |
+| `ca_bundle` | CA file for https calls, only needed when PHP has none (old XAMPP) |
+| `allowed_origins` | The websites allowed to call our API from the browser |
 | `debug` | `true` only on your PC |
 
 **Going live**
 
-1. Upload `api/` to PHP hosting with HTTPS, create the MySQL database and `config.php`, run `php api/install.php`.
-2. In `config.php`: `debug => false`, real addresses, Billplz keys, SMTP, `sales_to`.
-3. Set `PRODUCTION_API` in `js/shared/config.js`, run `node set-version.js`, push.
-4. Back up the database **and** `api/storage/uploads/` (club certificates) every day.
+1. Upload `api/` to PHP 8.1+ hosting with HTTPS (needs the curl extension) and create `config.php` with the **production** client.
+2. In `config.php`: `debug => false`, the real website address in `allowed_origins`.
+3. Ask the portal team to set the result page to `https://<site>/arena/payment-status.html`.
+4. Set `PRODUCTION_API` in `js/shared/config.js`, add it to `API_ORIGINS` in `set-security.js`, run both scripts, push.
 
 **Security**
 
-- Card and bank details are entered only on Billplz; a signup is marked paid only after the bill is re-checked.
-- Secrets stay in `api/config.php` (git-ignored). `api/.htaccess` blocks web access to config, code and storage on Apache.
-- Signup and the contact form are rate-limited per IP address.
+- Payment details are entered only on Boost; the result page always asks the portal, never trusts the address bar.
+- The portal secret stays in `api/config.php` (git-ignored). `api/.htaccess` blocks web access to config, code and storage on Apache.
+- Signup, status and the contact form are rate-limited per IP address.
 
 </details>

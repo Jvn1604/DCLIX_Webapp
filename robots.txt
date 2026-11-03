@@ -1,8 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /arena/payment.html
 Disallow: /arena/payment-status.html
-Disallow: /arena/mock-gateway.html
 
 Sitemap: https://jvn1604.github.io/DCLIX_Webapp/sitemap.xml

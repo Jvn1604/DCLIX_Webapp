@@ -1,7 +1,5 @@
-/* ==========================================================
-   Club signup (club-register.html)
-   The club type is passed in the URL:  club-register.html?sport=karate
-   ========================================================== */
+/* club signup (club-register.html?sport=karate)
+   api/signup.php sends it to the portal, then we go to boost to pay */
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
@@ -9,15 +7,19 @@
   var page = document.body.getAttribute('data-page');
   var sportId = window.currentSportId();
   var sport = window.getSport(sportId);
-  var q = function (p) { return p + '.html?sport=' + sportId; };
 
   document.addEventListener('DOMContentLoaded', function () {
     if (page === 'club') initClub();
     window.hydrateIcons();
   });
 
+  function newKey() {
+    var a = new Uint8Array(16); window.crypto.getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+  }
+
   function initClub() {
-    // Pre-selected only when the visitor came from a sport page (?sport=…); from the pricing page they must choose one.
+    // only preselect when coming from a sport page
     var chosen = new URLSearchParams(location.search).get('sport') && sport ? sport.id : '';
     var typeSel = $('#clubType');
     typeSel.innerHTML = '<option value="">Select your club type</option>' + window.SPORTS.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
@@ -26,7 +28,7 @@
     typeSel.addEventListener('change', function () { sportId = typeSel.value || 'taekwondo'; sport = window.getSport(typeSel.value); });
     var form = $('#clubForm'), modal = $('#successModal'), errBox = $('#clubErr'), btn = $('#clubSubmit');
     var qs = new URLSearchParams(location.search);
-    // Plan chosen on the pricing page (?plan=…&billing=…); visitors from the competition portal pick one here.
+    // plan from the pricing page (?plan=…&billing=…)
     var PLANS = [['basic', 'Basic Plan', 100, 1000], ['standard', 'Standard Plan', 150, 1500], ['premium', 'Premium Plan', 200, 2000]];
     var plan = qs.get('plan'), billing = qs.get('billing') === 'yearly' ? 'yearly' : 'monthly';
     if (!PLANS.some(function (p) { return p[0] === plan; })) plan = 'basic';
@@ -41,9 +43,11 @@
       var v = planSel.value.split('-'); plan = v[0]; billing = v[1];
       try { history.replaceState(null, '', '?sport=' + sportId + '&plan=' + plan + '&billing=' + billing); } catch (e) {}
     });
-    // Field name in the API → input id on this page
-    var FIELD_IDS = { ssmFile: 'ssmDrop', regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2' };
-    // Registration certificate (SSM / ROS / PJS): PDF, JPG or PNG up to 5 MB, sent with the form as base64
+    // api field -> input id
+    var FIELD_IDS = { ssmFile: 'ssmDrop', regNo: 'regNo', username: 'username', branch: 'branch', clubCode: 'clubCode', clubName: 'clubName', headInstructor: 'headInstructor', sport: 'clubType', whatsapp: 'whatsapp', email: 'clubEmail', password: 'pw', password2: 'pw2', promoCode: 'promoCode', terms: 'termsRow', plan: 'planSel' };
+    // one key per form, so a double click or retry doesnt make 2 orders in the portal
+    var key = newKey();
+    // ssm cert: pdf/jpg/png max 5MB. checked here only, portal cant take it yet (PORTAL-TODO.md)
     var MAX_FILE = 5 * 1024 * 1024;
     var drop = $('#ssmDrop'), fileIn = $('#ssmFile'), clearBtn = $('#ssmClear'), ssm = null;
     function fileProblem(f) {
@@ -71,17 +75,9 @@
     drop.addEventListener('drop', function (e) {
       e.preventDefault(); drop.classList.remove('drag');
       var f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return;
-      try { fileIn.files = e.dataTransfer.files; } catch (err) { /* older browsers: keep the file in memory only */ }
+      try { fileIn.files = e.dataTransfer.files; } catch (err) { /* old browsers */ }
       setFile(f);
     });
-    function readFile(f) {
-      return new Promise(function (resolve, reject) {
-        var r = new FileReader();
-        r.onload = function () { resolve({ name: f.name, type: f.type, size: f.size, data: String(r.result).split(',')[1] || '' }); };
-        r.onerror = function () { reject(new Error('Could not read the certificate file. Please choose it again.')); };
-        r.readAsDataURL(f);
-      });
-    }
     function clearErrors() {
       errBox.classList.remove('show'); errBox.textContent = '';
       $$('.field-err', form).forEach(function (el) { el.remove(); });
@@ -96,9 +92,9 @@
         input.insertAdjacentElement('afterend', p);
       });
       errBox.textContent = summary || 'Please fix the highlighted fields.'; errBox.classList.add('show');
-      // Focus the first problem in page order, so the visitor starts at the top of the form
+      // focus first error
       first = $$('[aria-invalid="true"]', form)[0];
-      if (first) first.focus();
+      if (first) (first.id === 'termsRow' ? $('#terms') : first).focus();
     }
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -115,22 +111,26 @@
       var pw = $('#pw').value;
       if (pw.length < 8 || !/[A-Z]/.test(pw) || !/[a-z]/.test(pw) || !/[0-9]/.test(pw)) errs.password = 'Use at least 8 characters with upper-case, lower-case and a number.';
       if (pw !== $('#pw2').value) errs.password2 = 'Passwords do not match.';
+      // the portal needs these too
+      if (v('headInstructor').length < 2) errs.headInstructor = 'Please enter the head instructor name.';
+      if (!/^[0-9 -]{6,15}$/.test(v('whatsapp'))) errs.whatsapp = 'Please enter a valid phone number.';
+      if (!$('#terms').checked) errs.terms = 'Please accept the terms to continue.';
       if (Object.keys(errs).length) return showErrors(errs);
       btn.disabled = true; btn.textContent = 'Saving…';
-      readFile(ssm).then(function (file) {
-        return window.dclixApi('signup.php', { body: {
-          plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), regNo: v('regNo'), clubName: v('clubName'), headInstructor: v('headInstructor'),
-          sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
-          country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw, ssmFile: file
-        } });
-      }).then(function (res) {
-        // Only the one-time signup token is kept in the browser — never the password.
-        try { sessionStorage.setItem('dclixSignup', JSON.stringify({ token: res.token, clubName: v('clubName'), clubCode: v('clubCode'), email: v('clubEmail'), plan: plan, billing: billing })); } catch (err) {}
+      window.dclixApi('signup.php', { body: {
+        plan: plan, billing: billing, clubCode: v('clubCode'), username: v('username'), branch: v('branch'), regNo: v('regNo'), clubName: v('clubName'), headInstructor: v('headInstructor'),
+        sport: typeSel.value, sportName: sport ? sport.name : '', address1: v('address1'), address2: v('address2'), state: v('state'),
+        country: $('#country').value, phoneCode: $('#phoneCode').value, whatsapp: v('whatsapp'), email: v('clubEmail'), password: pw,
+        promoCode: v('promoCode'), acceptedTerms: true, requestKey: key
+      } }).then(function (res) {
+        // boost payment page, or the result page when the portal has online payment off
+        var next = res.url && /^https:///i.test(res.url) ? res.url : 'payment-status.html?ref=' + encodeURIComponent(res.ref || '');
         modal.classList.add('show');
-        setTimeout(function () { location.href = q('payment'); }, 1500);
+        setTimeout(function () { location.href = next; }, 1500);
       }, function (err) {
         btn.disabled = false; btn.textContent = 'Save Club';
-        if (err.offline) return showErrors({}, 'Online registration is not available yet. Please contact D-Clix at +603-7804 1412 to register your club.');
+        // they will change something, so a fresh key
+        if (err.status === 409 || err.status === 422) key = newKey();
         showErrors(err.data && err.data.fields, err.message);
       });
     });

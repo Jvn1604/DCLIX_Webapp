@@ -14,3 +14,9 @@ Thumbs.db
 # Dependencies and logs
 node_modules/
 *.log
+
+# Keys, certificates and archives
+*.pem
+*.key
+*.p12
+*.zip

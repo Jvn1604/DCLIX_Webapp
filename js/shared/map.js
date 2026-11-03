@@ -1,7 +1,5 @@
-/* Club globe (home page): a globe zoomed in on Malaysia.
-   Drag to spin it; let go and it glides back to Malaysia. Each state with clubs has a glowing dot:
-   click it and the globe turns to that state and the panel shows its clubs.
-   Club list: assets/clubs/clubs.js · state outlines: assets/clubs/malaysia-geo.js */
+/* club globe on home page. drag to spin, click a dot to see clubs in that state
+   clubs: assets/clubs/clubs.js, states: assets/clubs/malaysia-geo.js */
 (function () {
   'use strict';
   var box = document.getElementById('clubMap');
@@ -9,7 +7,7 @@
   if (!box || !GEO) return;
   var SRC = (document.currentScript && document.currentScript.src) || '';
   var ROOT = SRC.replace(/js\/shared\/map\.js(\?.*)?$/, ''), VER = (SRC.match(/\?v=[^#]*/) || [''])[0];
-  var WORLD = null;    // other countries, loaded when the globe first comes into view (assets/clubs/world.js)
+  var WORLD = null;    // other countries (world.js), loaded when globe is in view
   var globe = box.querySelector('.mg-globe'), canvas = globe.querySelector('canvas'), ctx = canvas.getContext('2d');
   var dotsLayer = globe.querySelector('.mg-dots'), panel = box.querySelector('.mg-panel'), more = document.getElementById('clubMore');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,7 +15,7 @@
   var bm = function () { return document.documentElement.lang === 'ms'; };
   var count = function (n) { return n + (bm() ? ' kelab' : n === 1 ? ' club' : ' clubs'); };
 
-  /* ---------- clubs per state ---------- */
+  /* clubs per state */
   var ALIAS = { 'malacca': 'melaka', 'pulau pinang': 'penang', 'wp kuala lumpur': 'kuala lumpur', 'kl': 'kuala lumpur' };
   var byName = {}, unplaced = [];
   GEO.forEach(function (s) {
@@ -31,8 +29,8 @@
   var withClubs = GEO.filter(function (s) { return s.clubs.length; }).sort(function (a, b) { return b.clubs.length - a.clubs.length || a.name.localeCompare(b.name); });
   var max = Math.max.apply(null, GEO.map(function (s) { return s.clubs.length; }).concat(1));
 
-  /* ---------- view: centre (lon, lat) and zoom, easing towards a target ---------- */
-  var HOME = { lon: 109.45, lat: 4.3, zoom: 5.7 };          // the whole of Malaysia fills the globe
+  /* view */
+  var HOME = { lon: 109.45, lat: 4.3, zoom: 5.7 };          // fit malaysia
   var view = { lon: HOME.lon, lat: HOME.lat, zoom: HOME.zoom }, target = { lon: HOME.lon, lat: HOME.lat, zoom: HOME.zoom };
   var selected = null, focus = HOME, dragging = false, last = null, vel = { lon: 0, lat: 0 }, idleAt = 0, raf = 0, onScreen = false, size = 0, dpr = 1;
 
@@ -40,11 +38,11 @@
     var l = (lon - view.lon) * D2R, p = lat * D2R, p0 = view.lat * D2R, R = size / 2 * view.zoom;
     var cosc = Math.sin(p0) * Math.sin(p) + Math.cos(p0) * Math.cos(p) * Math.cos(l);
     var x = R * Math.cos(p) * Math.sin(l), y = -R * (Math.cos(p0) * Math.sin(p) - Math.sin(p0) * Math.cos(p) * Math.cos(l));
-    if (cosc < 0) { var k = R / (Math.hypot(x, y) || 1); x *= k; y *= k; }   // behind the globe: pin to the edge
+    if (cosc < 0) { var k = R / (Math.hypot(x, y) || 1); x *= k; y *= k; }   // behind the globe
     return [size / 2 + x, size / 2 + y, cosc];
   }
 
-  /* ---------- drawing ---------- */
+  /* draw */
   function resize() {
     size = Math.round(globe.clientWidth);
     dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -56,18 +54,15 @@
     ctx.clearRect(0, 0, size, size);
     ctx.save();
     ctx.beginPath(); ctx.arc(r, r, r - 1, 0, 7); ctx.clip();
-    // ocean
     var sea = ctx.createRadialGradient(r * .7, r * .6, r * .1, r, r, r * 1.05);
     sea.addColorStop(0, '#1d1a15'); sea.addColorStop(1, '#0b0a09');
     ctx.fillStyle = sea; ctx.fillRect(0, 0, size, size);
-    // the sphere's edge when zoomed out
     if (R < r * 1.6) { ctx.beginPath(); ctx.arc(r, r, R, 0, 7); ctx.strokeStyle = 'rgba(222,152,54,.45)'; ctx.lineWidth = 1.5; ctx.stroke(); }
-    // graticule
     ctx.strokeStyle = 'rgba(222,152,54,.10)'; ctx.lineWidth = 1;
     var step = view.zoom > 2 ? 5 : 15;
     for (var lo = -180; lo < 180; lo += step) line(function (t) { return [lo, -80 + t * 160]; });
     for (var la = -75; la <= 75; la += step) line(function (t) { return [-180 + t * 360, la]; });
-    // other countries: dim outlines; skip any that are out of view
+    // other countries, skip offscreen
     if (WORLD) {
       var p0 = view.lat * D2R, sp0 = Math.sin(p0), cp0 = Math.cos(p0);
       var reach = view.zoom > 1 ? Math.asin(1 / view.zoom) / D2R : 90;
@@ -83,13 +78,12 @@
       });
       ctx.fill(); ctx.stroke();
     }
-    // states
     GEO.forEach(function (s) {
       var n = s.clubs.length, on = !!selected && selected.indexOf(s) >= 0;
       ctx.beginPath();
       s.rings.forEach(function (ring) {
         var pts = ring.map(function (pt) { return project(pt[0], pt[1]); });
-        if (!pts.some(function (q) { return q[2] > 0; })) return;      // fully behind the globe
+        if (!pts.some(function (q) { return q[2] > 0; })) return;
         pts.forEach(function (q, i) { if (i) ctx.lineTo(q[0], q[1]); else ctx.moveTo(q[0], q[1]); });
         ctx.closePath();
       });
@@ -98,7 +92,7 @@
       ctx.strokeStyle = on ? '#fbe3a8' : 'rgba(222,152,54,.55)'; ctx.lineWidth = on ? 1.6 : .8; ctx.stroke();
     });
     ctx.restore();
-    // glass shading so it reads as a sphere
+    // shading
     var shade = ctx.createRadialGradient(r * .62, r * .5, r * .05, r, r, r);
     shade.addColorStop(0, 'rgba(255,240,210,.10)'); shade.addColorStop(.55, 'rgba(0,0,0,0)'); shade.addColorStop(1, 'rgba(0,0,0,.55)');
     ctx.beginPath(); ctx.arc(r, r, r - 1, 0, 7); ctx.fillStyle = shade; ctx.fill();
@@ -114,7 +108,7 @@
     ctx.stroke();
   }
 
-  /* ---------- state dots ---------- */
+  /* dots */
   withClubs.forEach(function (s) {
     var b = document.createElement('button');
     b.type = 'button'; b.className = 'mg-dot';
@@ -123,7 +117,7 @@
     b.addEventListener('click', function () { select([s]); });
     s.dot = b; dotsLayer.appendChild(b);
   });
-  // dots closer than GAP px merge into one cluster dot (KL, Putrajaya, Selangor…); zooming in splits them
+  // merge close dots, split when zoomed
   var GAP = 34, pool = [];
   function clusterBtn(i) {
     if (pool[i]) return pool[i];
@@ -141,7 +135,6 @@
       s.dot.classList.add('off'); s.dot.tabIndex = -1;
       if (show) pts.push({ s: s, x: q[0], y: q[1], used: false });
     });
-    // keep merging the two closest dots until none are closer than GAP
     var groups = pts.map(function (p) { return { m: [p], x: p.x, y: p.y }; });
     for (;;) {
       var best = null, bd = GAP;
@@ -165,14 +158,14 @@
         btn.querySelector('b').textContent = n;
         btn.setAttribute('aria-label', btn._states.map(function (o) { return o.name; }).join(', ') + ': ' + count(n));
       }
-      btn.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';   // translate (not transform), so the hover/selected scale doesn't shift it
+      btn.style.translate = x.toFixed(1) + 'px ' + y.toFixed(1) + 'px';   // translate not transform, so scale doesnt move it
       btn.classList.remove('off'); btn.tabIndex = 0;
       btn.classList.toggle('on', !!selected && group.every(function (o) { return selected.indexOf(o.s) >= 0; }));
     });
     for (var i = used; i < pool.length; i++) { pool[i].classList.add('off'); pool[i].tabIndex = -1; }
   }
 
-  /* ---------- panel ---------- */
+  /* panel */
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function showAll() {
     panel.innerHTML = '';
@@ -216,7 +209,7 @@
       panel.appendChild(clubGrid(o.clubs));
     });
   }
-  // select(null) = all of Malaysia; select([states]) = turn to them and zoom in until their dots separate
+  // null = whole malaysia
   function select(list) {
     selected = list && list.length ? list : null;
     if (selected) {
@@ -234,10 +227,7 @@
     vel.lon = vel.lat = 0; idleAt = 0; kick(true);
   }
 
-  /* ---------- drag to spin ----------
-     A press only becomes a drag once the pointer moves a few pixels, so a plain click does nothing.
-     From the starting view the globe eases out a little while spinning and glides back afterwards;
-     once the visitor has zoomed in with the wheel, dragging just pans and the view stays where they leave it. */
+  /* drag to spin. small moves count as click */
   var press = null, dragZoom = 0;
   globe.addEventListener('pointerdown', function (e) {
     if (e.target.closest('.mg-dot, .mg-reset') || e.button > 0) return;
@@ -265,14 +255,14 @@
     if (!dragging) return;
     dragging = false; globe.classList.remove('grab');
     if (focus.custom) { target.zoom = dragZoom; focus = { lon: view.lon, lat: view.lat, zoom: dragZoom, custom: true }; vel.lon *= .5; vel.lat *= .5; }
-    else idleAt = performance.now() + 900;                       // glide back to Malaysia (or the chosen state)
+    else idleAt = performance.now() + 900;                       // glide back
     kick(true);
   }
   globe.addEventListener('pointerup', release);
 
-  /* ---------- mouse wheel / trackpad: zoom towards the pointer ---------- */
+  /* wheel zoom */
   var MIN_ZOOM = 1.15, MAX_ZOOM = 90;
-  // the longitude/latitude under a point on the globe (inverse of project), for view v
+  // lon/lat at a point
   function unproject(px, py, v) {
     var R = size / 2 * v.zoom, x = px - size / 2, y = -(py - size / 2), rho = Math.hypot(x, y);
     if (rho >= R) return null;
@@ -284,19 +274,19 @@
   }
   globe.addEventListener('wheel', function (e) {
     var from = target.zoom, to = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, from * Math.exp(-e.deltaY * (e.deltaMode === 1 ? 0.05 : 0.0015))));
-    if (to === from) return;                                     // already fully in or out: let the page scroll
+    if (to === from) return;                                     // at the limit, let page scroll
     e.preventDefault();
-    var r = globe.getBoundingClientRect(), k = size / r.width, at = unproject((e.clientX - r.left) * k, (e.clientY - r.top) * k, target);   // where the view is heading, so quick scrolls don't drift
-    if (at) {                                                    // keep the spot under the pointer in place
+    var r = globe.getBoundingClientRect(), k = size / r.width, at = unproject((e.clientX - r.left) * k, (e.clientY - r.top) * k, target);
+    if (at) {                                                    // zoom to the pointer
       var f = 1 - from / to, dl = ((at[0] - target.lon + 540) % 360) - 180;
       target.lon += dl * f; target.lat = Math.max(-70, Math.min(70, target.lat + (at[1] - target.lat) * f));
     }
     target.zoom = to;
-    focus = { lon: target.lon, lat: target.lat, zoom: to, custom: true };   // the visitor's own view: dragging won't snap back
+    focus = { lon: target.lon, lat: target.lat, zoom: to, custom: true };
     vel.lon = vel.lat = 0; idleAt = 0; resetBtn.hidden = false; kick(true);
   }, { passive: false });
 
-  // "Reset view" appears once the visitor has zoomed or chosen a state
+  // show reset button
   var resetBtn = document.createElement('button');
   resetBtn.type = 'button'; resetBtn.className = 'mg-reset'; resetBtn.hidden = true;
   resetBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Reset view</span>';
@@ -304,12 +294,12 @@
   globe.appendChild(resetBtn);
   globe.addEventListener('pointercancel', release);
 
-  /* ---------- animation loop (runs only while something is moving and the globe is on screen) ---------- */
+  /* loop, only runs when needed */
   function tick(t) {
     raf = 0;
     var moving = false;
     if (!dragging) {
-      if (Math.abs(vel.lon) + Math.abs(vel.lat) > 0.01) {          // spin on after letting go
+      if (Math.abs(vel.lon) + Math.abs(vel.lat) > 0.01) {
         view.lon += vel.lon; view.lat = Math.max(-70, Math.min(70, view.lat + vel.lat));
         vel.lon *= 0.94; vel.lat *= 0.94; target.lon = view.lon; target.lat = view.lat; moving = true;
         if (focus.custom) { focus.lon = view.lon; focus.lat = view.lat; }
@@ -317,7 +307,7 @@
         target.lon = focus.lon; target.lat = focus.lat; target.zoom = focus.zoom; idleAt = 0;
       } else if (idleAt) moving = true;
     }
-    // shortest way round in longitude
+    // shortest way
     var dl = ((target.lon - view.lon + 540) % 360) - 180;
     var e = reduce ? 1 : 0.09;
     view.lon += dl * e; view.lat += (target.lat - view.lat) * e; view.zoom *= Math.pow(target.zoom / view.zoom, reduce ? 1 : 0.1);
@@ -325,10 +315,9 @@
     draw();
     if ((moving || dragging) && onScreen) raf = requestAnimationFrame(tick);
   }
-  // a click or drag means the globe is in view, even if the browser hasn't reported it yet
   function kick(user) { if (user) onScreen = true; if (!raf && onScreen) raf = requestAnimationFrame(tick); }
 
-  /* ---------- clubs without a state: a row under the globe ---------- */
+  /* clubs with no state */
   if (more) {
     if (!unplaced.length) more.hidden = true;
     var row = more.querySelector('.my-more-row');
@@ -343,7 +332,7 @@
   }
 
   resize(); showAll(); draw();
-  // redraw whenever the globe's size changes (page layout, window resize)
+  // redraw on resize
   if ('ResizeObserver' in window) new ResizeObserver(function () { if (Math.round(globe.clientWidth) !== size) { resize(); draw(); } }).observe(globe);
   else window.addEventListener('resize', function () { resize(); draw(); });
   function loadWorld() {

@@ -13,7 +13,7 @@
   var AGENT = 'Harith';
   var TEAM = 'D-Clix Sales Team';
   var GREETING = 'Hi D-Clix, I would like to know more about the club management system.';
-  // quick topics: [button text, message written for the visitor in WhatsApp]
+  // [button, message]
   var TOPICS = [
     ['Book a free demo', 'Hi D-Clix, I would like to book a free demo for my club.'],
     ['Which plan suits my club?', 'Hi D-Clix, which plan would suit my club?'],
@@ -21,7 +21,7 @@
     ['Something else', GREETING]
   ];
 
-  // Site root, so links and images work from pages inside arena/ too
+  // site root
   var me = document.currentScript && document.currentScript.src;
   var root = me ? me.replace(/js\/shared\/whatsapp\.js(\?.*)?$/, '') : '';
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -62,7 +62,7 @@
     var pop = w.querySelector('.wa-pop'), fab = w.querySelector('.wa-fab'), tease = w.querySelector('.wa-tease');
     var typing = w.querySelector('.wa-typing'), steps = $all('.wa-msg').concat($all('.wa-topics')), played = false, timers = [];
 
-    // the greeting "types" in the first time the panel opens
+    // typing intro
     function play() {
       if (played || reduce) { typing.hidden = true; steps.forEach(function (s) { s.hidden = false; }); played = true; return; }
       played = true;
@@ -85,10 +85,10 @@
     w.querySelector('.wa-x').addEventListener('click', function () { toggle(false); fab.focus(); });
     $all('.wa-chip, .wa-start').forEach(function (a) { a.addEventListener('click', function () { if (NUMBER) setTimeout(function () { toggle(false); }, 150); }); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { toggle(false); fab.focus(); } });
-    // any button with data-whatsapp-open (e.g. Community page) opens the same panel
+    // data-whatsapp-open buttons open it too
     document.addEventListener('click', function (e) { if (e.target.closest('[data-whatsapp-open]')) { e.preventDefault(); toggle(true); } });
 
-    // a small "Questions?" bubble next to the button, once per visit, after a while on the page
+    // small bubble once per visit
     var seen = false; try { seen = sessionStorage.getItem('wa-tease') === '1'; } catch (e) {}
     function hideTease() { tease.hidden = true; try { sessionStorage.setItem('wa-tease', '1'); } catch (e) {} }
     if (!seen) setTimeout(function () { if (pop.hidden) tease.hidden = false; }, 12000);

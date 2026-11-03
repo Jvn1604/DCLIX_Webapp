@@ -1,5 +1,5 @@
 <?php
-/* D-Clix API — core helpers: config, database, JSON responses, CORS, rate limits, logging. */
+/* core: config, json, cors, throttle, logs */
 declare(strict_types=1);
 
 date_default_timezone_set('Asia/Kuala_Lumpur');
@@ -8,7 +8,7 @@ define('API_ROOT', dirname(__DIR__));
 if (!is_file(API_ROOT . '/config.php')) {
     http_response_code(503);
     header('Content-Type: application/json');
-    echo json_encode(['error' => 'The server is not configured yet. Run: php api/install.php']);
+    echo json_encode(['error' => 'The server is not configured yet. Copy api/config.example.php to api/config.php and fill it in.']);
     exit;
 }
 $GLOBALS['CONFIG'] = require API_ROOT . '/config.php';
@@ -23,37 +23,17 @@ function cfg(string $path, $default = null)
     return $v;
 }
 
-function db(): PDO
-{
-    static $pdo = null;
-    if ($pdo === null) {
-        $pdo = new PDO(cfg('db.dsn'), cfg('db.user'), cfg('db.pass'), [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
-        $pdo->exec("SET time_zone = '+08:00'");
-    }
-    return $pdo;
-}
-
-function q(string $sql, array $params = []): PDOStatement
-{
-    $st = db()->prepare($sql);
-    $st->execute($params);
-    return $st;
-}
-
-function now(): string { return date('Y-m-d H:i:s'); }
-function today(): string { return date('Y-m-d'); }
-function iso_time(?string $dt): string { return $dt ? date('c', strtotime($dt)) : ''; }
-
 function json_out($data, int $code = 200): never
 {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
     header('Cache-Control: no-store');
     header('X-Content-Type-Options: nosniff');
+    // same as api/.htaccess, for hosts without apache
+    header('X-Frame-Options: DENY');
+    header("Content-Security-Policy: default-src 'none'; frame-ancestors 'none'");
+    header('Referrer-Policy: no-referrer');
+    header_remove('X-Powered-By');
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
@@ -63,12 +43,14 @@ function fail(string $message, int $code = 400, array $extra = []): never
     json_out(['error' => $message] + $extra, $code);
 }
 
-/** Request body as an array (JSON or form-encoded). */
+/** request body (json or form) */
 function body(): array
 {
     static $b = null;
     if ($b === null) {
-        $raw = file_get_contents('php://input') ?: '';
+        // forms are small, the portal takes max 64 KB anyway
+        $raw = (string) file_get_contents('php://input', false, null, 0, 65537);
+        if (strlen($raw) > 65536) fail('This form is too large.', 413);
         $b = json_decode($raw, true);
         if (!is_array($b)) $b = $_POST ?: [];
     }
@@ -84,16 +66,14 @@ function str_in(array $src, string $key, int $max = 255): string
 }
 
 function client_ip(): string { return substr((string) ($_SERVER['REMOTE_ADDR'] ?? ''), 0, 64); }
-function client_agent(): string { return substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255); }
 
-/** Allow the configured websites to call the API from the browser. */
 function cors(): void
 {
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     if ($origin !== '' && in_array($origin, cfg('allowed_origins', []), true)) {
         header('Access-Control-Allow-Origin: ' . $origin);
         header('Vary: Origin');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Allow-Headers: Content-Type');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         header('Access-Control-Max-Age: 600');
     }
@@ -109,7 +89,7 @@ function log_line(string $channel, string $msg): void
 {
     $dir = API_ROOT . '/storage/logs';
     if (!is_dir($dir)) @mkdir($dir, 0775, true);
-    @file_put_contents($dir . '/' . $channel . '-' . date('Y-m') . '.log', '[' . now() . '] ' . $msg . PHP_EOL, FILE_APPEND);
+    @file_put_contents($dir . '/' . $channel . '-' . date('Y-m') . '.log', '[' . date('Y-m-d H:i:s') . '] ' . $msg . PHP_EOL, FILE_APPEND);
 }
 
 set_exception_handler(function (Throwable $e) {
@@ -120,46 +100,24 @@ set_exception_handler(function (Throwable $e) {
     }
 });
 
-function random_token(int $bytes = 32): string
-{
-    return rtrim(strtr(base64_encode(random_bytes($bytes)), '+/', '-_'), '=');
-}
-
-function six_digit_code(): string { return str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT); }
-
-function settings_get(string $key)
-{
-    $v = q('SELECT v FROM settings WHERE k = ?', [$key])->fetchColumn();
-    return $v === false ? null : json_decode($v, true);
-}
-
-function settings_put(string $key, $value): void
-{
-    q('INSERT INTO settings (k, v, updated_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE v = VALUES(v), updated_at = VALUES(updated_at)',
-        [$key, json_encode($value, JSON_UNESCAPED_UNICODE), now()]);
-}
-
-/** Allow at most $max hits per $window seconds for this key, otherwise reply 429. */
+/** max $max hits per $window sec, else 429 */
 function throttle(string $key, int $max, int $window): void
 {
-    $k = substr($key, 0, 120);
-    $row = q('SELECT hits, window_start FROM throttle WHERE k = ?', [$k])->fetch();
-    if (!$row || strtotime($row['window_start']) < time() - $window) {
-        q('REPLACE INTO throttle (k, hits, window_start) VALUES (?, 1, ?)', [$k, now()]);
-        return;
+    // file based, no db needed
+    $dir = API_ROOT . '/storage/throttle';
+    if (!is_dir($dir)) @mkdir($dir, 0775, true);
+    $fh = @fopen($dir . '/' . hash('sha256', $key) . '.json', 'c+');
+    if (!$fh) return;
+    flock($fh, LOCK_EX);
+    $row = json_decode((string) stream_get_contents($fh), true);
+    if (!is_array($row) || ($row['start'] ?? 0) < time() - $window) $row = ['start' => time(), 'hits' => 0];
+    $over = $row['hits'] >= $max;
+    if (!$over) {
+        $row['hits']++;
+        ftruncate($fh, 0); rewind($fh); fwrite($fh, json_encode($row));
     }
-    if ((int) $row['hits'] >= $max) fail('Too many attempts. Please wait a few minutes and try again.', 429);
-    q('UPDATE throttle SET hits = hits + 1 WHERE k = ?', [$k]);
+    flock($fh, LOCK_UN); fclose($fh);
+    if ($over) fail('Too many attempts. Please wait a few minutes and try again.', 429);
 }
 
 function valid_email(string $e): bool { return (bool) filter_var($e, FILTER_VALIDATE_EMAIL) && strlen($e) <= 190; }
-
-function password_problem(string $pw): ?string
-{
-    if (strlen($pw) < 8 || !preg_match('/[A-Z]/', $pw) || !preg_match('/[a-z]/', $pw) || !preg_match('/\d/', $pw))
-        return 'Use at least 8 characters with upper-case, lower-case and a number.';
-    if (strlen($pw) > 200) return 'Password is too long.';
-    return null;
-}
-
-function money_fmt($n): string { return 'RM ' . number_format((float) $n, 2); }

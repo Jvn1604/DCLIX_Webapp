@@ -1,10 +1,5 @@
-/* Stamps a version on every page's own CSS and JS links (style.css?v=…),
-   so visitors' browsers load the new files right after a push instead of
-   an old saved copy. Run it before committing a release:
-
-       node set-version.js
-
-   It uses today's date and time, e.g. ?v=20261021-1430. */
+/* adds ?v= to css/js links so browsers get the new files
+   run before pushing: node set-version.js */
 const fs = require('fs');
 const path = require('path');
 const d = new Date();
@@ -15,7 +10,7 @@ const pages = fs.readdirSync('.').filter(f => f.endsWith('.html'))
 let changed = 0;
 for (const f of pages) {
   const s = fs.readFileSync(f, 'utf8');
-  // only local files under css/, js/, assets/banners and assets/clubs (not Google Fonts or other sites)
+  // only our own files
   const t = s.replace(/((?:href|src)="(?:\.\.\/)?(?:css|js|assets\/banners|assets\/clubs)\/[^"?#]+\.(?:css|js))(?:\?v=[^"]*)?"/g, '$1?v=' + v + '"');
   if (t !== s) { fs.writeFileSync(f, t); changed++; }
 }

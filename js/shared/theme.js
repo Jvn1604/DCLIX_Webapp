@@ -1,4 +1,4 @@
-/* Loaded in <head> (no defer) so the saved theme is applied before first paint. */
+/* in head so theme loads before paint */
 (function () {
   var t = 'dark';
   try { t = localStorage.getItem('theme') || 'dark'; } catch (e) {}
@@ -7,8 +7,7 @@
   root.classList.add(t);
 })();
 
-/* Clickjacking protection: if another website shows this page inside a frame, hide it and
-   offer a link to open it properly. (GitHub Pages cannot send the X-Frame-Options header.) */
+/* stop other sites framing this page */
 (function () {
   if (window.top === window.self) return;
   var sameSite = false;
