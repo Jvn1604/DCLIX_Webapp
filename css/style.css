@@ -510,7 +510,7 @@ button.li:hover { border-color: rgba(var(--accent-rgb),.4); }
 .ps-track li:not(:last-child)::after { content: ""; position: absolute; left: 12px; top: 38px; bottom: -4px; width: 2px; background: var(--line2); }
 .ps-track li.done:not(:last-child)::after { background: #10b981; }
 .ps-track .d { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--line2); }
-.ps-track li.done .d { background: #10b981; border-color: #10b981; color: #fff; }
+.ps-track li.done .d { background: #10b981; border-color: #10b981; color: #052e1c; }
 .ps-track li.now .d { border-color: var(--accent); }
 .ps-track li.now .d::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: stepPulse 2.4s ease-in-out infinite; }
 .ps-track b { display: block; font-size: 15px; }
@@ -807,6 +807,10 @@ a.accent:hover { background-size: 100% 1px; }
 .home h2 { font-size: clamp(30px, 4.2vw, 48px); font-weight: 700; line-height: 1.08; text-wrap: balance; }
 .home h3 { text-wrap: balance; }
 .h-stack { display: grid; gap: 48px; }
+/* grid items may shrink below their content (tab rails, carousels), so nothing pushes the page wider than the screen */
+.h-stack > * { min-width: 0; }
+/* side cards of carousels peek past the edge: cut them at the screen, no sideways scroll */
+main { overflow-x: clip; }
 .h-head { display: grid; gap: 16px; justify-items: center; text-align: center; max-width: 760px; margin-inline: auto; }
 .h-head.left { justify-items: start; text-align: left; margin: 0; }
 .h-head .lead { max-width: 620px; }
@@ -1568,6 +1572,16 @@ a.addr:hover { color: var(--accent-light); }
   .h-module.snake-l::after, .h-module.snake-r::after { display: none; }
   .snake-r > .h-mod-toggle { left: -24px; right: auto; flex-direction: row; padding: 0 20px 0 4px; }
 }
+/* touch screens: bigger tap area round the small dots and text links (looks the same) */
+@media (pointer: coarse) {
+  .ev-dots, .vt .vt-dots, .dots { gap: 0; }
+  .ev-dots button, .vt-dots .vt-dot, .dots button { border: 12px solid transparent; background-clip: padding-box !important; box-sizing: content-box; }
+  .f-contact a, a.accent, .c-link { display: inline-block; padding: 8px 0; }
+}
+/* small phones: keep the "See what it does" button inside the screen */
+@media (max-width: 560px) {
+  .h-module.snake-l, .h-module.snake-r { margin-left: 8px; }
+}
 
 /* ---------- phone: solid nav (blur is slow) ---------- */
 @media (max-width: 760px) {
@@ -1669,10 +1683,10 @@ a.addr:hover { color: var(--accent-light); }
   .pc-compare thead th { padding: 16px 2px 12px; }
   .pc-compare thead th b { font-size: 14px; }
   .pc-compare thead th small { font-size: 10.5px; }
-  .pc-compare thead th em { font-size: 8.5px; padding: 2px 6px; letter-spacing: .04em; }
-  .pc-compare thead th.feat { font-size: 10px; padding-left: 8px; }
-  .pc-compare td.txt { font-size: 11px; }
-  .pc-compare tr.grp th { white-space: normal; font-size: 10.5px; padding: 20px 8px 8px; }
+  .pc-compare thead th em { font-size: 10px; padding: 2px 6px; letter-spacing: .02em; }
+  .pc-compare thead th.feat { font-size: 11px; padding-left: 8px; }
+  .pc-compare td.txt { font-size: 12px; }
+  .pc-compare tr.grp th { white-space: normal; font-size: 11.5px; padding: 20px 8px 8px; }
   .pc-compare .yes { width: 22px; height: 22px; }
   .pc-compare .yes svg { width: 13px; height: 13px; }
   .pc-compare tfoot td { padding: 14px 3px; }

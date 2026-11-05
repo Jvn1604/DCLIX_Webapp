@@ -315,7 +315,7 @@
         });
       });
       var head = '<tr><th scope="col" class="feat">Features</th>' + plans.map(function (p) {
-        return '<th scope="col"' + (p.featured ? ' class="pop"' : '') + '>' + (p.featured ? '<em>Most popular</em>' : p.top ? '<em class="top">Top tier</em>' : '') + '<b>' + p.name + '</b>' + tier(p.tier) + '<small>' + rm(p.m) + '/month</small></th>';
+        return '<th scope="col"' + (p.featured ? ' class="pop"' : '') + '>' + (p.featured ? '<em>Most popular</em>' : p.top ? '<em class="top">Top tier</em>' : '') + '<b>' + p.name + '</b>' + tier(p.tier) + '<small>' + rm(p.m) + '<wbr>/month</small></th>';
       }).join('') + '</tr>';
       var foot = '<tr><td></td>' + plans.map(function (p) { return '<td><a class="' + (p.featured ? 'btn-primary' : 'btn-outline') + ' sm" href="arena/club-register.html?plan=' + p.key + '&billing=monthly">Choose ' + p.name + '</a></td>'; }).join('') + '</tr>';
       return '<table><thead>' + head + '</thead><tbody>' + rows.join('') + '</tbody><tfoot>' + foot + '</tfoot></table>';
