@@ -1678,7 +1678,7 @@ a.addr:hover { color: var(--accent-light); }
   .pc-compare tfoot td { padding: 14px 3px; }
   .pc-compare tfoot a { font-size: 11.5px; padding: 8px 4px; white-space: normal; line-height: 1.2; }
 }
-html.light .pc-save, html.light .bill-tag { background: rgba(22,163,74,.12); color: #15803d; }
+html.light .pc-save, html.light .bill-tag { background: rgba(22,163,74,.12); color: #166534; }
 html.light .billing button.active .bill-tag { background: rgba(255,255,255,.35); color: #3b2405; }
 html.light .pc-name, html.light .pc .tick, html.light .pc-classes svg, html.light .pc-inherit svg, html.light .pc-trust svg, html.light .pc-compare .yes, html.light .pc-compare tr.grp th { color: var(--accent-ink); }
 html.light .pc-compare tr > :nth-child(3) .yes { color: var(--on-accent); }
@@ -1710,7 +1710,7 @@ html.light .pc.featured { box-shadow: 0 24px 50px rgba(17,12,4,.12), 0 0 0 6px r
 .pc-compare thead .pc-level i:nth-child(3) { height: 14px; }
 .pc-compare thead th em.top { background: linear-gradient(135deg, #fbe3a8, #e9b04a 45%, #c98a22); color: #2a1a05; }
 html.light .pc.pc-premium .pc-name { background: linear-gradient(90deg, #a8680d, #7a4806); -webkit-background-clip: text; background-clip: text; }
-html.light .pc-level i { background: rgba(17,12,4,.12); }
+html.light .pc-level i:not(.on) { background: rgba(17,12,4,.12); }
 
 /* ---------- pain cards ---------- */
 .h-pains { grid-template-columns: 1fr; }
@@ -1797,6 +1797,14 @@ html.light .brand-logo img { filter: drop-shadow(0 4px 12px rgba(17,12,4,.18)); 
 }html:not(.light) .hex-title { color: color-mix(in srgb, var(--sc) 72%, #fff); }
 .h-mock-note { opacity: 1; }
 html.light .c-item .ic, html.light .c-addr summary svg, html.light .c-go a { color: var(--accent-ink); }
+/* pale gold text + icons on white */
+html.light .f-contact .ic, html.light .pc-compare-box summary svg, html.light .sw-tag, html.light .sw-n,
+html.light .f-contact a:hover, html.light .c-item a:hover, html.light .c-link:hover, html.light .c-addr summary:hover,
+html.light a.addr:hover, html.light .pc-compare-box summary:hover { color: var(--accent-ink); }
+html.light .vt-badge .av { color: var(--on-accent); }
+html.light .h-live, html.light .upload.has-file .upload-ic { color: #15803d; }
+html.light .pc-price s { opacity: 1; }
+html.light .upload.bad .upload-ic, html.light .upload[aria-invalid="true"] .upload-ic { color: #b42318; }
 html.light .c-map { box-shadow: 0 20px 44px rgba(17,12,4,.10); }
 
 /* ---------- Why clubs switch: chapter rail (home #tour, js/shared/switch.js) ---------- */
