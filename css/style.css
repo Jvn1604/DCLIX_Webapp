@@ -1981,3 +1981,34 @@ html.light .c-map { box-shadow: 0 20px 44px rgba(17,12,4,.10); }
 #stories .h-quotes { grid-template-columns: 1fr; }
 @media (min-width: 640px) { #stories .h-quotes { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1000px) { #stories .h-quotes { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- phones + tablets: layout tidy-up ---------- */
+/* grid items shrink to the screen instead of their widest content */
+.sw > *, .laptop-grid > *, .h-hero-grid > *, .h-final-grid > * { min-width: 0; }
+@media (max-width: 560px) {
+  /* laptop picture (about): narrower sidebar + search so it fits a phone */
+  .laptop .side { width: 88px; padding: 12px 6px; }
+  .laptop .search { width: auto; flex: 0 1 110px; min-width: 0; }
+  .laptop .bar { gap: 8px; padding: 0 10px; }
+  .laptop .main { padding: 10px; gap: 10px; min-width: 0; }
+  /* main buttons: full width and the same size, stacked */
+  .hero-cta, .p-cta-btns { flex-direction: column; align-items: stretch; width: 100%; justify-self: stretch; align-self: stretch; }
+  .hero-cta > a, .p-cta-btns > a, .h-head.left > .btn-primary { width: 100%; justify-content: center; }
+  /* timeline modules: less space on the left so text is centred on the screen */
+  .h-module.snake-l, .h-module.snake-r { padding-left: 24px; }
+}
+@media (max-width: 640px) {
+  /* section titles: centred like the rest */
+  .h-head.left { justify-items: center; text-align: center; }
+  .h-head.left .h-ticks { justify-self: stretch; text-align: left; }
+  .h-head.left .eyebrow::after { left: 50%; transform: translateX(-50%) scaleX(0); transform-origin: 50% 50%; }
+  .reveal.in.h-head.left .eyebrow::after, .reveal.in .h-head.left .eyebrow::after { transform: translateX(-50%) scaleX(1); }
+  /* long card lists: swipe sideways instead of a very long scroll */
+  .h-pains, .h-quotes, #stories .h-quotes, .h-trust-grid {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 86%; gap: 12px;
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+    margin: 0 -16px; padding: 4px 16px 14px; scroll-padding: 0 16px; scrollbar-width: none;
+  }
+  .h-pains::-webkit-scrollbar, .h-quotes::-webkit-scrollbar, .h-trust-grid::-webkit-scrollbar { display: none; }
+  .h-pains > *, .h-quotes > *, .h-trust-grid > * { scroll-snap-align: start; min-width: 0; }
+}
